@@ -408,7 +408,8 @@ public class MainActivity extends Activity implements AppAdapter.TileListener {
             List<File> catFiles = OnlineWallpapers.listByCategory(this, activeCat);
             if (!catFiles.isEmpty()) wallpapers = catFiles;
             else if (cfg.wallpaperOnline && wallpapers.isEmpty()) wallpapers = OnlineWallpapers.list(this);
-            if (wallpapers.isEmpty()) {
+            final boolean wasEmpty = catFiles.isEmpty();
+            if (catFiles.size() < OnlineWallpapers.countForCategory(activeCat)) {
                 new Thread(() -> {
                     OnlineWallpapers.syncCategory(getApplicationContext(), activeCat);
                     handler.post(() -> {
@@ -416,7 +417,7 @@ public class MainActivity extends Activity implements AppAdapter.TileListener {
                         List<File> fresh = OnlineWallpapers.listByCategory(MainActivity.this, activeCat);
                         if (!fresh.isEmpty()) {
                             wallpapers = fresh;
-                            showNextWallpaper(false);
+                            if (wasEmpty) showNextWallpaper(false);
                         }
                     });
                 }).start();
@@ -3450,12 +3451,13 @@ public class MainActivity extends Activity implements AppAdapter.TileListener {
         }
 
         List<WallpaperOption> options = new ArrayList<>();
-        options.add(new WallpaperOption("Indonesia", "🇮🇩 Pesona Nusantara (Indonesia)", "16 Koleksi 4K Alam & Candi Ikonik Indonesia"));
+        options.add(new WallpaperOption("Indonesia", "🇮🇩 Pesona Nusantara (Indonesia)", "Koleksi 4K Alam & Candi Ikonik Indonesia"));
+        options.add(new WallpaperOption("Anime", "🎌 Anime HD", "Ilustrasi Sinematik, Langit Senja & Pemandangan Anime"));
         options.add(new WallpaperOption("Natural", "🌿 Alam & Pemandangan", "Pegunungan, Hutan & Aurora 4K"));
         options.add(new WallpaperOption("Skyscraper", "🏙️ Gedung Pencakar Langit & Kota", "Metropolis Modern & Arsitektur"));
         options.add(new WallpaperOption("Space", "🌌 Luar Angkasa & Kosmos", "Galaksi, Nebula & Bintang (Deep Space)"));
         options.add(new WallpaperOption("Ocean", "🌊 Lautan & Pesisir Pantai", "Air Jernih, Terumbu Karang & Pantai"));
-        options.add(new WallpaperOption("Minimalist", "🔲 Minimalis Gelap (OLED)", "Monokrom, Tekstur Gelap & Abstrak"));
+        options.add(new WallpaperOption("Minimalist", "🔲 Minimalis Gelap (OLED)", "Gelap Murni, Kurva Abstrak 3D & Siluet Malam"));
         options.add(new WallpaperOption("MANAGE_CUSTOM", "📁 Kelola Gambar Unggahan",
                 customCount > 0 ? (customCount + " foto diunggah • QR / Slideshow") : "Unggah foto pribadi lewat HP"));
         options.add(new WallpaperOption("NEXT", "🔀 Ganti Gambar Berikutnya", "Putar gambar berikutnya di kategori ini"));
@@ -3750,11 +3752,14 @@ public class MainActivity extends Activity implements AppAdapter.TileListener {
         }
 
         List<File> matching = OnlineWallpapers.listByCategory(this, category);
-        if (!matching.isEmpty()) {
+        final boolean hadCached = !matching.isEmpty();
+        if (hadCached) {
             wallpapers = matching;
             showNextWallpaper(true);
         } else {
-            Toast.makeText(this, "Mengunduh Wallpaper 4K " + displayLabel + " (Pexels & Unsplash)...", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Mengunduh Wallpaper 4K " + displayLabel + "...", Toast.LENGTH_SHORT).show();
+        }
+        if (matching.size() < OnlineWallpapers.countForCategory(category)) {
             new Thread(() -> {
                 boolean downloaded = OnlineWallpapers.syncCategory(getApplicationContext(), category);
                 handler.post(() -> {
@@ -3762,7 +3767,9 @@ public class MainActivity extends Activity implements AppAdapter.TileListener {
                     List<File> fresh = OnlineWallpapers.listByCategory(MainActivity.this, category);
                     if (!fresh.isEmpty()) {
                         wallpapers = fresh;
-                        showNextWallpaper(true);
+                        if (!hadCached) {
+                            showNextWallpaper(true);
+                        }
                     }
                 });
             }, "wall-cat-sync").start();
@@ -4414,62 +4421,11 @@ public class MainActivity extends Activity implements AppAdapter.TileListener {
     }
 
     private void showAsiaCountryDialog() {
-        final List<String> regions = AppLocationManager.getAvailableRegions();
-        String activeRegion = AppLocationManager.getActiveRegion(this);
-        int selectedIndex = 0;
-        CharSequence[] items = new CharSequence[regions.size()];
-        for (int i = 0; i < regions.size(); i++) {
-            String r = regions.get(i);
-            items[i] = r;
-            if (r.equalsIgnoreCase(activeRegion)) {
-                selectedIndex = i;
-            }
-        }
-
-        AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.Theme_TvHome_GlassDialog);
-        builder.setTitle("🌏 Pilih Negara / Wilayah");
-        builder.setSingleChoiceItems(items, selectedIndex, (dialog, which) -> {
-            dialog.dismiss();
-            String chosenRegion = regions.get(which);
-            AppLocationManager.setActiveRegion(MainActivity.this, chosenRegion);
-            Toast.makeText(MainActivity.this, "Wilayah dipilih: " + chosenRegion, Toast.LENGTH_SHORT).show();
-            showStationListDialog(chosenRegion);
-        });
-        builder.setNegativeButton("Tutup", (dialog, which) -> dialog.dismiss());
-        AlertDialog dialog = builder.create();
-        dialog.show();
-        styleGlassDialog(dialog);
+        CitySearchDialog.show(this, this::refreshLocationDependentData);
     }
 
     private void showStationListDialog(String region) {
-        final List<AppLocationManager.Station> stations = AppLocationManager.getStationsForRegion(region);
-        String currentId = AppLocationManager.getStationId(this);
-        int selectedIndex = 0;
-        CharSequence[] items = new CharSequence[stations.size()];
-        for (int i = 0; i < stations.size(); i++) {
-            AppLocationManager.Station s = stations.get(i);
-            items[i] = s.getDisplayName() + "\n" + s.place;
-            if (s.id.equalsIgnoreCase(currentId)) {
-                selectedIndex = i;
-            }
-        }
-
-        AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.Theme_TvHome_GlassDialog);
-        builder.setTitle("📍 Pilih Kota / Stasiun (" + region + ")");
-        builder.setSingleChoiceItems(items, selectedIndex, (dialog, which) -> {
-            dialog.dismiss();
-            AppLocationManager.Station chosen = stations.get(which);
-            AppLocationManager.setStation(MainActivity.this, chosen);
-            Toast.makeText(MainActivity.this, "Lokasi: " + chosen.name + " (" + chosen.country + ")", Toast.LENGTH_SHORT).show();
-            refreshLocationDependentData();
-        });
-        builder.setNegativeButton("Kembali", (dialog, which) -> {
-            dialog.dismiss();
-            showAsiaCountryDialog();
-        });
-        AlertDialog dialog = builder.create();
-        dialog.show();
-        styleGlassDialog(dialog);
+        CitySearchDialog.show(this, this::refreshLocationDependentData);
     }
 
     private void showPrayerZoneDialog() {
@@ -5363,13 +5319,6 @@ public class MainActivity extends Activity implements AppAdapter.TileListener {
                 nameTv.setSingleLine(true);
                 nameTv.setEllipsize(TextUtils.TruncateAt.END);
                 textCol.addView(nameTv);
-
-                TextView kindTv = new TextView(this);
-                kindTv.setText(item.banner != null ? "Banner TV" : "Ikon Standar");
-                kindTv.setTextSize(10.5f);
-                kindTv.setTextColor(0x8CFFFFFF);
-                kindTv.setTypeface(getResources().getFont(R.font.outfit), Typeface.NORMAL);
-                textCol.addView(kindTv);
 
                 row.addView(textCol, textColLp);
 

@@ -86,6 +86,11 @@ public class WeatherActivity extends Activity {
             btnChangeLocation.setOnClickListener(v -> showLocationPickerDialog());
             setupFocusAnimation(btnChangeLocation, 1.03f);
         }
+        View btnChangeAtmosphere = findViewById(R.id.btnChangeAtmosphere);
+        if (btnChangeAtmosphere != null) {
+            btnChangeAtmosphere.setOnClickListener(v -> showWeatherAnimationPicker());
+            setupFocusAnimation(btnChangeAtmosphere, 1.03f);
+        }
 
         // Setup Card Focus Animators for TV Remote Navigation on Leaf Cards
         setupCardFocus(findViewById(R.id.tileWind));
@@ -123,27 +128,10 @@ public class WeatherActivity extends Activity {
     }
 
     private void showLocationPickerDialog() {
-        String activeRegion = AppLocationManager.getActiveRegion(this);
-        CharSequence[] topOptions = new CharSequence[]{
-                "📍 Pilih Kota / Stasiun (" + activeRegion + ")",
-                "🌏 Ubah Negara / Wilayah Asia",
-                "✨ Atur Suasana Latar Cuaca (Cerah, Hujan, Badai, Malam)"
-        };
-
-        AlertDialog.Builder builder = new AlertDialog.Builder(this, android.R.style.Theme_DeviceDefault_Dialog_Alert);
-        builder.setTitle("🌏 Lokasi & Suasana Cuaca");
-        builder.setItems(topOptions, (dialog, which) -> {
-            dialog.dismiss();
-            if (which == 0) {
-                showStationListDialog(activeRegion);
-            } else if (which == 1) {
-                showAsiaCountryDialog();
-            } else {
-                showWeatherAnimationPicker();
-            }
+        CitySearchDialog.show(this, () -> {
+            populateUi();
+            WeatherAirQuality.sync(this, this::populateUi);
         });
-        builder.setNegativeButton("Tutup", (dialog, which) -> dialog.dismiss());
-        builder.create().show();
     }
 
     private void showWeatherAnimationPicker() {
@@ -255,10 +243,10 @@ public class WeatherActivity extends Activity {
         }
 
         // 2. Header
-        String locDisplay = w.location;
+        String locDisplay = AppLocationManager.getLocationName(this);
         String neatLoc = "Tuban";
-        if (locDisplay != null && !locDisplay.isEmpty()) {
-            neatLoc = locDisplay.substring(0, 1).toUpperCase(Locale.ROOT) + locDisplay.substring(1).toLowerCase(Locale.ROOT);
+        if (locDisplay != null && !locDisplay.trim().isEmpty()) {
+            neatLoc = locDisplay.trim();
             weatherLocation.setText(neatLoc);
         } else {
             weatherLocation.setText("Tuban");
@@ -392,7 +380,10 @@ public class WeatherActivity extends Activity {
         if (aqiStatus != null) aqiStatus.setText(w.aqiStatus);
         if (aqiBar != null) aqiBar.setAqi(w.aqi);
         if (aqiStation != null) {
-            if (w.stationPlace != null && !w.stationPlace.isEmpty()) {
+            String activePlace = AppLocationManager.getStationPlace(this);
+            if (activePlace != null && !activePlace.isEmpty()) {
+                aqiStation.setText(activePlace);
+            } else if (w.stationPlace != null && !w.stationPlace.isEmpty()) {
                 aqiStation.setText(w.stationPlace);
             } else {
                 aqiStation.setText("Alun-Alun Tuban, Jawa Timur");
@@ -401,7 +392,13 @@ public class WeatherActivity extends Activity {
 
         // Radar Map
         if (radarMapView != null) {
-            radarMapView.setDetails(w.temp, neatLoc);
+            radarMapView.setDetails(
+                    w.temp,
+                    neatLoc,
+                    AppLocationManager.getLatitude(this),
+                    AppLocationManager.getLongitude(this),
+                    AppLocationManager.getActiveProvince(this)
+            );
         }
 
         // Humidity & Pressure

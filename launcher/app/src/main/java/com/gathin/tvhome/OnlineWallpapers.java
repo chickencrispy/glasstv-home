@@ -36,7 +36,7 @@ final class OnlineWallpapers {
     private static final String PREFS_NAME = "online_wallpapers";
     private static final String PREF_LAST_SYNC = "last_sync_time";
     private static final long REFRESH_INTERVAL_MS = 6L * 60 * 60 * 1000; // 6 hours
-    private static final int MAX_CACHE_FILES = 50;
+    private static final int MAX_CACHE_FILES = 120;
     private static final int MAX_IMAGE_BYTES = 25 * 1024 * 1024; // 25 MB limit per 4K/8K image
 
     static class WallpaperItem {
@@ -55,7 +55,7 @@ final class OnlineWallpapers {
 
     // Built-in curated catalog of dark, moody, atmospheric 4K desktop wallpapers (Unsplash & Pexels)
     private static final WallpaperItem[] CURATED_CATALOG = new WallpaperItem[]{
-            // Indonesia: Pesona Alam & Landmark Nusantara (16 Koleksi 4K Ultra HD)
+            // Indonesia: Pesona Alam & Landmark Nusantara (Koleksi 4K Ultra HD)
             new WallpaperItem("https://images.unsplash.com/photo-1588668214407-6ea9a6d8c272?auto=format&fit=crop&w=3840&h=2160&q=80",
                     "Kaldera Gunung Bromo", "Kabut pagi menyelimuti kawah Gunung Bromo dan lautan pasir Taman Nasional Bromo Tengger Semeru", "Indonesia_JawaTimur"),
             new WallpaperItem("https://images.unsplash.com/photo-1518548419970-58e3b4079ab2?auto=format&fit=crop&w=3840&h=2160&q=80",
@@ -149,13 +149,53 @@ final class OnlineWallpapers {
             new WallpaperItem("https://images.pexels.com/photos/1295138/pexels-photo-1295138.jpeg?auto=compress&cs=tinysrgb&w=3840&h=2160",
                     "Tebing Karang Pesisir", "Tebing batu gelap yang berpadu dengan deburan ombak laut", "Coast"),
 
-            // Minimalist & Atmospheric (Minimalis Gelap - Unsplash & Pexels 4K)
-            new WallpaperItem("https://images.unsplash.com/photo-1515694346937-94d85e41e6f0?auto=format&fit=crop&w=3840&h=2160&q=80",
-                    "Rintik Hujan di Jendela", "Tetesan air hujan pada kaca jendela dengan latar senja yang redup", "Atmospheric"),
-            new WallpaperItem("https://images.unsplash.com/photo-1510312305653-8ed496efae75?auto=format&fit=crop&w=3840&h=2160&q=80",
-                    "Malam Berbintang di Gurun", "Ketenangan malam di bawah kubah langit penuh bintang", "Nature"),
-            new WallpaperItem("https://images.unsplash.com/photo-1491557345352-5929e343eb89?auto=format&fit=crop&w=3840&h=2160&q=80",
-                    "Puncak Gunung Gelap", "Siluet tebing gunung di balik awan gelap yang dramatis", "Mountains")
+            // Minimalist & Dark Abstract OLED (Koleksi Pilihan Pengguna 4K)
+            new WallpaperItem("https://images.unsplash.com/photo-1439792675105-701e6a4ab6f0?auto=format&fit=crop&w=3840&h=2160&q=85",
+                    "Siluet Gunung Malam", "Siluet puncak gunung di bawah atmosfer langit malam yang tenang", "Minimalist"),
+            new WallpaperItem("https://images.unsplash.com/photo-1672009190560-12e7bade8d09?auto=format&fit=crop&w=3840&h=2160&q=85",
+                    "Kurva Abstrak Ungu", "Latar belakang kurva abstrak ungu gelap bernuansa modern minimalis", "Minimalist"),
+            new WallpaperItem("https://images.unsplash.com/photo-1663970206579-c157cba7edda?auto=format&fit=crop&w=3840&h=2160&q=85",
+                    "Abstrak Ungu & Biru Tua", "Gradasi dinamis warna ungu dan biru gelap atmosferik", "Minimalist"),
+            new WallpaperItem("https://images.unsplash.com/photo-1567095751004-aa51a2690368?auto=format&fit=crop&w=3840&h=2160&q=85",
+                    "Gelombang Abu-abu & Biru", "Pola gelombang 3D lembut dalam nuansa abu-abu dan biru malam", "Minimalist"),
+            new WallpaperItem("https://images.unsplash.com/photo-1709625862266-014ef072fd93?auto=format&fit=crop&w=3840&h=2160&q=85",
+                    "Lengkung Monokrom OLED", "Objek melengkung monokrom hitam putih dengan kontras tinggi", "Minimalist"),
+            new WallpaperItem("https://images.unsplash.com/photo-1460355976672-71c3f0a4bdac?auto=format&fit=crop&w=3840&h=2160&q=85",
+                    "Malam Pegunungan Bersalju", "Langit malam berbintang di atas punggung bukit pegunungan es", "Minimalist"),
+            new WallpaperItem("https://images.unsplash.com/photo-1686164439898-9790e48910ab?auto=format&fit=crop&w=3840&h=2160&q=85",
+                    "Gelombang Neon di Atas Hitam", "Alunan pita cahaya neon halus di atas latar hitam pekat", "Minimalist"),
+            new WallpaperItem("https://images.unsplash.com/photo-1683908280933-09d19b039198?auto=format&fit=crop&w=3840&h=2160&q=85",
+                    "Aliran Gelombang Biru Tua", "Latar belakang biru tua elegan dengan alur garis bergelombang", "Minimalist"),
+            new WallpaperItem("https://images.unsplash.com/photo-1637825891035-1930cbd564dd?auto=format&fit=crop&w=3840&h=2160&q=85",
+                    "Pita Cahaya Ungu & Merah Muda", "Gelombang abstrak berpendar dalam kegelapan ruang minimalis", "Minimalist"),
+            new WallpaperItem("https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=3840&h=2160&q=85",
+                    "Gelombang Sutra Obsidian", "Alunan gelombang cairan 3D hitam pekat dengan bias cahaya halus untuk layar OLED", "Minimalist"),
+
+            // Anime HD (Ilustrasi Sinematik & Pemandangan Anime 4K)
+            new WallpaperItem("https://w.wallhaven.cc/full/3l/wallhaven-3ldkoy.jpg",
+                    "Langit Senja Anime", "Ilustrasi sinematik awan keemasan dan siluet kota saat matahari terbenam", "Anime"),
+            new WallpaperItem("https://w.wallhaven.cc/full/vq/wallhaven-vqwxd8.jpg",
+                    "Stasiun Kereta Senja", "Pemandangan perlintasan kereta api anime di bawah langit jingga dan ungu", "Anime"),
+            new WallpaperItem("https://w.wallhaven.cc/full/wy/wallhaven-wy6vqx.jpg",
+                    "Malam Berbintang Anime", "Taburan bintang dan komet menghiasi langit malam biru di atas bukit", "Anime"),
+            new WallpaperItem("https://w.wallhaven.cc/full/gw/wallhaven-gw5ypd.jpg",
+                    "Lembah Hijau Sinematik", "Ilustrasi padang rumput dan awan putih megah bergaya anime", "Anime"),
+            new WallpaperItem("https://w.wallhaven.cc/full/yq/wallhaven-yq5mlk.jpg",
+                    "Cahaya Kota Malam Anime", "Panorama lampu kota dari balkon di malam yang tenang dan syahdu", "Anime"),
+            new WallpaperItem("https://w.wallhaven.cc/full/2y/wallhaven-2y89my.jpg",
+                    "Pelabuhan Awan Biru", "Pemandangan laut biru dan awan musim panas dalam goresan anime detail tinggi", "Anime"),
+            new WallpaperItem("https://w.wallhaven.cc/full/og/wallhaven-ogjwvl.jpg",
+                    "Senja di Tepi Sungai", "Pantulan langit senja merah muda pada aliran sungai kota Jepang", "Anime"),
+            new WallpaperItem("https://w.wallhaven.cc/full/gw/wallhaven-gwdvxq.jpg",
+                    "Kuil Hutan Magis", "Gerbang torii di tengah hutan berkabut dengan berkas cahaya pagi", "Anime"),
+            new WallpaperItem("https://w.wallhaven.cc/full/l8/wallhaven-l83k62.jpg",
+                    "Festival Lentera Malam", "Pendaran cahaya lentera hangat di jalanan malam bergaya anime", "Anime"),
+            new WallpaperItem("https://w.wallhaven.cc/full/85/wallhaven-8562ko.jpg",
+                    "Horizon Galaksi Anime", "Langit malam fantasi dengan bentangan galaksi memantul di permukaan air", "Anime"),
+            new WallpaperItem("https://images.unsplash.com/photo-1578632767115-351597cf2477?auto=format&fit=crop&w=3840&h=2160&q=85",
+                    "Siluet Neon Tokyo Anime", "Nuansa malam ilustratif kota Jepang dengan kontras cahaya neon", "Anime"),
+            new WallpaperItem("https://images.unsplash.com/photo-1607604276583-eef5d076aa5f?auto=format&fit=crop&w=3840&h=2160&q=85",
+                    "Estetika Malam Anime", "Ilustrasi suasana malam Jepang bergaya anime modern", "Anime")
     };
 
     private OnlineWallpapers() {
@@ -208,13 +248,26 @@ final class OnlineWallpapers {
         if (sc.contains("ocean") || sc.contains("water") || sc.contains("coast")) {
             return ic.contains("ocean") || ic.contains("underwater") || ic.contains("coast");
         }
-        if (sc.contains("minim")) {
-            return ic.contains("minim") || ic.contains("atmos") || ic.contains("weather");
+        if (sc.contains("minim") || sc.contains("oled")) {
+            return ic.contains("minim") || ic.contains("oled") || ic.contains("abstract");
+        }
+        if (sc.contains("anime")) {
+            return ic.contains("anime");
         }
         if (sc.contains("malay")) {
             return ic.contains("malay");
         }
         return ic.contains(sc);
+    }
+
+    static int countForCategory(String category) {
+        int count = 0;
+        for (WallpaperItem item : CURATED_CATALOG) {
+            if (matchesCategory(item.category, category)) {
+                count++;
+            }
+        }
+        return count;
     }
 
     static void cleanOutdatedCategoryWallpapers(File d, String category) {

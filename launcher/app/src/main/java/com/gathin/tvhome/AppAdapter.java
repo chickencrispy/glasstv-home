@@ -44,6 +44,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * App tiles. The first {@link MainActivity#COLUMNS} positions are the pinned dock (favourites, fixed order),
@@ -85,12 +86,21 @@ public class AppAdapter extends RecyclerView.Adapter<AppAdapter.Holder> {
         final String name;
         /** Ambient glow colour; 0 until sampled from the banner, or the card's accent from the start. */
         int ambient;
+        final boolean hasNativeBanner;
 
         Entry(String label, ComponentName component, Drawable banner, Drawable icon) {
-            this(APP, label, component, banner, icon, null, 0);
+            this(APP, label, component, banner, icon, null, 0, true);
+        }
+
+        Entry(String label, ComponentName component, Drawable banner, Drawable icon, boolean hasNativeBanner) {
+            this(APP, label, component, banner, icon, null, 0, hasNativeBanner);
         }
 
         Entry(int kind, String label, ComponentName component, Drawable banner, Drawable icon, String caption, int accent) {
+            this(kind, label, component, banner, icon, caption, accent, true);
+        }
+
+        Entry(int kind, String label, ComponentName component, Drawable banner, Drawable icon, String caption, int accent, boolean hasNativeBanner) {
             this.kind = kind;
             this.label = label;
             this.component = component;
@@ -99,6 +109,7 @@ public class AppAdapter extends RecyclerView.Adapter<AppAdapter.Holder> {
             this.icon = icon;
             this.name = caption == null ? label : label + " \u00B7 " + caption;
             this.ambient = accent;
+            this.hasNativeBanner = hasNativeBanner;
         }
     }
 
@@ -253,22 +264,24 @@ public class AppAdapter extends RecyclerView.Adapter<AppAdapter.Holder> {
             String key = component.flattenToShortString() + '@' + ri.activityInfo.applicationInfo.sourceDir;
             Entry built = card == null ? builtApps.get(key) : null;
             if (built != null) {
-                if (built.banner == null && !addedApps.contains(pkg)) continue;
+                if (!built.hasNativeBanner && !addedApps.contains(pkg)) continue;
                 fresh.add(built);
                 apps.put(key, built);
                 continue;
             }
-            Drawable banner = loadBanner(ctx, pm, ri);
+            Drawable nativeBanner = loadNativeBanner(ctx, pm, ri);
+            boolean hasNative = nativeBanner != null;
             // Default home rule: only show apps that have a TV banner, unless manually added via '+'
-            if (banner == null && !addedApps.contains(pkg)) continue;
+            if (!hasNative && !addedApps.contains(pkg)) continue;
+            Drawable banner = hasNative ? nativeBanner : generateSolidBanner(ctx, ri.loadIcon(pm), pkg);
             // The icon only shows on a tile without a banner.
             Drawable icon = banner == null ? ri.loadIcon(pm) : null;
             if (card != null) {
-                fresh.add(new Entry(Entry.CARD, card.label, component, banner, icon, card.caption, card.accent));
+                fresh.add(new Entry(Entry.CARD, card.label, component, banner, icon, card.caption, card.accent, hasNative));
             } else {
                 // Same cleaner as the card prompt: an app label with a bidi override or line separator must not
                 // redraw the tile name as something else (#117).
-                Entry entry = new Entry(Cards.cleanLabel(String.valueOf(ri.loadLabel(pm)), pkg), component, banner, icon);
+                Entry entry = new Entry(Cards.cleanLabel(String.valueOf(ri.loadLabel(pm)), pkg), component, banner, icon, hasNative);
                 fresh.add(entry);
                 apps.put(key, entry);
             }
@@ -313,7 +326,10 @@ public class AppAdapter extends RecyclerView.Adapter<AppAdapter.Holder> {
         return true;
     }
 
-    static Drawable loadBanner(Context ctx, PackageManager pm, ResolveInfo ri) {
+    private static final Map<String, Drawable> sSyntheticBannerCache = new ConcurrentHashMap<>();
+
+    static Drawable loadNativeBanner(Context ctx, PackageManager pm, ResolveInfo ri) {
+        if (ri == null || ri.activityInfo == null) return null;
         int id = ri.activityInfo.banner;
         if (id == 0) id = ri.activityInfo.applicationInfo.banner;
         if (id != 0) {
@@ -328,6 +344,138 @@ public class AppAdapter extends RecyclerView.Adapter<AppAdapter.Holder> {
         Drawable d = ri.activityInfo.loadBanner(pm);
         if (d == null) d = ri.activityInfo.applicationInfo.loadBanner(pm);
         return d;
+    }
+
+    public static Drawable getOrGenerateBanner(Context ctx, PackageManager pm, ResolveInfo ri) {
+        Drawable nativeBanner = loadNativeBanner(ctx, pm, ri);
+        if (nativeBanner != null) return nativeBanner;
+        String pkg = (ri != null && ri.activityInfo != null) ? ri.activityInfo.packageName : null;
+        Drawable icon = ri != null ? ri.loadIcon(pm) : null;
+        return generateSolidBanner(ctx, icon, pkg);
+    }
+
+    public static Drawable loadBanner(Context ctx, PackageManager pm, ResolveInfo ri) {
+        return getOrGenerateBanner(ctx, pm, ri);
+    }
+
+    /**
+     * Generates a 16:9 solid dominant color banner with the original icon centered.
+     * Option A: Solid dominant background color extracted dynamically from the icon (no gradients).
+     */
+    public static Drawable generateSolidBanner(Context ctx, Drawable icon, String pkgKey) {
+        if (icon == null) return null;
+        if (pkgKey != null) {
+            Drawable cached = sSyntheticBannerCache.get(pkgKey);
+            if (cached != null) return cached;
+        }
+
+        try {
+            int bannerW = 320;
+            int bannerH = 180;
+            Bitmap bannerBmp = Bitmap.createBitmap(bannerW, bannerH, Bitmap.Config.ARGB_8888);
+            Canvas canvas = new Canvas(bannerBmp);
+
+            int dominantColor = extractDominantColor(icon);
+
+            Paint bgPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+            bgPaint.setStyle(Paint.Style.FILL);
+            bgPaint.setColor(dominantColor);
+            canvas.drawRect(0, 0, bannerW, bannerH, bgPaint);
+
+            // Center the original icon at ~52% of banner height
+            int iconSize = 94;
+            int left = (bannerW - iconSize) / 2;
+            int top = (bannerH - iconSize) / 2;
+
+            Drawable iconCopy = icon.getConstantState() != null ? icon.getConstantState().newDrawable().mutate() : icon;
+            iconCopy.setBounds(left, top, left + iconSize, top + iconSize);
+            iconCopy.draw(canvas);
+
+            BitmapDrawable result = new BitmapDrawable(ctx.getResources(), bannerBmp);
+            if (pkgKey != null) {
+                sSyntheticBannerCache.put(pkgKey, result);
+            }
+            return result;
+        } catch (Throwable t) {
+            return null;
+        }
+    }
+
+    /**
+     * Extracts the dominant solid color from an app icon.
+     */
+    public static int extractDominantColor(Drawable icon) {
+        if (icon == null) return 0xFF18181B;
+        try {
+            int sampleSize = 36;
+            Bitmap sample = Bitmap.createBitmap(sampleSize, sampleSize, Bitmap.Config.ARGB_8888);
+            Canvas c = new Canvas(sample);
+            Drawable copy = icon.getConstantState() != null ? icon.getConstantState().newDrawable().mutate() : icon;
+            copy.setBounds(0, 0, sampleSize, sampleSize);
+            copy.draw(c);
+
+            Map<Integer, Integer> freq = new HashMap<>();
+            Map<Integer, long[]> rgbSum = new HashMap<>();
+            int bestBucket = -1;
+            int maxCount = 0;
+
+            float[] hsv = new float[3];
+            for (int y = 0; y < sampleSize; y++) {
+                for (int x = 0; x < sampleSize; x++) {
+                    int pixel = sample.getPixel(x, y);
+                    int a = Color.alpha(pixel);
+                    if (a < 100) continue; // Skip transparent or translucent edges
+
+                    int r = Color.red(pixel);
+                    int g = Color.green(pixel);
+                    int b = Color.blue(pixel);
+
+                    // 4-bit per channel quantization to cluster subtle gradients into the same bucket
+                    int bucket = ((r >> 4) << 8) | ((g >> 4) << 4) | (b >> 4);
+                    int count = (freq.containsKey(bucket) ? freq.get(bucket) : 0) + 1;
+                    freq.put(bucket, count);
+
+                    long[] sum = rgbSum.get(bucket);
+                    if (sum == null) {
+                        sum = new long[3];
+                        rgbSum.put(bucket, sum);
+                    }
+                    sum[0] += r;
+                    sum[1] += g;
+                    sum[2] += b;
+
+                    Color.colorToHSV(pixel, hsv);
+                    boolean isWhite = (hsv[1] < 0.12f && hsv[2] > 0.88f);
+                    if (!isWhite && count > maxCount) {
+                        maxCount = count;
+                        bestBucket = bucket;
+                    }
+                }
+            }
+            sample.recycle();
+
+            // If icon is completely white/monochrome glyph on transparent, fallback to elegant dark slate
+            if (bestBucket == -1 || !rgbSum.containsKey(bestBucket)) {
+                return 0xFF1E293B;
+            }
+
+            long[] sum = rgbSum.get(bestBucket);
+            int total = freq.get(bestBucket);
+            int avgR = (int) (sum[0] / total);
+            int avgG = (int) (sum[1] / total);
+            int avgB = (int) (sum[2] / total);
+
+            Color.colorToHSV(Color.rgb(avgR, avgG, avgB), hsv);
+
+            // Minimum luminance for TV OLED: ensures dark icons (like Termux) stay visible as sleek charcoal slate
+            if (hsv[2] < 0.12f) {
+                hsv[2] = 0.14f;
+            }
+
+            return Color.HSVToColor(hsv);
+        } catch (Throwable t) {
+            return 0xFF18181B;
+        }
     }
 
     @NonNull

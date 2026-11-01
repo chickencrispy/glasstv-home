@@ -123,24 +123,50 @@
                     android:textColor="#CBD5E1"
                     android:textSize="11sp" />
 
-                <TextView
-                    android:id="@+id/btnChangeLocation"
+                <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="3dp"
-                    android:background="@drawable/bg_location_pill"
-                    android:clickable="true"
-                    android:focusable="true"
-                    android:fontFamily="@font/outfit"
-                    android:fontVariationSettings="'wght' 600"
                     android:gravity="center"
-                    android:paddingStart="12dp"
-                    android:paddingTop="2.5dp"
-                    android:paddingEnd="12dp"
-                    android:paddingBottom="2.5dp"
-                    android:text="📍 Ubah Lokasi / Suasana"
-                    android:textColor="@color/selector_pill_text"
-                    android:textSize="10sp" />
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/btnChangeLocation"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/bg_location_pill"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:fontFamily="@font/outfit"
+                        android:fontVariationSettings="'wght' 600"
+                        android:gravity="center"
+                        android:paddingStart="12dp"
+                        android:paddingTop="2.5dp"
+                        android:paddingEnd="12dp"
+                        android:paddingBottom="2.5dp"
+                        android:text="📍 Ubah Kota"
+                        android:textColor="@color/selector_pill_text"
+                        android:textSize="10sp" />
+
+                    <TextView
+                        android:id="@+id/btnChangeAtmosphere"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="6dp"
+                        android:background="@drawable/bg_location_pill"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:fontFamily="@font/outfit"
+                        android:fontVariationSettings="'wght' 600"
+                        android:gravity="center"
+                        android:paddingStart="11dp"
+                        android:paddingTop="2.5dp"
+                        android:paddingEnd="11dp"
+                        android:paddingBottom="2.5dp"
+                        android:text="✨ Suasana"
+                        android:textColor="@color/selector_pill_text"
+                        android:textSize="10sp" />
+                </LinearLayout>
             </LinearLayout>
 
             <!-- Main Widescreen Body: Bento Grid (Exact Height: 385dp) -->
