@@ -1,7 +1,7 @@
 {
-  "versionCode": 20,
-  "versionName": "3.2.9-id",
+  "versionCode": 21,
+  "versionName": "3.3.0-id",
   "apkUrl": "https://github.com/luthpunk/glass-tv-home/releases/latest/download/glass-tv-home.apk",
-  "changelog": "fix(backdrop): lock glass backdrop coordinates against entrance scale/translation so wallpaper never shifts on scroll (v3.2.9-id)",
-  "releaseDate": "2026-10-29"
+  "changelog": "feat: dynamic 16:9 solid banners for sideloaded apps, Indonesian city search, Anime 4K & OLED wallpapers (v3.3.0-id)",
+  "releaseDate": "2026-11-01"
 }
