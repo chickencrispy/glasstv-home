@@ -1,6 +1,5 @@
 package com.gathin.tvhome;
 
-import android.graphics.drawable.GradientDrawable;
 import android.os.Handler;
 import android.os.Looper;
 import android.service.dreams.DreamService;
@@ -13,8 +12,7 @@ import java.util.Random;
 
 /**
  * Screensaver (DreamService): StandBy OLED Nightstand Screensaver with large 110sp digits,
- * Gregorian date, Islamic Hijri date, next prayer countdown capsule, and subtle
- * drift to prevent OLED burn-in over long sessions.
+ * an Indonesian Gregorian date, and subtle drift to prevent OLED burn-in over long sessions.
  *
  * <p>Between 10:00 PM and 6:00 AM, automatically shifts to iPhone StandBy Wind Down
  * Mode (soft monochrome red on pure black). Dismisses on any remote button press.
@@ -25,16 +23,27 @@ public class ClockDream extends DreamService {
     private static final long MOVE_MS = 60_000L;
     private static final long DREAM_SLEEP_TIMEOUT_MS = 2L * 60 * 60 * 1000L; // 2 hours
 
+    private static final String[] DAY_NAMES = {"Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"};
+    private static final String[] MONTH_NAMES = {"Januari", "Februari", "Maret", "April", "Mei", "Juni",
+            "Juli", "Agustus", "September", "Oktober", "November", "Desember"};
+
     private final Handler handler = new Handler(Looper.getMainLooper());
     private final Random random = new Random();
     private View content;
     private TextView clock;
     private TextView ampm;
     private TextView date;
-    private TextView hijri;
-    private TextView prayer;
     private TextView hint;
     private long dreamStartTime = 0;
+
+    /** The date written the Indonesian way, e.g. "Senin, 2 November 2026". */
+    static String indonesianDate(Calendar cal) {
+        int dayOfWeek = cal.get(Calendar.DAY_OF_WEEK);
+        int month = cal.get(Calendar.MONTH);
+        String dayName = (dayOfWeek >= 1 && dayOfWeek <= 7) ? DAY_NAMES[dayOfWeek - 1] : "";
+        String monthName = (month >= 0 && month < 12) ? MONTH_NAMES[month] : "";
+        return dayName + ", " + cal.get(Calendar.DAY_OF_MONTH) + " " + monthName + " " + cal.get(Calendar.YEAR);
+    }
 
     private final Runnable tick = new Runnable() {
         @Override
@@ -72,8 +81,6 @@ public class ClockDream extends DreamService {
         clock = findViewById(R.id.nightstandClock);
         ampm = findViewById(R.id.nightstandAmPm);
         date = findViewById(R.id.nightstandDate);
-        hijri = findViewById(R.id.nightstandHijri);
-        prayer = findViewById(R.id.nightstandPrayer);
         hint = findViewById(R.id.nightstandHint);
 
         updateNightstand();
@@ -111,18 +118,12 @@ public class ClockDream extends DreamService {
     private void updateNightstand() {
         if (content == null) return;
 
-        if (hijri != null) {
-            hijri.setText("🌙 " + PrayerTimes.getHijriDate());
+        Calendar cal = Calendar.getInstance();
+        if (date != null) {
+            date.setText(indonesianDate(cal));
         }
-
-        if (prayer != null) {
-            prayer.setText("🕌 " + PrayerTimes.getNextPrayerSummary(this));
-        }
-
-        float density = getResources().getDisplayMetrics().density;
 
         // StandBy Wind Down Mode: 10:00 PM (22:00) to 6:00 AM (06:00) -> Red Monochrome
-        Calendar cal = Calendar.getInstance();
         int hour = cal.get(Calendar.HOUR_OF_DAY);
         boolean isNightMode = (hour >= 22 || hour < 6);
 
@@ -131,26 +132,11 @@ public class ClockDream extends DreamService {
             if (clock != null) clock.setTextColor(red);
             if (ampm != null) ampm.setTextColor(0xCCFF453A);
             if (date != null) date.setTextColor(0xE6FF453A);
-            if (hijri != null) hijri.setTextColor(0xE6FF453A);
-            if (prayer != null) {
-                prayer.setTextColor(red);
-                GradientDrawable redPill = new GradientDrawable();
-                redPill.setShape(GradientDrawable.RECTANGLE);
-                redPill.setColor(0x26FF453A);
-                redPill.setStroke((int) (1 * density), 0x59FF453A);
-                redPill.setCornerRadius(21 * density);
-                prayer.setBackground(redPill);
-            }
             if (hint != null) hint.setTextColor(0x55FF453A);
         } else {
             if (clock != null) clock.setTextColor(0xFFFFFFFF);
             if (ampm != null) ampm.setTextColor(0xB3FFFFFF);
             if (date != null) date.setTextColor(0xE6FFFFFF);
-            if (hijri != null) hijri.setTextColor(0xD9E6E0D2);
-            if (prayer != null) {
-                prayer.setTextColor(0xFFFFFFFF);
-                prayer.setBackgroundResource(R.drawable.pill_bg);
-            }
             if (hint != null) hint.setTextColor(0x4DFFFFFF);
         }
     }
