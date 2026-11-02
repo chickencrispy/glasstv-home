@@ -4,9 +4,9 @@
 Users can simply paste this single prompt into any AI coding agent (Google Antigravity, Claude Code, Cursor):
 
 ```text
-install ni dekat tv rumah saya: https://github.com/aqmangge/glass-tv-home
+install ni dekat tv rumah saya: https://github.com/chickencrispy/glasstv-home
 ```
-*(English alias: `install this on my home tv: https://github.com/aqmangge/glass-tv-home`)*
+*(English alias: `install this on my home tv: https://github.com/chickencrispy/glasstv-home`)*
 
 When an AI assistant receives this prompt:
 1. Ask the user for their TV IP address (or scan the local Wi-Fi subnet with `adb connect <ip>:5555`).

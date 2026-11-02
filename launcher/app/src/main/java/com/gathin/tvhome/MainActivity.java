@@ -125,6 +125,8 @@ public class MainActivity extends Activity implements AppAdapter.TileListener {
 
     /** Tiles per row and dock slots (res/values/config.xml, columns). Set in onCreate. */
     static int COLUMNS = 4;
+    /** Margin left visible below the dock row on the home screen. */
+    private static final float DOCK_BOTTOM_MARGIN_DP = 1f;
     private static final long MINUTE_MS = 60_000L;
     private String liveTvPkg;
     private String liveTvAction;
@@ -179,8 +181,6 @@ public class MainActivity extends Activity implements AppAdapter.TileListener {
     private View btnAssistant;
     private View btnCandyBox;
     private TextView ampmView, dateView;
-    private TextView shamsiDate;
-    private TextView prayerTimesView;
     private TextView weatherAirQualityView;
     private View nowPlayingCard;
     private ImageView cardAlbumArt;
@@ -194,14 +194,7 @@ public class MainActivity extends Activity implements AppAdapter.TileListener {
     private boolean nowPlayingDisabledByUser = false;
     private String lastPlayedTrackKey = "";
     private NowPlayingManager.Listener nowPlayingListener;
-    private View islamicShelf;
-    private View ayahBlock;
-    private TextView ayahLabel, ayahArabic, ayahText, prayerHeader;
-    private boolean ayahRunning;
     private boolean homeWeatherRunning;
-    private TextView lblSubuh, lblSyuruk, lblZohor, lblAsar, lblMaghrib, lblIsyak;
-    private TextView timeSubuh, timeSyuruk, timeZohor, timeAsar, timeMaghrib, timeIsyak;
-    private boolean shamsi;
     private String vpnApp;
     private SpringAnimation springX, springY;
     private float glassTargetX, glassTargetY;
@@ -313,15 +306,13 @@ public class MainActivity extends Activity implements AppAdapter.TileListener {
     private final Runnable minuteTick = new Runnable() {
         @Override
         public void run() {
-            updateShamsiDate();
-            updatePrayerTimes();
             updateDateAndPeriod();
             updateWifiLabel();
             updateWeatherAqi();
             WeatherAirQuality.syncIfDue(MainActivity.this, MainActivity.this::updateWeatherAqi);
-            updateIslamicShelf();
             refreshPlacesIfDue();
             refreshOnlineWallpapersIfDue();
+            AppUpdateManager.checkScheduledAutoUpdate(MainActivity.this);
             checkInactivity();
             handler.postDelayed(this, MINUTE_MS);
         }
@@ -343,6 +334,8 @@ public class MainActivity extends Activity implements AppAdapter.TileListener {
         sInstance = new java.lang.ref.WeakReference<>(this);
         SoundEffects.init(this);
         setContentView(R.layout.activity_main);
+        // One-time move of installs still on the old Tuban default to Payakumbuh.
+        AppLocationManager.ensureDefaults(this);
         density = getResources().getDisplayMetrics().density;
         // config.xml, overlaid by config.json from a pushed theme (see Config and tools/theme.sh).
         Config cfg = Config.load(this);
@@ -551,72 +544,8 @@ public class MainActivity extends Activity implements AppAdapter.TileListener {
         nowPlayingListener = this::updateNowPlayingUi;
         NowPlayingManager.registerListener(nowPlayingListener);
 
-        islamicShelf = findViewById(R.id.islamicShelf);
-        if (islamicShelf != null) {
-            ayahBlock = findViewById(R.id.ayahBlock);
-            ayahLabel = findViewById(R.id.ayahLabel);
-            ayahArabic = findViewById(R.id.ayahArabic);
-            ayahText = findViewById(R.id.ayahText);
-            prayerHeader = findViewById(R.id.prayerHeader);
-
-            lblSubuh = findViewById(R.id.lblSubuh);
-            lblSyuruk = findViewById(R.id.lblSyuruk);
-            lblZohor = findViewById(R.id.lblZohor);
-            lblAsar = findViewById(R.id.lblAsar);
-            lblMaghrib = findViewById(R.id.lblMaghrib);
-            lblIsyak = findViewById(R.id.lblIsyak);
-
-            timeSubuh = findViewById(R.id.timeSubuh);
-            timeSyuruk = findViewById(R.id.timeSyuruk);
-            timeZohor = findViewById(R.id.timeZohor);
-            timeAsar = findViewById(R.id.timeAsar);
-            timeMaghrib = findViewById(R.id.timeMaghrib);
-            timeIsyak = findViewById(R.id.timeIsyak);
-
-            islamicShelf.addOnLayoutChangeListener((v, l, t, r, b, ol, ot, orr, ob) -> {
-                if (heroBottom > 0) v.setY(heroBottom - v.getHeight());
-            });
-            updateIslamicShelf();
-        }
-
         btnWifi = findViewById(R.id.btnWifi);
         if (!cfg.showNetworkPill) btnWifi.setVisibility(View.GONE);
-        shamsiDate = findViewById(R.id.shamsiDate);
-        shamsi = cfg.shamsiDate;
-        if (shamsi) {
-            shamsiDate.setVisibility(View.VISIBLE);
-            TextView date = findViewById(R.id.date);
-            date.setTextSize(11f);
-            date.setPadding(0, (int) (4 * density), 0, 0);
-        }
-        prayerTimesView = findViewById(R.id.prayerTimes);
-        if (prayerTimesView != null) {
-            prayerTimesView.setOnClickListener(v -> showPrayerPopup());
-            prayerTimesView.setOnKeyListener((v, keyCode, event) -> {
-                if (event.getAction() != KeyEvent.ACTION_DOWN) return false;
-                if (keyCode == KeyEvent.KEYCODE_DPAD_RIGHT) {
-                    View inputs = findViewById(R.id.btnInputs);
-                    View wifi = findViewById(R.id.btnWifi);
-                    View settings = findViewById(R.id.btnSettings);
-                    if (inputs != null && inputs.getVisibility() == View.VISIBLE) inputs.requestFocus();
-                    else if (wifi != null && wifi.getVisibility() == View.VISIBLE) wifi.requestFocus();
-                    else if (settings != null) settings.requestFocus();
-                    return true;
-                }
-                if (keyCode == KeyEvent.KEYCODE_DPAD_DOWN) {
-                    focusTile(lastFocused % COLUMNS);
-                    return true;
-                }
-                if (keyCode == KeyEvent.KEYCODE_DPAD_UP) return true;
-                if (keyCode == KeyEvent.KEYCODE_DPAD_CENTER || keyCode == KeyEvent.KEYCODE_ENTER) {
-                    showPrayerPopup();
-                    return true;
-                }
-                return false;
-            });
-        }
-        updatePrayerTimes();
-        PrayerTimes.syncIfDue(this, this::updatePrayerTimes);
         vpnApp = cfg.vpnApp;
         moduleCards = cfg.moduleCards;
         hiddenApps = new HashSet<>(cfg.hiddenApps);
@@ -659,14 +588,6 @@ public class MainActivity extends Activity implements AppAdapter.TileListener {
             Backdrop.watch(pill);
             pill.setOnFocusChangeListener((v, has) -> {
                 if (has) moveTopHighlight(v);
-            });
-        }
-        if (prayerTimesView != null) {
-            prayerTimesView.setOnFocusChangeListener((v, has) -> {
-                if (has) {
-                    SoundEffects.playNav();
-                    glider.hide();
-                }
             });
         }
         // The apps rise into place on the first launch after the TV starts, and only then. Setting
@@ -821,10 +742,6 @@ public class MainActivity extends Activity implements AppAdapter.TileListener {
                         return true;
                     }
                 }
-                if (v.getId() == R.id.btnInputs && prayerTimesView != null && prayerTimesView.getVisibility() == View.VISIBLE) {
-                    prayerTimesView.requestFocus();
-                    return true;
-                }
                 return v.getId() == R.id.btnInputs
                         || (v.getId() == R.id.btnWifi && (btnInputs == null || btnInputs.getVisibility() != View.VISIBLE));
             }
@@ -892,8 +809,8 @@ public class MainActivity extends Activity implements AppAdapter.TileListener {
                     .build(), vpnCallback);
         }
 
-        // Silent background update check after 5 seconds on launch
-        handler.postDelayed(() -> AppUpdateManager.checkForUpdates(this, false), 5000);
+        // Silent background update check after 5 seconds on launch, only when auto-update is on.
+        handler.postDelayed(() -> AppUpdateManager.checkAutoUpdateIfDue(this), 5000);
 
         if (getIntent() != null && getIntent().getBooleanExtra("open_settings", false)) {
             handler.postDelayed(() -> {
@@ -905,12 +822,6 @@ public class MainActivity extends Activity implements AppAdapter.TileListener {
             handler.postDelayed(() -> {
                 if (screensaverActive) dismissScreensaver();
                 showCandyBoxPopup();
-            }, 100);
-        }
-        if (getIntent() != null && getIntent().getBooleanExtra("open_azan_settings", false)) {
-            handler.postDelayed(() -> {
-                if (screensaverActive) dismissScreensaver();
-                showAzanSettingsDialog();
             }, 100);
         }
         if (getIntent() != null && getIntent().getBooleanExtra("open_wallpaper", false)) {
@@ -1118,11 +1029,6 @@ public class MainActivity extends Activity implements AppAdapter.TileListener {
             showCandyBoxPopup();
             return;
         }
-        if (intent != null && intent.getBooleanExtra("open_azan_settings", false)) {
-            if (screensaverActive) dismissScreensaver();
-            showAzanSettingsDialog();
-            return;
-        }
         if (intent != null && intent.getBooleanExtra("open_wallpaper", false)) {
             if (screensaverActive) dismissScreensaver();
             showWallpaperDialog();
@@ -1178,17 +1084,11 @@ public class MainActivity extends Activity implements AppAdapter.TileListener {
         promptsPaused = false;
         resuming = true;
         reloadApps(true);
-        updateShamsiDate();
-        updatePrayerTimes();
         updateDateAndPeriod();
         updateWifiLabel();
         updateWeatherAqi();
         WeatherAirQuality.syncIfDue(this, this::updateWeatherAqi);
-        updateIslamicShelf();
         updateInputsButton();
-        Location.Zone chosenPlace = Location.chosen(this);
-        String zoneCode = (chosenPlace != null) ? chosenPlace.code : "WLY01";
-        Azan.setMasterEnabled(this, false);
         NowPlayingManager.updateCurrentMedia(this);
         startWallpaperRotation();
         handler.postDelayed(minuteTick, MINUTE_MS);
@@ -1332,9 +1232,8 @@ public class MainActivity extends Activity implements AppAdapter.TileListener {
 
     public void refreshLocationDependentData() {
         updateWeatherAqi();
-        updatePrayerTimes();
         WeatherAirQuality.sync(this, this::updateWeatherAqi);
-        PrayerTimes.sync(this, this::updatePrayerTimes);
+        PrayerTimes.sync(this, null);
     }
 
     @Override
@@ -1392,9 +1291,6 @@ public class MainActivity extends Activity implements AppAdapter.TileListener {
         }
         if (heroShelf != null) {
             heroShelf.animate().alpha(alpha).setDuration(duration).start();
-        }
-        if (islamicShelf != null) {
-            islamicShelf.animate().alpha(alpha).setDuration(duration).start();
         }
         if (glass != null) {
             glass.animate().alpha(alpha).setDuration(duration).start();
@@ -1504,18 +1400,6 @@ public class MainActivity extends Activity implements AppAdapter.TileListener {
     private void showHero(int position, float dockTopInRoot) {
         int color = adapter.ambientColorAt(position);
         heroBottom = dockTopInRoot - HERO_GAP_DP * density;
-
-        if (islamicShelf != null) {
-            float iy = heroBottom - islamicShelf.getHeight();
-            islamicShelf.setY(iy);
-            islamicShelf.animate().cancel();
-            if (!heroShown) {
-                if (firstFrameHeld || resuming) islamicShelf.setAlpha(1f);
-                else islamicShelf.animate().alpha(1f).setDuration(260).start();
-            } else {
-                islamicShelf.setAlpha(1f);
-            }
-        }
 
         // When using custom wallpaper or before wallpaper place name is ready, hide the shelf completely
         if (isCustomWallpaper() || placeName == null) {
@@ -1801,7 +1685,7 @@ public class MainActivity extends Activity implements AppAdapter.TileListener {
         int inner = grid.getWidth() - grid.getPaddingLeft() - grid.getPaddingRight();
         int itemH = AppAdapter.itemHeightPx(AppAdapter.tileHeightPx(AppAdapter.tileWidthPx(inner, COLUMNS, density)), density);
         int dockRow = itemH + (int) ((6 + 12) * density);   // item height plus DockDecoration offsets
-        int want = Math.max(0, h - dockRow - itemH * rowsBelowDockSetting - (int) (30 * density));
+        int want = Math.max(0, h - dockRow - itemH * rowsBelowDockSetting - (int) (DOCK_BOTTOM_MARGIN_DP * density));
         if (grid.getPaddingTop() == want) return true;
         grid.setPadding(grid.getPaddingLeft(), want, grid.getPaddingRight(), grid.getPaddingBottom());
         return false;
@@ -1926,7 +1810,6 @@ public class MainActivity extends Activity implements AppAdapter.TileListener {
         if (!heroShown) return;
         heroShown = false;
         if (heroShelf != null) heroShelf.animate().alpha(0f).setDuration(reducedMotion ? 100 : 160).start();
-        if (islamicShelf != null) islamicShelf.animate().alpha(0f).setDuration(reducedMotion ? 100 : 160).start();
     }
 
     /**
@@ -2277,23 +2160,6 @@ public class MainActivity extends Activity implements AppAdapter.TileListener {
 
     // ---- top bar ---------------------------------------------------------------------------------
 
-    private void updateShamsiDate() {
-        if (shamsi) shamsiDate.setText(Shamsi.today());
-    }
-
-    private void updatePrayerTimes() {
-        applyPrayerVisibility();
-    }
-
-    /** Hides the Waktu Solat, Ayah/Doa and Islamic shelf completely. */
-    private void applyPrayerVisibility() {
-        if (prayerTimesView != null) prayerTimesView.setVisibility(View.GONE);
-        if (prayerHeader != null) prayerHeader.setVisibility(View.GONE);
-        if (ayahBlock != null) ayahBlock.setVisibility(View.GONE);
-        if (islamicShelf != null) islamicShelf.setVisibility(View.GONE);
-        View table = findViewById(R.id.prayerTable);
-        if (table != null) table.setVisibility(View.GONE);
-    }
 
     private void updateWeatherAqi() {
         if (weatherAirQualityView != null) {
@@ -2329,19 +2195,6 @@ public class MainActivity extends Activity implements AppAdapter.TileListener {
         }
     }
 
-    private void updateIslamicShelf() {
-        if (islamicShelf != null) islamicShelf.setVisibility(View.GONE);
-        if (ayahBlock != null) ayahBlock.setVisibility(View.GONE);
-    }
-
-    private void updateAyah() {
-    }
-
-    private void showAyah(WeeklyAyah.Ayah a) {
-        if (ayahBlock != null) {
-            ayahBlock.setVisibility(View.GONE);
-        }
-    }
 
     private void updateDateAndPeriod() {
         Calendar cal = Calendar.getInstance();
@@ -2636,342 +2489,6 @@ public class MainActivity extends Activity implements AppAdapter.TileListener {
         styleGlassDialog(dialog);
     }
 
-    private void showAzanSettingsDialog() {
-        SoundEffects.playSelect();
-        Location.Zone chosenPlace = Location.chosen(this);
-        String zoneCode = (chosenPlace != null) ? chosenPlace.code : "WLY01";
-        java.util.Calendar cal = java.util.Calendar.getInstance();
-        PrayerTimes.Day todayTimes = PrayerTimes.day(this, zoneCode, cal);
-
-        AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.Theme_TvHome_GlassDialog);
-        AlertDialog[] dialogHolder = new AlertDialog[1];
-
-        LinearLayout rootContainer = new LinearLayout(this);
-        rootContainer.setOrientation(LinearLayout.VERTICAL);
-        rootContainer.setPadding((int) (22 * density), (int) (16 * density), (int) (22 * density), (int) (16 * density));
-
-        // Header Title Row
-        LinearLayout headerRow = new LinearLayout(this);
-        headerRow.setOrientation(LinearLayout.HORIZONTAL);
-        headerRow.setGravity(Gravity.CENTER_VERTICAL);
-
-        LinearLayout titleCol = new LinearLayout(this);
-        titleCol.setOrientation(LinearLayout.VERTICAL);
-
-        TextView titleView = new TextView(this);
-        titleView.setText("🕌 Tetapan & Pilihan Azan");
-        titleView.setTextSize(19);
-        titleView.setTextColor(0xFFFFFFFF);
-        titleView.setTypeface(getResources().getFont(R.font.inter), Typeface.BOLD);
-        titleView.setFontVariationSettings("'wght' 700");
-        titleView.setShadowLayer(4 * density, 0, 1 * density, 0xDD000000);
-        titleCol.addView(titleView);
-
-        TextView subView = new TextView(this);
-        subView.setText("Notifikasi popup kad kaca terapung di atas semua aplikasi & tetapan audio azan");
-        subView.setTextSize(12.5f);
-        subView.setTextColor(0xD9FFFFFF);
-        subView.setTypeface(getResources().getFont(R.font.inter), Typeface.BOLD);
-        subView.setFontVariationSettings("'wght' 600");
-        subView.setShadowLayer(3 * density, 0, 1 * density, 0xCC000000);
-        subView.setPadding(0, (int) (2 * density), 0, 0);
-        titleCol.addView(subView);
-
-        headerRow.addView(titleCol, new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1f));
-        rootContainer.addView(headerRow);
-
-        // Gap below header
-        View headerDivider = new View(this);
-        headerDivider.setBackgroundColor(0x22FFFFFF);
-        LinearLayout.LayoutParams divLp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, Math.max(1, (int) (1 * density)));
-        divLp.topMargin = (int) (8 * density);
-        divLp.bottomMargin = (int) (8 * density);
-        rootContainer.addView(headerDivider, divLp);
-
-        // Content ScrollView with 2 balanced columns (16:9 widescreen layout)
-        android.widget.ScrollView scroll = new android.widget.ScrollView(this);
-        scroll.setVerticalScrollBarEnabled(false);
-        scroll.setFillViewport(true);
-
-        LinearLayout twoCols = new LinearLayout(this);
-        twoCols.setOrientation(LinearLayout.HORIZONTAL);
-
-        // --- LEFT COLUMN: A (Suis Utama) & B (Pilihan Waktu Solat) ---
-        LinearLayout leftCol = new LinearLayout(this);
-        leftCol.setOrientation(LinearLayout.VERTICAL);
-        LinearLayout.LayoutParams leftLp = new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1.15f);
-        leftLp.rightMargin = (int) (12 * density);
-        leftCol.setLayoutParams(leftLp);
-
-        // Bahagian A: Suis Utama
-        leftCol.addView(createDialogSectionHeader("A. STATUS UTAMA POPUP AZAN"));
-        final TextView masterStatusTag = new TextView(this);
-        LinearLayout masterRow = createDialogRow(
-                "🔔 Notifikasi Popup Azan TV",
-                "Papar kad waktu solat terapung di atas Netflix, YouTube & semua app",
-                masterStatusTag,
-                null,
-                () -> {
-                    boolean nowOn = !Azan.isMasterEnabled(MainActivity.this);
-                    Azan.setMasterEnabled(MainActivity.this, nowOn);
-                    Azan.schedule(MainActivity.this, zoneCode);
-                    SoundEffects.playSelect();
-                    updateMasterTag(masterStatusTag, nowOn);
-                    Toast.makeText(MainActivity.this, nowOn ? "✅ Popup Azan TV Diaktifkan" : "⭕ Popup Azan TV Dimatikan", Toast.LENGTH_SHORT).show();
-                }
-        );
-        updateMasterTag(masterStatusTag, Azan.isMasterEnabled(this));
-        leftCol.addView(masterRow);
-
-        // Bahagian B: Pilihan Waktu Solat
-        leftCol.addView(createDialogSectionHeader("B. PILIHAN WAKTU SOLAT (ON / OFF)"));
-        int[] prayers = {0, 2, 3, 4, 5};
-        String[] prayerLabels = {"🌅 Subuh", "☀️ Zohor", "🌤️ Asar", "🌇 Maghrib", "🌙 Isyak"};
-
-        for (int i = 0; i < prayers.length; i++) {
-            final int pIdx = prayers[i];
-            String pName = prayerLabels[i];
-            String pTimeStr = "";
-            if (todayTimes != null && pIdx < todayTimes.minutes.length) {
-                int min = todayTimes.minutes[pIdx];
-                pTimeStr = String.format(Locale.ROOT, " • %02d:%02d", min / 60, min % 60);
-            }
-
-            final TextView prayerTag = new TextView(this);
-            LinearLayout prayerRow = createDialogRow(
-                    pName + pTimeStr,
-                    null,
-                    prayerTag,
-                    null,
-                    () -> {
-                        boolean current = Azan.on(MainActivity.this, pIdx);
-                        Azan.set(MainActivity.this, pIdx, !current);
-                        Azan.schedule(MainActivity.this, zoneCode);
-                        SoundEffects.playSelect();
-                        updatePrayerTag(prayerTag, !current);
-                    }
-            );
-            updatePrayerTag(prayerTag, Azan.on(this, pIdx));
-            leftCol.addView(prayerRow);
-        }
-        twoCols.addView(leftCol);
-
-        // Subtle vertical divider between columns
-        View colDivider = new View(this);
-        colDivider.setBackgroundColor(0x1FFFFFFF);
-        LinearLayout.LayoutParams colDivLp = new LinearLayout.LayoutParams(Math.max(1, (int) (1 * density)), ViewGroup.LayoutParams.MATCH_PARENT);
-        colDivLp.leftMargin = (int) (4 * density);
-        colDivLp.rightMargin = (int) (12 * density);
-        twoCols.addView(colDivider, colDivLp);
-
-        // --- RIGHT COLUMN: C (Audio), D (Uji Popup), Panduan & Tutup ---
-        LinearLayout rightCol = new LinearLayout(this);
-        rightCol.setOrientation(LinearLayout.VERTICAL);
-        LinearLayout.LayoutParams rightLp = new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1.0f);
-        rightCol.setLayoutParams(rightLp);
-
-        // Bahagian C: Audio
-        rightCol.addView(createDialogSectionHeader("C. PILIHAN BUNYI AZAN"));
-        final TextView soundTag = new TextView(this);
-        final TextView[] soundSubHolder = new TextView[1];
-        LinearLayout soundRow = createDialogRow(
-                "🔊 Bunyi Azan Semasa",
-                Azan.soundLabel(Azan.getSoundChoice(this)),
-                soundTag,
-                soundSubHolder,
-                () -> {
-                    SoundEffects.playSelect();
-                    showAzanSoundChoiceSubDialog(() -> {
-                        if (soundSubHolder[0] != null) {
-                            soundSubHolder[0].setText(Azan.soundLabel(Azan.getSoundChoice(MainActivity.this)));
-                        }
-                    });
-                }
-        );
-        soundTag.setText("TUKAR ❯");
-        soundTag.setTextSize(12.5f);
-        soundTag.setTypeface(getResources().getFont(R.font.inter), Typeface.BOLD);
-        soundTag.setFontVariationSettings("'wght' 700");
-        soundTag.setTextColor(new ColorStateList(new int[][]{{android.R.attr.state_focused}, {}}, new int[]{0xFF000000, 0xFF38BDF8}));
-        rightCol.addView(soundRow);
-
-        // Bahagian D: Ujian Azan
-        rightCol.addView(createDialogSectionHeader("D. UJI POPUP AZAN"));
-        final TextView testTag = new TextView(this);
-        LinearLayout testRow = createDialogRow(
-                "▶️ Uji Popup Azan Sekarang",
-                "Mencetuskan kad terapung & main audio pilihan",
-                testTag,
-                null,
-                () -> {
-                    SoundEffects.playSelect();
-                    if (dialogHolder[0] != null) dialogHolder[0].dismiss();
-                    Intent azanIntent = new Intent(MainActivity.this, AzanActivity.class);
-                    azanIntent.putExtra("prayer", 4);
-                    azanIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                    startActivity(azanIntent);
-                }
-        );
-        testTag.setText("UJI ▶");
-        testTag.setTextSize(13);
-        testTag.setTypeface(getResources().getFont(R.font.inter), Typeface.BOLD);
-        testTag.setFontVariationSettings("'wght' 700");
-        testTag.setTextColor(new ColorStateList(new int[][]{{android.R.attr.state_focused}, {}}, new int[]{0xFF000000, 0xFF38BDF8}));
-        rightCol.addView(testRow);
-
-        // Info Card
-        LinearLayout infoCard = new LinearLayout(this);
-        infoCard.setOrientation(LinearLayout.VERTICAL);
-        infoCard.setPadding((int) (12 * density), (int) (8 * density), (int) (12 * density), (int) (8 * density));
-        GradientDrawable infoBg = new GradientDrawable();
-        infoBg.setColor(0x12FFFFFF);
-        infoBg.setCornerRadius(9 * density);
-        infoBg.setStroke(Math.max(1, (int) (1 * density)), 0x22FFFFFF);
-        infoCard.setBackground(infoBg);
-
-        TextView infoText = new TextView(this);
-        infoText.setText("💡 Waktu solat diselaraskan secara automatik mengikut zon JAKIM. Kad azan tetap muncul di atas Netflix, YouTube & Perfect TV.");
-        infoText.setTextSize(11f);
-        infoText.setTextColor(0xB3FFFFFF);
-        infoText.setTypeface(getResources().getFont(R.font.inter), Typeface.NORMAL);
-        infoText.setFontVariationSettings("'wght' 500");
-        infoText.setLineSpacing(0, 1.25f);
-        infoCard.addView(infoText);
-
-        LinearLayout.LayoutParams infoLp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        infoLp.topMargin = (int) (4 * density);
-        infoLp.bottomMargin = (int) (5 * density);
-        infoCard.setLayoutParams(infoLp);
-        rightCol.addView(infoCard);
-
-        // Butang Tutup / Selesai
-        final TextView closeTag = new TextView(this);
-        LinearLayout closeRow = createDialogRow(
-                "✕ Tutup Tetapan",
-                null,
-                closeTag,
-                null,
-                () -> {
-                    SoundEffects.playSelect();
-                    if (dialogHolder[0] != null) dialogHolder[0].dismiss();
-                }
-        );
-        closeTag.setText("TUTUP");
-        closeTag.setTextSize(12.5f);
-        closeTag.setTypeface(getResources().getFont(R.font.inter), Typeface.BOLD);
-        closeTag.setFontVariationSettings("'wght' 700");
-        closeTag.setTextColor(new ColorStateList(new int[][]{{android.R.attr.state_focused}, {}}, new int[]{0xFF000000, 0x88FFFFFF}));
-        rightCol.addView(closeRow);
-
-        twoCols.addView(rightCol);
-        scroll.addView(twoCols);
-        rootContainer.addView(scroll, new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 0, 1f));
-
-        builder.setView(rootContainer);
-        AlertDialog dialog = builder.create();
-        dialogHolder[0] = dialog;
-        dialog.show();
-        styleGlassDialog(dialog);
-
-        // Set true 16:9 popup layout sizing with generous top & bottom margins
-        Window window = dialog.getWindow();
-        if (window != null) {
-            android.util.DisplayMetrics dm = getResources().getDisplayMetrics();
-            int screenH = dm.heightPixels;
-            int screenW = dm.widthPixels;
-
-            // Target height: ~70% of screen height in 16:9 (e.g. 756px on 1080p, leaving 162px top & bottom margin)
-            int targetH = Math.round(screenH * 0.70f / 9f) * 9;
-            int targetW = targetH * 16 / 9;
-            if (targetW > (int) (screenW * 0.85f)) {
-                targetW = Math.round((screenW * 0.85f) / 16f) * 16;
-                targetH = targetW * 9 / 16;
-            }
-            window.setLayout(targetW, targetH);
-            window.setGravity(Gravity.CENTER);
-        }
-    }
-
-    private void showAzanSoundChoiceSubDialog(Runnable onUpdated) {
-        final String[] soundKeys = new String[]{
-                Azan.SOUND_MAKKAH,
-                Azan.SOUND_MADINAH,
-                Azan.SOUND_KLCC,
-                Azan.SOUND_CHIME,
-                Azan.SOUND_SILENT
-        };
-
-        final String[] soundOptions = new String[]{
-                "🕋 Azan Masjidil Haram Makkah (Penuh)",
-                "🕌 Azan Masjid Nabawi Madinah (Penuh)",
-                "🇲🇾 Azan Masjid As-Syakirin KLCC",
-                "🔔 Nada Chime Lembut (Ringkas ~5 saat)",
-                "🔕 Mod Senyap (Visual Sahaja Tanpa Audio)"
-        };
-
-        String currentSound = Azan.getSoundChoice(this);
-        int selectedIndex = 0;
-        for (int i = 0; i < soundKeys.length; i++) {
-            if (soundKeys[i].equalsIgnoreCase(currentSound)) {
-                selectedIndex = i;
-                break;
-            }
-        }
-
-        AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.Theme_TvHome_GlassDialog);
-        builder.setTitle("🔊 Pilih Audio Azan");
-        builder.setSingleChoiceItems(soundOptions, selectedIndex, (dialog, which) -> {
-            dialog.dismiss();
-            String chosen = soundKeys[which];
-            Azan.setSoundChoice(MainActivity.this, chosen);
-            SoundEffects.playSelect();
-            Azan.fetch(MainActivity.this, chosen);
-            Toast.makeText(MainActivity.this, "Audio Dipilih: " + Azan.soundLabel(chosen), Toast.LENGTH_SHORT).show();
-            if (onUpdated != null) onUpdated.run();
-        });
-        builder.setNegativeButton("Kembali", (dialog, which) -> dialog.dismiss());
-        AlertDialog d = builder.create();
-        d.show();
-        styleGlassDialog(d);
-
-        if (d.getWindow() != null) {
-            android.util.DisplayMetrics dm = getResources().getDisplayMetrics();
-            int w = Math.min((int) (540 * density), (int) (dm.widthPixels * 0.75f));
-            int h = Math.min((int) (400 * density), (int) (dm.heightPixels * 0.72f));
-            d.getWindow().setLayout(w, h);
-            d.getWindow().setGravity(Gravity.CENTER);
-        }
-    }
-
-    private void updateMasterTag(TextView tag, boolean on) {
-        tag.setText(on ? "ON" : "OFF");
-        tag.setTextSize(13);
-        tag.setTypeface(getResources().getFont(R.font.inter), Typeface.NORMAL);
-        tag.setFontVariationSettings(on ? "'wght' 700" : "'wght' 600");
-        int color = on ? 0xFF38BDF8 : 0x99FFFFFF;
-        tag.setTextColor(new ColorStateList(new int[][]{{android.R.attr.state_focused}, {}}, new int[]{0xFF000000, color}));
-    }
-
-    private void updatePrayerTag(TextView tag, boolean on) {
-        tag.setText(on ? "ON" : "OFF");
-        tag.setTextSize(13);
-        tag.setTypeface(getResources().getFont(R.font.inter), Typeface.NORMAL);
-        tag.setFontVariationSettings(on ? "'wght' 700" : "'wght' 600");
-        int color = on ? 0xFF38BDF8 : 0x99FFFFFF;
-        tag.setTextColor(new ColorStateList(new int[][]{{android.R.attr.state_focused}, {}}, new int[]{0xFF000000, color}));
-    }
-
-    private TextView createDialogSectionHeader(String title) {
-        TextView tv = new TextView(this);
-        tv.setText(title);
-        tv.setTextSize(11.5f);
-        tv.setTextColor(0xFF38BDF8);
-        tv.setTypeface(getResources().getFont(R.font.inter), Typeface.BOLD);
-        tv.setFontVariationSettings("'wght' 700");
-        tv.setLetterSpacing(0.08f);
-        tv.setPadding(0, (int) (6 * density), 0, (int) (3 * density));
-        return tv;
-    }
 
     private LinearLayout createDialogRow(String title, String subtitle, TextView tagView, TextView[] subHolderOut, Runnable onClick) {
         LinearLayout row = new LinearLayout(this);
@@ -3176,10 +2693,6 @@ public class MainActivity extends Activity implements AppAdapter.TileListener {
             return;
         }
 
-        if (ayahBlock != null) {
-            ayahBlock.setVisibility(View.GONE);
-        }
-
         // Active playback from Spotify or YouTube Music
         cardTitle.setText(info.title.isEmpty() ? "Lagu Dimainkan" : info.title);
         cardTitle.setSelected(true);
@@ -3245,7 +2758,6 @@ public class MainActivity extends Activity implements AppAdapter.TileListener {
                         if (weatherAirQualityView != null) {
                             weatherAirQualityView.setNextFocusDownId(View.NO_ID);
                         }
-                        showAyah(WeeklyAyah.stored(MainActivity.this) != null ? WeeklyAyah.stored(MainActivity.this) : WeeklyAyah.last(MainActivity.this));
                     })
                     .start();
         } else {
@@ -3254,7 +2766,6 @@ public class MainActivity extends Activity implements AppAdapter.TileListener {
             if (weatherAirQualityView != null) {
                 weatherAirQualityView.setNextFocusDownId(View.NO_ID);
             }
-            showAyah(WeeklyAyah.stored(this) != null ? WeeklyAyah.stored(this) : WeeklyAyah.last(this));
         }
     }
 
@@ -3984,7 +3495,7 @@ public class MainActivity extends Activity implements AppAdapter.TileListener {
             return;
         }
 
-        String uploadUrl = "http://" + localIp + ":" + port;
+        String uploadUrl = "http://" + localIp + ":" + port + "/?t=" + uploadServer.getToken();
         Bitmap qrBmp = QrBitmapUtil.createQrBitmap(uploadUrl, Math.round(260 * density));
 
         LinearLayout rootLayout = new LinearLayout(this);
@@ -4420,87 +3931,6 @@ public class MainActivity extends Activity implements AppAdapter.TileListener {
         CitySearchDialog.show(this, this::refreshLocationDependentData);
     }
 
-    private void showPrayerZoneDialog() {
-        showAsiaCountryDialog();
-    }
-
-    /** Shows an Apple TV-style frosted glass Putrajaya prayer timetable popup. */
-    private void showPrayerPopup() {
-        if (openMenu != null) return;
-        SoundEffects.playSelect();
-        View anchor = prayerTimesView != null ? prayerTimesView : findViewById(R.id.leftBlock);
-        FrameLayout panel = (FrameLayout) getLayoutInflater().inflate(R.layout.popup_inputs, root, false);
-        LinearLayout rows = panel.findViewById(R.id.rows);
-        Runnable close = () -> closeMenu(false);
-
-        // Header: Active Prayer Zone
-        addInputRow(rows, close, R.drawable.ic_settings, "Waktu Solat " + PrayerTimes.getShortZoneName(this) + " (Tukar Zon ▶)", TvInputManager.INPUT_STATE_CONNECTED, () -> {
-            SoundEffects.playSelect();
-            closeMenu(false);
-            startActivity(new Intent(MainActivity.this, LocationActivity.class));
-        });
-
-        // Date row: Islamic Hijri
-        addInputRow(rows, close, R.drawable.ic_input, PrayerTimes.getHijriDate(), -1, () -> {});
-
-        addSeparator(rows);
-
-        // Prayer times list
-        java.util.List<PrayerTimes.ScheduleItem> schedule = PrayerTimes.getFullSchedule(this);
-        for (PrayerTimes.ScheduleItem item : schedule) {
-            addPrayerRow(rows, close, item.name, item.timeFormatted, item.isNext);
-        }
-
-        addSeparator(rows);
-
-        // Tetapan Azan shortcut
-        addInputRow(rows, close, R.drawable.ic_azan, "Tetapan & Pilihan Azan ▶", -1, () -> {
-            SoundEffects.playSelect();
-            closeMenu(false);
-            showAzanSettingsDialog();
-        });
-
-        // Tutup
-        addInputRow(rows, close, R.drawable.ic_close, "Tutup", -1, () -> {
-            SoundEffects.playSelect();
-            closeMenu(true);
-        });
-
-        int width = (int) (270 * density);
-        panel.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
-        width = Math.max(width, panel.getMeasuredWidth());
-
-        showMenu(panel, rows, anchor, width, false);
-    }
-
-    private void addPrayerRow(LinearLayout rows, Runnable close, String name, String time, boolean isNext) {
-        View row = getLayoutInflater().inflate(R.layout.item_input, rows, false);
-        ((ImageView) row.findViewById(R.id.icon)).setImageResource(R.drawable.ic_input);
-        TextView title = row.findViewById(R.id.title);
-        title.setText(name + (isNext ? " (Seterusnya)" : ""));
-        title.setTypeface(getResources().getFont(R.font.inter), Typeface.BOLD);
-        title.setFontVariationSettings(isNext ? "'wght' 700" : "'wght' 650");
-        title.setShadowLayer(3 * density, 0, 1 * density, 0xCC000000);
-
-        TextView status = row.findViewById(R.id.status);
-        View dot = row.findViewById(R.id.dot);
-        status.setText(time);
-        status.setVisibility(View.VISIBLE);
-        status.setTypeface(getResources().getFont(R.font.inter), Typeface.BOLD);
-        status.setFontVariationSettings(isNext ? "'wght' 700" : "'wght' 600");
-        status.setShadowLayer(3 * density, 0, 1 * density, 0xCC000000);
-
-        if (isNext) {
-            dot.setVisibility(View.VISIBLE);
-        } else {
-            dot.setVisibility(View.GONE);
-        }
-        row.setOnClickListener(v -> {
-            SoundEffects.playSelect();
-            close.run();
-        });
-        rows.addView(row);
-    }
 
     private void checkInactivity() {
         if (!hasWindowFocus() || isFinishing() || isDestroyed()) return;

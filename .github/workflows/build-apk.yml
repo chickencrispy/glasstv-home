@@ -69,6 +69,14 @@ jobs:
 
           mkdir -p release
           cp glass-tv-home.apk release/glass-tv-home.apk
+
+          # Keep release/README.md in step with the APK it describes.
+          SIZE_KB=$(( $(stat -c %s glass-tv-home.apk) / 1024 ))
+          SHA256=$(sha256sum glass-tv-home.apk | awk '{print $1}')
+          sed -i -E "s|^\* \*\*Versi / Version\*\*: .*|* **Versi / Version**: \`v${VNAME}\` (Launcher Glass TV Home Edisi Indonesia: cuaca dan AQI, tempat, tetapan tema, OTA In-App Auto Update)|" release/README.md
+          sed -i -E "s|^\* \*\*Saiz Fail\*\*: ~[0-9]+ KB|* **Saiz Fail**: ~${SIZE_KB} KB|" release/README.md
+          sed -i -E "s|^\* \*\*SHA-256 Checksum\*\*: \`[0-9a-f]+\`|* **SHA-256 Checksum**: \`${SHA256}\`|" release/README.md
+
           cat > release/version.json <<EOF
           {
             "versionCode": ${VCODE:-11},
@@ -81,7 +89,7 @@ jobs:
 
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add release/version.json release/glass-tv-home.apk
+          git add release/version.json release/glass-tv-home.apk release/README.md
           if ! git diff --cached --quiet; then
             git commit -m "chore(release): update OTA version.json to v${VNAME} (${VCODE})"
             git push origin main

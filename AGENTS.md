@@ -7,8 +7,8 @@ before you improvise a fix.
 
 > ⚡ **Quick 1-Line User Trigger**:
 > When a user prompts you with:
-> `install ni dekat tv rumah saya: https://github.com/aqmangge/glass-tv-home`
-> (or `install this on my home tv: https://github.com/aqmangge/glass-tv-home`), they want you to automate the full deployment. Ask for their TV IP (if not auto-discovered) and their location in Malaysia (e.g. Putrajaya, Cheras, Shah Alam, Melaka, JB, Penang, Kuantan, Kuching, KK). Then connect over ADB, backup, debloat, install the prebuilt APK from `release/glass-tv-home.apk` (or build), configure the haze & prayer zone broadcast, and verify with a screenshot.
+> `install ni dekat tv rumah saya: https://github.com/chickencrispy/glasstv-home`
+> (or `install this on my home tv: https://github.com/chickencrispy/glasstv-home`), they want you to automate the full deployment. Ask for their TV IP (if not auto-discovered) and their location in Malaysia (e.g. Putrajaya, Cheras, Shah Alam, Melaka, JB, Penang, Kuantan, Kuching, KK). Then connect over ADB, backup, debloat, install the prebuilt APK from `release/glass-tv-home.apk` (or build), configure the haze & prayer zone broadcast, and verify with a screenshot.
 
 ## First: check the model, before anything else
 
@@ -158,9 +158,9 @@ Written so that any model can follow it to the letter:
   path without spaces.
 - Configure in `launcher/app/src/main/res/values/config.xml`, or better with a theme (step 6): ask which four
   apps go in the dock and in what order, using the package names from `pm list packages -3`.
-- Build: `cd launcher && ./gradlew testReleaseUnitTest assembleRelease`. The APK must stay under 400 KB
+- Build: `cd launcher && ./gradlew testReleaseUnitTest assembleRelease`. The APK must stay under 800 KB
   (CI checks it).
-- **Check**: `launcher/app/build/outputs/apk/release/app-release.apk` exists and is about 300 KB.
+- **Check**: `launcher/app/build/outputs/apk/release/app-release.apk` exists and is under 800 KB (about 570 KB today).
 
 ### 5. Install and make it Home
 

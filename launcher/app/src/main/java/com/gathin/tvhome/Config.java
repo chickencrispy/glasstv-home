@@ -42,7 +42,6 @@ final class Config {
     final String inputAction;
     final int columns;
     final int rowsBelowDock;
-    final boolean shamsiDate;
     final boolean moduleCards;
     /** Calmer motion for weak GPUs (config.xml, reduced_motion): stiff spring, short fades, no replay. */
     final boolean reducedMotion;
@@ -73,7 +72,7 @@ final class Config {
     private Config(List<String> dockApps, List<String> hiddenApps, String liveTvPackage, String liveTvAction,
                    String sourcePanelService, String sourcePanelAction, String inputAction,
                    int columns, int rowsBelowDock,
-                   boolean shamsiDate, boolean moduleCards, boolean reducedMotion, String vpnApp,
+                   boolean moduleCards, boolean reducedMotion, String vpnApp,
                    boolean showHomeSettingsShortcut, boolean showNetworkPill, boolean showLiveTv,
                    int backgroundColor,
                    File wallpaper, List<File> wallpapers, long wallpaperIntervalMs,
@@ -88,7 +87,6 @@ final class Config {
         this.inputAction = inputAction;
         this.columns = columns;
         this.rowsBelowDock = rowsBelowDock;
-        this.shamsiDate = shamsiDate;
         this.moduleCards = moduleCards;
         this.reducedMotion = reducedMotion;
         this.vpnApp = vpnApp;
@@ -122,7 +120,6 @@ final class Config {
         String inputAction = res.getString(R.string.input_action).trim();
         int columns = res.getInteger(R.integer.columns);
         int rowsBelow = res.getInteger(R.integer.rows_below_dock);
-        boolean shamsi = res.getBoolean(R.bool.shamsi_date);
         boolean moduleCards = res.getBoolean(R.bool.module_cards);
         boolean reducedMotion = res.getBoolean(R.bool.reduced_motion);
         String vpn = res.getString(R.string.vpn_app).trim();
@@ -146,7 +143,6 @@ final class Config {
             inputAction = string(json, "input_action", inputAction);
             columns = integer(json, "columns", columns, 1, 8);
             rowsBelow = integer(json, "rows_below_dock", rowsBelow, 0, 3);
-            shamsi = bool(json, "shamsi_date", shamsi);
             moduleCards = bool(json, "module_cards", moduleCards);
             reducedMotion = bool(json, "reduced_motion", reducedMotion);
             vpn = string(json, "vpn_app", vpn);
@@ -193,7 +189,7 @@ final class Config {
                 : CacheCleaner.DEFAULT_DAYS;
 
         return new Config(dock, hidden, liveTv, liveTvAction, panelService, panelAction, inputAction,
-                Math.max(1, columns), Math.max(0, rowsBelow), shamsi, moduleCards, reducedMotion,
+                Math.max(1, columns), Math.max(0, rowsBelow), moduleCards, reducedMotion,
                 vpn, homeSettings, networkPill, liveTvRow, background, wallpaper, wallpapers, wallpaperIntervalMs,
                 places, wallpaperOnline, wallpaperFeed, cacheCleanDays, applied);
     }

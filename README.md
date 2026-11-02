@@ -7,12 +7,12 @@
 </p>
 
 <p align="center">
-  <a href="https://github.com/luthpunk/glass-tv-home/releases/latest/download/glass-tv-home.apk">
-    <img src="https://img.shields.io/badge/Download_APK_v3.3.0--id-glass--tv--home.apk-success?style=for-the-badge&logo=android" alt="Download APK Terbaru">
+  <a href="https://github.com/chickencrispy/glasstv-home/releases/latest/download/glass-tv-home.apk">
+    <img src="https://img.shields.io/badge/Download_APK_v3.3.1--id-glass--tv--home.apk-success?style=for-the-badge&logo=android" alt="Download APK Terbaru">
   </a>
 </p>
 
-> 📦 **Unduh Langsung APK Terbaru**: Dapatkan rilis terbaru [**`glass-tv-home.apk`**](https://github.com/luthpunk/glass-tv-home/releases/latest/download/glass-tv-home.apk) (**v3.3.0-id**) yang siap dipasang di Android TV, Google TV, maupun STB (seperti ZTE `HG680-FJ` / `B860H`).
+> 📦 **Unduh Langsung APK Terbaru**: Dapatkan rilis terbaru [**`glass-tv-home.apk`**](https://github.com/chickencrispy/glasstv-home/releases/latest/download/glass-tv-home.apk) (**v3.3.1-id**) yang siap dipasang di Android TV, Google TV, maupun STB (seperti ZTE `HG680-FJ` / `B860H`).
 
 ---
 
@@ -37,8 +37,8 @@
 - **Unggah Wallpaper via QR Code (HP ke TV)**: Pindai kode QR di layar TV menggunakan kamera HP pada jaringan Wi-Fi yang sama untuk mengunggah foto pribadi langsung ke TV tanpa aplikasi pihak ketiga, lengkap dengan pengelola galeri (Kunci 1 Foto atau Mode *Slideshow*).
 
 ### 4. Dashboard Cuaca & Kualitas Udara (AQI) Indonesia
-- **Default Lokasi: Tuban, Jawa Timur**: Menggunakan koordinat Alun-Alun Tuban (`-6.8976, 112.0649`) sebagai lokasi cuaca bawaan begitu aplikasi dipasang.
-- **Pilihan Kota Lengkap**: Tersedia kota-kota Jawa Timur & sekitarnya (**Tuban, Lamongan, Bojonegoro, Gresik, Surabaya, Malang**) serta kota besar Indonesia lainnya (**Jakarta, Bandung, Semarang, Yogyakarta, Denpasar/Bali, Medan, Batam, Makassar**) dan berbagai negara Asia.
+- **Default Lokasi: Payakumbuh, Sumatera Barat**: Menggunakan koordinat Kota Payakumbuh (`-0.2223, 100.6327`) sebagai lokasi cuaca bawaan begitu aplikasi dipasang.
+- **Pilihan Kota Lengkap**: Tersedia kota-kota Sumatera Barat & sekitarnya (**Payakumbuh, Bukittinggi, Padang, Padang Panjang, Solok, Sawahlunto**) serta kota besar Indonesia lainnya (**Jakarta, Bandung, Semarang, Yogyakarta, Denpasar/Bali, Medan, Batam, Makassar**) dan berbagai negara Asia.
 - **Dashboard Cuaca Lengkap (`WeatherActivity`)**: Menampilkan suhu saat ini, kondisi langit dinamis, prakiraan per jam, prakiraan 7 hari, indeks UV, kompas angin, kelembapan, tekanan udara, radar cuaca, dan indeks kualitas udara (**AQI**) dari Open-Meteo.
 
 ### 5. Menu Kanan Atas Presisi & Fitur Pintar
@@ -46,7 +46,7 @@
 - **Efek Suara Konsol**: Pilihan efek suara navigasi **PlayStation 5**, **Nintendo Switch**, **Xbox Series X/S**, atau **Bisu (Off)**.
 - **Screensaver Jam Meja (*StandBy Mode*)**: Aktif otomatis saat TV tidak digunakan selama 10 menit (atau tekan tombol *Back* 2x di layar utama), lengkap dengan mode malam merah monokrom di atas pukul 22.00.
 - **Pembersih Cache & Pengoptimalan RAM**: Membersihkan *cache* aplikasi TV secara berkala maupun instan lewat menu *Bersihkan Cache TV*.
-- **Update Otomatis (OTA) Terintegrasi**: Memeriksa dan mengunduh pembaruan APK langsung dari GitHub Releases [`luthpunk/glass-tv-home`](https://github.com/luthpunk/glass-tv-home/releases) melalui menu Pengaturan TV tanpa perlu komputer.
+- **Update Otomatis (OTA) Terintegrasi**: Memeriksa dan mengunduh pembaruan APK langsung dari GitHub Releases [`chickencrispy/glasstv-home`](https://github.com/chickencrispy/glasstv-home/releases) melalui menu Pengaturan TV tanpa perlu komputer.
 
 ---
 
@@ -76,4 +76,4 @@ Repositori ini telah dikonfigurasi dengan workflow [`.github/workflows/build-apk
 
 - Dikembangkan dari fondasi [CleanYourTV](https://github.com/Gathin23/cleanyourtv) & `glass-tv-home` di bawah lisensi MIT — lihat [LICENSE](LICENSE).
 - Kustomisasi Edisi Indonesia, App Drawer 6x6 Glass, dan integrasi OTA oleh [**luthpunk**](https://github.com/luthpunk/glass-tv-home).
-- Font **Outfit** berlisensi di bawah SIL Open Font License (`launcher/FONT-LICENSE-OFL.txt`).
+- Font **Inter** berlisensi di bawah SIL Open Font License (`launcher/FONT-LICENSE-OFL.txt`).

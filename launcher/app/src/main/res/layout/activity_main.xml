@@ -7,7 +7,7 @@
     android:clipToPadding="false"
     android:background="#FF000000">
 
-    <!-- Ambient glow in the colour of the focused dock app. -->
+    <!-- Lapisan cahaya ambien di latar; warnanya mengikuti ubin yang sedang difokuskan dan muncul dengan animasi alpha. -->
     <View
         android:id="@+id/ambient"
         android:layout_width="match_parent"
@@ -15,9 +15,9 @@
         android:alpha="0" 
         android:visibility="gone" />
 
-    <!--Top shelf: the place's name, its country and what it is about, positioned above the dock in code.
-        The width is capped in code to a share of the space between the side paddings, so the
-        description wraps in a column instead of running the width of the screen.-->
+    <!--Rak atas: nama tempat, negara/provinsi, dan deskripsinya. Posisinya diatur di kode tepat di atas dock
+        (setY = heroBottom - tinggi view). Lebar nama dan deskripsi dibatasi di kode ke sebagian ruang di antara
+        padding samping, dan deskripsi maksimal dua baris.-->
     <LinearLayout
         android:id="@+id/heroShelf"
         android:layout_width="wrap_content"
@@ -44,7 +44,7 @@
             android:maxLines="1"
             android:ellipsize="end" />
 
-        <!-- The country/state close under the name, and the description a little further below it. -->
+        <!-- Negara/provinsi tepat di bawah nama, deskripsi menyusul di bawahnya. Keduanya disembunyikan bila gambar tidak punya keterangan. -->
         <TextView
             android:id="@+id/heroWhere"
             android:layout_width="wrap_content"
@@ -84,311 +84,6 @@
             android:visibility="gone" />
     </LinearLayout>
 
-    <!-- Right shelf: Waktu Solat Table matching bravia-glass-tv UI -->
-    <LinearLayout
-        android:id="@+id/islamicShelf"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="end"
-        android:layout_marginEnd="56dp"
-        android:orientation="vertical"
-        android:gravity="end"
-        android:visibility="gone"
-        android:alpha="0">
-
-        <!-- Ayat / Doa Harian (WeeklyAyah) matching bravia-glass-tv UI -->
-        <LinearLayout
-            android:id="@+id/ayahBlock"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="14dp"
-            android:orientation="vertical"
-            android:gravity="end"
-            android:visibility="gone">
-
-            <TextView
-                android:id="@+id/ayahLabel"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="DOA HARIAN  •  AYAT PILIHAN"
-                android:textColor="#CCFFFFFF"
-                android:textSize="11sp"
-                android:fontFamily="@font/inter"
-                android:fontVariationSettings="'wght' 600"
-                android:letterSpacing="0.16"
-                android:textAllCaps="true"
-                android:includeFontPadding="false"
-                android:shadowColor="#99000000"
-                android:shadowDx="0"
-                android:shadowDy="1"
-                android:shadowRadius="3"
-                android:singleLine="true" />
-
-            <TextView
-                android:id="@+id/ayahArabic"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="3dp"
-                android:maxWidth="460dp"
-                android:gravity="end"
-                android:textDirection="rtl"
-                android:textColor="#FFFFC56B"
-                android:textSize="20sp"
-                android:fontFamily="@font/amiri_quran"
-                android:lineSpacingExtra="2dp"
-                android:maxLines="2"
-                android:ellipsize="end"
-                android:shadowColor="#99000000"
-                android:shadowDx="0"
-                android:shadowDy="1"
-                android:shadowRadius="4" />
-
-            <TextView
-                android:id="@+id/ayahText"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="2dp"
-                android:maxWidth="460dp"
-                android:gravity="end"
-                android:textColor="#D9FFFFFF"
-                android:textSize="12sp"
-                android:fontFamily="@font/inter"
-                android:fontVariationSettings="'wght' 400"
-                android:lineSpacingExtra="1.5dp"
-                android:maxLines="3"
-                android:ellipsize="end"
-                android:shadowColor="#99000000"
-                android:shadowDx="0"
-                android:shadowDy="1"
-                android:shadowRadius="3" />
-        </LinearLayout>
-
-        <!-- Waktu Solat Header (e.g. WAKTU SOLAT • 11 JAMADILAWAL 1448H) -->
-        <TextView
-            android:id="@+id/prayerHeader"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
-            android:textColor="#B3FFFFFF"
-            android:textSize="12sp"
-            android:fontFamily="@font/inter"
-            android:fontVariationSettings="'wght' 600"
-            android:letterSpacing="0.14"
-            android:includeFontPadding="false"
-            android:shadowColor="#99000000"
-            android:shadowDx="0"
-            android:shadowDy="1"
-            android:shadowRadius="4" />
-
-        <!-- Waktu Solat Table (6 Columns: Subuh, Syuruk, Zohor, Asar, Maghrib, Isyak) -->
-        <LinearLayout
-            android:id="@+id/prayerTable"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
-            android:orientation="horizontal"
-            android:gravity="end">
-
-            <!-- Subuh -->
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:gravity="center_horizontal"
-                android:layout_marginStart="0dp">
-                <TextView
-                    android:id="@+id/lblSubuh"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Subuh"
-                    android:textColor="#B3FFFFFF"
-                    android:textSize="12sp"
-                    android:fontFamily="@font/inter"
-                    android:fontVariationSettings="'wght' 600"
-                    android:shadowColor="#99000000"
-                    android:shadowDy="1"
-                    android:shadowRadius="3" />
-                <TextView
-                    android:id="@+id/timeSubuh"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="2dp"
-                    android:textColor="#FFFFFFFF"
-                    android:textSize="16sp"
-                    android:fontFamily="@font/inter"
-                    android:fontVariationSettings="'wght' 700"
-                    android:shadowColor="#B3000000"
-                    android:shadowDy="1"
-                    android:shadowRadius="4" />
-            </LinearLayout>
-
-            <!-- Syuruk -->
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:gravity="center_horizontal"
-                android:layout_marginStart="14dp">
-                <TextView
-                    android:id="@+id/lblSyuruk"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Syuruk"
-                    android:textColor="#B3FFFFFF"
-                    android:textSize="12sp"
-                    android:fontFamily="@font/inter"
-                    android:fontVariationSettings="'wght' 600"
-                    android:shadowColor="#99000000"
-                    android:shadowDy="1"
-                    android:shadowRadius="3" />
-                <TextView
-                    android:id="@+id/timeSyuruk"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="2dp"
-                    android:textColor="#FFFFFFFF"
-                    android:textSize="16sp"
-                    android:fontFamily="@font/inter"
-                    android:fontVariationSettings="'wght' 700"
-                    android:shadowColor="#B3000000"
-                    android:shadowDy="1"
-                    android:shadowRadius="4" />
-            </LinearLayout>
-
-            <!-- Zohor -->
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:gravity="center_horizontal"
-                android:layout_marginStart="14dp">
-                <TextView
-                    android:id="@+id/lblZohor"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Zohor"
-                    android:textColor="#B3FFFFFF"
-                    android:textSize="12sp"
-                    android:fontFamily="@font/inter"
-                    android:fontVariationSettings="'wght' 600"
-                    android:shadowColor="#99000000"
-                    android:shadowDy="1"
-                    android:shadowRadius="3" />
-                <TextView
-                    android:id="@+id/timeZohor"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="2dp"
-                    android:textColor="#FFFFFFFF"
-                    android:textSize="16sp"
-                    android:fontFamily="@font/inter"
-                    android:fontVariationSettings="'wght' 700"
-                    android:shadowColor="#B3000000"
-                    android:shadowDy="1"
-                    android:shadowRadius="4" />
-            </LinearLayout>
-
-            <!-- Asar -->
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:gravity="center_horizontal"
-                android:layout_marginStart="14dp">
-                <TextView
-                    android:id="@+id/lblAsar"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Asar"
-                    android:textColor="#B3FFFFFF"
-                    android:textSize="12sp"
-                    android:fontFamily="@font/inter"
-                    android:fontVariationSettings="'wght' 600"
-                    android:shadowColor="#99000000"
-                    android:shadowDy="1"
-                    android:shadowRadius="3" />
-                <TextView
-                    android:id="@+id/timeAsar"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="2dp"
-                    android:textColor="#FFFFFFFF"
-                    android:textSize="16sp"
-                    android:fontFamily="@font/inter"
-                    android:fontVariationSettings="'wght' 700"
-                    android:shadowColor="#B3000000"
-                    android:shadowDy="1"
-                    android:shadowRadius="4" />
-            </LinearLayout>
-
-            <!-- Maghrib -->
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:gravity="center_horizontal"
-                android:layout_marginStart="14dp">
-                <TextView
-                    android:id="@+id/lblMaghrib"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Maghrib"
-                    android:textColor="#B3FFFFFF"
-                    android:textSize="12sp"
-                    android:fontFamily="@font/inter"
-                    android:fontVariationSettings="'wght' 600"
-                    android:shadowColor="#99000000"
-                    android:shadowDy="1"
-                    android:shadowRadius="3" />
-                <TextView
-                    android:id="@+id/timeMaghrib"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="2dp"
-                    android:textColor="#FFFFFFFF"
-                    android:textSize="16sp"
-                    android:fontFamily="@font/inter"
-                    android:fontVariationSettings="'wght' 700"
-                    android:shadowColor="#B3000000"
-                    android:shadowDy="1"
-                    android:shadowRadius="4" />
-            </LinearLayout>
-
-            <!-- Isyak -->
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:gravity="center_horizontal"
-                android:layout_marginStart="14dp">
-                <TextView
-                    android:id="@+id/lblIsyak"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Isyak"
-                    android:textColor="#B3FFFFFF"
-                    android:textSize="12sp"
-                    android:fontFamily="@font/inter"
-                    android:fontVariationSettings="'wght' 600"
-                    android:shadowColor="#99000000"
-                    android:shadowDy="1"
-                    android:shadowRadius="3" />
-                <TextView
-                    android:id="@+id/timeIsyak"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="2dp"
-                    android:textColor="#FFFFFFFF"
-                    android:textSize="16sp"
-                    android:fontFamily="@font/inter"
-                    android:fontVariationSettings="'wght' 700"
-                    android:shadowColor="#B3000000"
-                    android:shadowDy="1"
-                    android:shadowRadius="4" />
-            </LinearLayout>
-        </LinearLayout>
-    </LinearLayout>
-
     <LinearLayout
         android:id="@+id/mainContent"
         android:layout_width="match_parent"
@@ -404,7 +99,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <!-- Top Row: Clock & Date on Left, Menu Buttons on Right (SEBARIS DENGAN MASA) -->
+            <!-- Blok kiri atas: jam besar, dengan blok hari/tanggal di sebelah kanannya. -->
             <LinearLayout
                 android:id="@+id/leftBlock"
                 android:layout_width="wrap_content"
@@ -435,22 +130,23 @@
                     android:shadowRadius="4"
                     android:includeFontPadding="false" />
 
-                <!-- 1:2 layout: 1 jam on left, 2 stacked rows on right (atas: am/pm, bawah: tarikh) -->
+                <!-- Tata letak 1:2: jam di kiri, dua baris bertumpuk di kanan (atas: nama hari, bawah: tanggal lengkap). -->
                 <LinearLayout
                     android:id="@+id/dateBlock"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
-                    android:orientation="vertical">
+                    android:orientation="vertical"
+                    android:gravity="center_vertical">
 
-                    <!--  Atas: nama hari (e.g. ISNIN / JUMAAT)  -->
+                    <!--  Atas: nama hari dalam bahasa Indonesia (mis. Senin / Jumat), diisi oleh updateDateAndPeriod().  -->
                     <TextView 
                         android:id="@+id/ampm" 
                         android:layout_width="wrap_content" 
                         android:layout_height="wrap_content" 
                         android:includeFontPadding="false" 
                         android:textColor="#FFFFFFFF" 
-                        android:textSize="16sp" 
+                        android:textSize="17sp" 
                         android:fontFamily="@font/inter" 
                         android:fontVariationSettings="'wght' 600" 
                         android:letterSpacing="0.06" 
@@ -460,15 +156,15 @@
                         android:shadowRadius="3" 
                         android:textAllCaps="false"/>
 
-                    <!-- Bawah: Tarikh (e.g. 23 November 2026) -->
+                    <!-- Bawah: tanggal lengkap (mis. 2 November 2026), diisi oleh updateDateAndPeriod(). -->
                     <TextView 
                         android:id="@+id/date" 
                         android:layout_width="wrap_content" 
                         android:layout_height="wrap_content" 
-                        android:layout_marginTop="3dp" 
+                        android:layout_marginTop="2dp" 
                         android:includeFontPadding="false" 
                         android:textColor="#E6FFFFFF" 
-                        android:textSize="16sp" 
+                        android:textSize="17sp" 
                         android:fontFamily="@font/inter" 
                         android:fontVariationSettings="'wght' 600" 
                         android:letterSpacing="0.06" 
@@ -477,26 +173,10 @@
                         android:shadowDy="1" 
                         android:shadowRadius="3" 
                         android:textAllCaps="false"/>
-
-                    <!-- Shamsi date ("27 Mehr 1405"), shown when shamsi_date is on. -->
-                    <TextView
-                        android:id="@+id/shamsiDate"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="2dp"
-                        android:singleLine="true"
-                        android:ellipsize="end"
-                        android:textColor="#E6FFFFFF"
-                        android:textSize="13sp"
-                        android:fontFamily="@font/inter"
-                        android:fontVariationSettings="'wght' 500"
-                        android:letterSpacing="0.02"
-                        android:includeFontPadding="false"
-                        android:visibility="gone" />
                 </LinearLayout>
             </LinearLayout>
 
-            <!-- Bawah Jam: Weather plus Haze API (clickable & focusable pill to open WeatherActivity) -->
+            <!-- Pil cuaca & kualitas udara (AQI) di bawah blok jam; dapat difokuskan dan diklik untuk membuka WeatherActivity. -->
             <TextView
                 android:id="@+id/weatherAirQuality"
                 android:layout_width="wrap_content"
@@ -522,7 +202,7 @@
                 android:shadowRadius="3"
                 android:singleLine="true" />
 
-            <!-- Now Playing Widget Card: Matching bravia-glass-tv design -->
+            <!-- Kartu Now Playing: album art, info lagu, dan kontrol pemutaran; tersembunyi selama tidak ada media yang diputar. -->
             <LinearLayout
                 android:id="@+id/nowPlayingCard"
                 android:layout_width="wrap_content"
@@ -597,7 +277,7 @@
                         android:marqueeRepeatLimit="marquee_forever" />
                 </LinearLayout>
 
-                <!-- Inline Media Controls: Prev, Play/Pause, Next (Round buttons with ic_np_tint) -->
+                <!-- Kontrol pemutaran inline: Sebelumnya, Putar/Jeda, Berikutnya, dan Tutup (tombol bulat dengan background bg_np_round_btn). -->
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -667,7 +347,7 @@
                 </LinearLayout>
             </LinearLayout>
 
-            <!-- Top Menu Buttons: Strictly in the same row, vertically centered with the clock -->
+            <!-- Tombol menu kanan atas: Input, Wi-Fi, Asisten, Kotak Fitur, dan Pengaturan; tingginya disamakan dengan blok jam/tanggal. -->
             <LinearLayout
                 android:id="@+id/topButtons"
                 android:layout_width="wrap_content"
@@ -724,17 +404,9 @@
                     android:drawableStart="@drawable/ic_settings" />
             </LinearLayout>
 
-            <!-- Fallback Prayer Times view -->
-            <TextView
-                android:id="@+id/prayerTimes"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/weatherAirQuality"
-                android:layout_alignParentStart="true"
-                android:visibility="gone" />
         </RelativeLayout>
 
-        <!-- The wrapper clips at the grid's edge; the grid itself must not clip so scaled tiles can overflow their cells. -->
+        <!-- Pembungkus grid: tepi atasnya memudar ke transparan saat baris tergulir ke bawah bilah atas. Pembungkus dan grid tidak memotong anak, sehingga ubin yang diperbesar tetap terlihat meluber dari selnya. -->
         <com.gathin.tvhome.FadeTopFrame
             android:id="@+id/gridWrap"
             android:layout_width="match_parent"
@@ -758,7 +430,7 @@
         </com.gathin.tvhome.FadeTopFrame>
     </LinearLayout>
 
-    <!-- The single floating glass highlight that springs between tiles. -->
+    <!-- Sorotan kaca yang bergerak dengan animasi pegas ke ubin yang sedang difokuskan. -->
     <com.gathin.tvhome.GlassView
         android:id="@+id/glass"
         android:layout_width="10dp"

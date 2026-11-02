@@ -20,6 +20,7 @@ import java.net.NetworkInterface;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.URLDecoder;
+import java.security.SecureRandom;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Collections;
@@ -43,6 +44,8 @@ public class WallpaperUploadServer {
     private final Context context;
     private final int port;
     private final UploadListener listener;
+    /** Random per-session key in the QR link, so only the phone that scanned it can upload or delete. */
+    private final String token;
     private ServerSocket serverSocket;
     private volatile boolean running = false;
     private Thread serverThread;
@@ -51,6 +54,16 @@ public class WallpaperUploadServer {
         this.context = context.getApplicationContext();
         this.port = port;
         this.listener = listener;
+        SecureRandom random = new SecureRandom();
+        byte[] bytes = new byte[16];
+        random.nextBytes(bytes);
+        StringBuilder sb = new StringBuilder(32);
+        for (byte value : bytes) sb.append(String.format(Locale.ROOT, "%02x", value));
+        this.token = sb.toString();
+    }
+
+    public String getToken() {
+        return token;
     }
 
     public static String getLocalIpAddress() {
@@ -152,6 +165,22 @@ public class WallpaperUploadServer {
 
             String requestLine = lines[0];
             Log.d(TAG, "Request: " + requestLine);
+
+            // Only the phone that scanned the QR link (which carries a random per-session token)
+            // may read, upload or delete. OPTIONS is the browser's own preflight, sent without
+            // the query string.
+            if (!requestLine.startsWith("OPTIONS") && !token.equals(getQueryParam(requestLine, "t"))) {
+                byte[] body = "Forbidden: scan the QR code on the TV again.".getBytes("UTF-8");
+                String response = "HTTP/1.1 403 Forbidden\r\n" +
+                        "Content-Type: text/plain; charset=UTF-8\r\n" +
+                        "Content-Length: " + body.length + "\r\n" +
+                        "Connection: close\r\n\r\n";
+                out.write(response.getBytes("UTF-8"));
+                out.write(body);
+                out.flush();
+                client.close();
+                return;
+            }
 
             if (requestLine.startsWith("OPTIONS")) {
                 String response = "HTTP/1.1 204 No Content\r\n" +
@@ -762,6 +791,8 @@ public class WallpaperUploadServer {
                 "  </footer>\n" +
                 "\n" +
                 "  <script>\n" +
+                "    const TOKEN = '" + token + "';\n" +
+                "    const T = '?t=' + TOKEN;\n" +
                 "    const fileInput = document.getElementById('file-input');\n" +
                 "    const dropzone = document.getElementById('dropzone');\n" +
                 "    const previewContainer = document.getElementById('preview-container');\n" +
@@ -800,7 +831,7 @@ public class WallpaperUploadServer {
                 "      statusMsg.style.display = 'none';\n" +
                 "\n" +
                 "      const xhr = new XMLHttpRequest();\n" +
-                "      xhr.open('POST', '/upload?name=' + encodeURIComponent(selectedFile.name), true);\n" +
+                "      xhr.open('POST', '/upload?name=' + encodeURIComponent(selectedFile.name) + '&t=' + TOKEN, true);\n" +
                 "      xhr.setRequestHeader('Content-Type', selectedFile.type || 'image/jpeg');\n" +
                 "\n" +
                 "      xhr.upload.onprogress = (e) => {\n" +
@@ -840,7 +871,7 @@ public class WallpaperUploadServer {
                 "    }\n" +
                 "\n" +
                 "    function loadGallery() {\n" +
-                "      fetch('/api/list')\n" +
+                "      fetch('/api/list' + T)\n" +
                 "        .then(r => r.json())\n" +
                 "        .then(items => {\n" +
                 "          const listEl = document.getElementById('gallery-list');\n" +
@@ -854,7 +885,7 @@ public class WallpaperUploadServer {
                 "          for (const item of items) {\n" +
                 "            const enc = encodeURIComponent(item.name);\n" +
                 "            html += '<div class=\"photo-row' + (item.active ? ' active' : '') + '\">' +\n" +
-                "              '<img class=\"photo-thumb\" src=\"/thumb?file=' + enc + '\" alt=\"thumb\">' +\n" +
+                "              '<img class=\"photo-thumb\" src=\"/thumb?file=' + enc + '&t=' + TOKEN + '\" alt=\"thumb\">' +\n" +
                 "              '<div class=\"photo-meta\">' +\n" +
                 "                '<div class=\"photo-name\">' + (item.active ? '✨ ' : '') + item.name + '</div>' +\n" +
                 "                '<div class=\"photo-sub\">' + item.date + ' • ' + item.size + '</div>' +\n" +
@@ -873,7 +904,7 @@ public class WallpaperUploadServer {
                 "    }\n" +
                 "\n" +
                 "    function selectSingle(fileName) {\n" +
-                "      fetch('/api/select?file=' + fileName, { method: 'POST' })\n" +
+                "      fetch('/api/select?file=' + fileName + '&t=' + TOKEN, { method: 'POST' })\n" +
                 "        .then(r => r.json())\n" +
                 "        .then(() => {\n" +
                 "          loadGallery();\n" +
@@ -882,7 +913,7 @@ public class WallpaperUploadServer {
                 "\n" +
                 "    function deletePhoto(fileName) {\n" +
                 "      if (!confirm('Padam gambar ini dari skrin TV?')) return;\n" +
-                "      fetch('/api/delete?file=' + fileName, { method: 'POST' })\n" +
+                "      fetch('/api/delete?file=' + fileName + '&t=' + TOKEN, { method: 'POST' })\n" +
                 "        .then(r => r.json())\n" +
                 "        .then(() => {\n" +
                 "          loadGallery();\n" +
@@ -890,7 +921,7 @@ public class WallpaperUploadServer {
                 "    }\n" +
                 "\n" +
                 "    function setSlideshow() {\n" +
-                "      fetch('/api/slideshow', { method: 'POST' })\n" +
+                "      fetch('/api/slideshow' + T, { method: 'POST' })\n" +
                 "        .then(r => r.json())\n" +
                 "        .then(() => {\n" +
                 "          loadGallery();\n" +

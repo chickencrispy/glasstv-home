@@ -27,6 +27,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.Calendar;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -36,9 +37,10 @@ import java.util.concurrent.Executors;
  */
 public final class AppUpdateManager {
     private static final String TAG = "AppUpdateManager";
-    private static final String VERSION_URL = "https://raw.githubusercontent.com/luthpunk/glass-tv-home/main/release/version.json";
+    private static final String VERSION_URL = "https://raw.githubusercontent.com/chickencrispy/glasstv-home/main/release/version.json";
     private static final String PREFS_NAME = "update_prefs";
     private static final String KEY_LAST_CHECK = "last_check_timestamp";
+    private static final String KEY_LAST_SCHEDULED = "last_scheduled_check";
     public static final String KEY_AUTO_UPDATE = "pref_auto_update";
     public static final String KEY_AUTO_UPDATE_TIME = "pref_auto_update_time";
     public static final String DEFAULT_AUTO_UPDATE_TIME = "03:30 AM";
@@ -80,6 +82,46 @@ public final class AppUpdateManager {
         // Check once every 12 hours at least
         if (System.currentTimeMillis() - lastCheck >= 12 * 3600 * 1000L) {
             checkForUpdates(activity, false);
+        }
+    }
+
+    /**
+     * Runs the automatic check at the time chosen in Settings, once a day. Called from Home's minute
+     * tick, so it needs no alarm permission and no background service: Home is in front when it runs.
+     * A missed time (TV off) is caught up the next time Home is in front.
+     */
+    public static void checkScheduledAutoUpdate(Activity activity) {
+        if (activity == null || activity.isFinishing() || !isAutoUpdateEnabled(activity)) return;
+
+        int[] clock = parseClock(getAutoUpdateTime(activity));
+        Calendar now = Calendar.getInstance();
+        Calendar due = (Calendar) now.clone();
+        due.set(Calendar.HOUR_OF_DAY, clock[0]);
+        due.set(Calendar.MINUTE, clock[1]);
+        due.set(Calendar.SECOND, 0);
+        due.set(Calendar.MILLISECOND, 0);
+        if (now.before(due)) return;
+
+        SharedPreferences sp = activity.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
+        if (sp.getLong(KEY_LAST_SCHEDULED, 0) >= due.getTimeInMillis()) return;
+        sp.edit().putLong(KEY_LAST_SCHEDULED, now.getTimeInMillis()).apply();
+        checkForUpdates(activity, false);
+    }
+
+    /** Parses "03:30 AM" / "12:00 PM" into {hour24, minute}; falls back to 03:30. */
+    private static int[] parseClock(String value) {
+        try {
+            String[] parts = value.trim().split("\\s+");
+            String[] hm = parts[0].split(":");
+            int hour = Integer.parseInt(hm[0]);
+            int minute = Integer.parseInt(hm[1]);
+            boolean pm = parts.length > 1 && "PM".equalsIgnoreCase(parts[1]);
+            if (pm && hour < 12) hour += 12;
+            if (!pm && hour == 12) hour = 0;
+            if (hour < 0 || hour > 23 || minute < 0 || minute > 59) throw new IllegalArgumentException();
+            return new int[]{hour, minute};
+        } catch (RuntimeException e) {
+            return new int[]{3, 30};
         }
     }
 

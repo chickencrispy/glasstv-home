@@ -244,12 +244,12 @@ public class WeatherActivity extends Activity {
 
         // 2. Header
         String locDisplay = AppLocationManager.getLocationName(this);
-        String neatLoc = "Tuban";
+        String neatLoc = AppLocationManager.DEFAULT_LOCATION_NAME;
         if (locDisplay != null && !locDisplay.trim().isEmpty()) {
             neatLoc = locDisplay.trim();
             weatherLocation.setText(neatLoc);
         } else {
-            weatherLocation.setText("Tuban");
+            weatherLocation.setText(AppLocationManager.DEFAULT_LOCATION_NAME);
         }
 
         weatherMainTemp.setText(w.temp + "°");
@@ -386,7 +386,7 @@ public class WeatherActivity extends Activity {
             } else if (w.stationPlace != null && !w.stationPlace.isEmpty()) {
                 aqiStation.setText(w.stationPlace);
             } else {
-                aqiStation.setText("Alun-Alun Tuban, Jawa Timur");
+                aqiStation.setText(AppLocationManager.DEFAULT_STATION_PLACE);
             }
         }
 

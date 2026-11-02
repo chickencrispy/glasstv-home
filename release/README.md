@@ -4,12 +4,12 @@ Fail pemasangan rasmi (*Official Release APK*) untuk **Glass TV Home**.
 
 ## ⬇️ Muat Turun / Download
 * **Fail APK**: [`glass-tv-home.apk`](glass-tv-home.apk)
-* **Versi / Version**: `v2.6.0` (🎮 Pilihan Sound Effect Konsol: PS5, Nintendo Switch, Xbox & Toggle Bisu/Mute, 🇲🇾 Koleksi 14 Negeri Malaysia, Phone QR Upload, Photo Manager, 🔄 OTA In-App Auto Update)
+* **Versi / Version**: `v3.3.0-id` (Launcher Glass TV Home Edisi Indonesia: cuaca & AQI, tempat, tetapan tema, 🔄 OTA In-App Auto Update)
 * **Pautan Muat Turun Terus (Direct Download Link)**:  
-  [https://github.com/aqmangge/glass-tv-home/raw/main/release/glass-tv-home.apk](https://github.com/aqmangge/glass-tv-home/raw/main/release/glass-tv-home.apk)
-* **Saiz Fail**: ~504 KB (Sangat ringan, pantas dimuat turun & jimat memori TV)
+  [https://github.com/chickencrispy/glasstv-home/raw/main/release/glass-tv-home.apk](https://github.com/chickencrispy/glasstv-home/raw/main/release/glass-tv-home.apk)
+* **Saiz Fail**: ~654 KB (Sangat ringan, pantas dimuat turun & jimat memori TV)
 * **Keserasian**: Android TV & Google TV (Android 8.0 Oreo ke atas, API 26+)
-* **SHA-256 Checksum**: `4296479f19c0945f3272bdd80eb75de0a330c799c105dc5d280cabb6041ade31`
+* **SHA-256 Checksum**: `7df3693521fee4c6e7efb32065e67be7d25d7502ba31578a45f61b11aee456b3`
 
 ---
 
@@ -18,7 +18,7 @@ Fail pemasangan rasmi (*Official Release APK*) untuk **Glass TV Home**.
 ### 1. Bantuan AI Automatik (Paling Mudah)
 Hanya tampal prompt ini pada AI anda (Google Antigravity / Claude Code / Cursor):
 ```text
-install ni dekat tv rumah saya: https://github.com/aqmangge/glass-tv-home
+install ni dekat tv rumah saya: https://github.com/chickencrispy/glasstv-home
 ```
 
 ### 2. Guna Telefon Pintar (Tanpa PC)
@@ -38,9 +38,9 @@ install ni dekat tv rumah saya: https://github.com/aqmangge/glass-tv-home
 ### Kaedah A: Prompt AI 1-Baris (Paling Pantas & 100% Automatik)
 Bagi pengguna sedia ada yang ingin mengemas kini ke patch terkini tanpa hilang susunan app atau tetapan:
 ```text
-update patch latest glass tv dekat tv rumah saya: https://github.com/aqmangge/glass-tv-home
+update patch latest glass tv dekat tv rumah saya: https://github.com/chickencrispy/glasstv-home
 ```
-*(Atau dalam Bahasa Inggeris: `update glass tv to the latest patch on my tv: https://github.com/aqmangge/glass-tv-home`)*
+*(Atau dalam Bahasa Inggeris: `update glass tv to the latest patch on my tv: https://github.com/chickencrispy/glasstv-home`)*
 
 AI akan menyambung ke TV, memasang APK terkini (`adb install -r`), dan melancarkan semula skrin utama dalam masa 5 saat secara senyap tanpa mengganggu sebarang tetapan anda.
 

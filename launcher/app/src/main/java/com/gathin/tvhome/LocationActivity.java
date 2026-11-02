@@ -134,7 +134,6 @@ public class LocationActivity extends Activity {
                 Location.publish(this, z.code, z.town, z.state, z.lat, z.lon);
                 PrayerTimes.setZone(this, z.code);
                 HomeWeather.forget(this);
-                Azan.schedule(this, z.code);
                 setResult(RESULT_OK);
                 finish();
             });

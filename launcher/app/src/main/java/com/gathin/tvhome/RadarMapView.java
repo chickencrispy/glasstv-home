@@ -30,8 +30,8 @@ public class RadarMapView extends View {
     private final Paint badgeStroke = new Paint(Paint.ANTI_ALIAS_FLAG);
 
     private int temp = 29;
-    private String locationName = "Tuban";
-    private String provinceName = "Jawa Timur";
+    private String locationName = AppLocationManager.DEFAULT_LOCATION_NAME;
+    private String provinceName = "Sumatera Barat";
     private double latitude = AppLocationManager.DEFAULT_LATITUDE;
     private double longitude = AppLocationManager.DEFAULT_LONGITUDE;
 
@@ -70,7 +70,7 @@ public class RadarMapView extends View {
         Context ctx = getContext();
         double lat = ctx != null ? AppLocationManager.getLatitude(ctx) : AppLocationManager.DEFAULT_LATITUDE;
         double lon = ctx != null ? AppLocationManager.getLongitude(ctx) : AppLocationManager.DEFAULT_LONGITUDE;
-        String prov = ctx != null ? AppLocationManager.getActiveProvince(ctx) : "Jawa Timur";
+        String prov = ctx != null ? AppLocationManager.getActiveProvince(ctx) : "Sumatera Barat";
         setDetails(temp, loc, lat, lon, prov);
     }
 

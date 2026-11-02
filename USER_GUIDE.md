@@ -1,269 +1,253 @@
-# Glass TV Home User Guide (Beginner-Friendly) 📺✨
+# Panduan Pengguna Glass TV Home (Ramah Pemula) 📺✨
 
-Welcome to **Glass TV Home**! This guide is crafted specifically for everyday users and beginners so you can easily install, debloat your TV for blazing-fast performance without ads, navigate seamlessly with your TV remote, and enjoy all smart ambient features effortlessly.
-
----
-
-## 🌟 1. What is Glass TV Home?
-
-Glass TV Home is a modern, lightweight home launcher replacement for Android TV and Google TV (compatible with Xiaomi Mi Box S, Mi TV Stick, Sony Bravia, TCL, Sharp, Philips, Mecool, Chromecast with Google TV, and more):
-
-* 🚀 **Zero Ads & Ultralight**: Only ~453 KB in size. Saves over 400 MB of RAM compared to sluggish stock manufacturer launchers.
-* 🪟 **Frosted Glass Aesthetic (tvOS Style)**: Modern Apple TV-inspired interface with fluid focus animations and a floating glass dock.
-* 🕌 **Islamic Prayer Timetable & Daily Ayat**: Accurate 6-phase prayer timetable (Subuh, Syuruk, Zohor, Asar, Maghrib, Isyak) with active prayer emerald highlighting and daily Quranic verses.
-* ⛅ **Weather & Air Quality (API / AQI) Dashboard**: Live ambient temperature, "feels like", humidity, UV index, wind speed, sunrise/sunset, 12-hour forecast, 7-day outlook, and official Air Quality Index readings (APIMS).
-* 🌙 **StandBy Screensaver & 2-Hour Auto Power-Off**: Enters ambient black nightstand screensaver after 10 minutes of inactivity (burn-in safe for OLED/LED), and automatically turns off the TV display after 2 hours of sleep standby to save electricity.
+Selamat datang di **Glass TV Home**! Panduan ini disusun khusus untuk pengguna sehari-hari dan pemula agar Anda dapat dengan mudah memasang, melakukan debloat pada TV untuk performa yang sangat cepat tanpa iklan, menavigasi dengan lancar menggunakan remote TV, dan menikmati semua fitur ambient pintar tanpa repot.
 
 ---
 
-## 📦 Direct APK Download
+## 🌟 1. Apa itu Glass TV Home?
 
-For users who want to download and install the pre-compiled APK directly:
-* 📥 **Official Release APK**: [**glass-tv-home.apk** (644 KB)](https://github.com/aqmangge/glass-tv-home/raw/main/release/glass-tv-home.apk)
-* 📁 **Repository Location**: [`release/glass-tv-home.apk`](release/glass-tv-home.apk)
-* ⚡ **Version**: **v3.0.0** (Major Release: 🍏 macOS Apple Weather Bento Grid Dashboard, 🌧️ Hardware-Accelerated Atmospheric Canvas with Sunny/Rain/Thunder/Cloud/Night modes, 📡 Doppler Precipitation Radar Map, 🧭 Wind Compass Dial, 🌙 3D Moon Phase, 🕌 16:9 Floating Glass Azan Notification & Audio Settings, 🎮 Console Sound Profiles: PS5, Nintendo Switch, Xbox & Mute Mode, 🔄 OTA In-App Auto Updates).
+Glass TV Home adalah launcher beranda modern dan ringan sebagai pengganti bawaan untuk Android TV dan Google TV (kompatibel dengan Xiaomi Mi Box S, Mi TV Stick, Sony Bravia, TCL, Sharp, Philips, Mecool, Chromecast with Google TV, dan lainnya):
+
+* 🚀 **Tanpa Iklan & Sangat Ringan**: Hanya sekitar 570 KB. Menghemat lebih dari 400 MB RAM dibandingkan launcher bawaan pabrikan yang lambat.
+* 🪟 **Estetika Kaca Buram (Gaya tvOS)**: Antarmuka modern terinspirasi Apple TV dengan animasi fokus yang halus dan dock kaca mengambang.
+* ⛅ **Dashboard Cuaca & Kualitas Udara (API / AQI)**: Suhu ambient langsung, "terasa seperti", kelembapan, indeks UV, kecepatan angin, matahari terbit/terbenam, prakiraan 12 jam, prakiraan 7 hari, dan pembacaan Indeks Kualitas Udara resmi (APIMS).
+* 🌙 **Screensaver StandBy & Mati Otomatis 2 Jam**: Masuk ke screensaver ambient hitam bergaya meja samping tempat tidur setelah 10 menit tidak ada aktivitas (aman dari burn-in untuk OLED/LED), dan secara otomatis mematikan layar TV setelah 2 jam standby tidur untuk menghemat listrik.
+
+---
+
+## 📦 Unduhan APK Langsung
+
+Bagi pengguna yang ingin mengunduh dan memasang APK yang sudah dikompilasi secara langsung:
+* 📥 **APK Rilis Resmi**: [**glass-tv-home.apk**](https://github.com/chickencrispy/glasstv-home/raw/main/release/glass-tv-home.apk)
+* 📁 **Lokasi Repositori**: [`release/glass-tv-home.apk`](release/glass-tv-home.apk)
+* ⚡ **Versi**: **v3.3.1-id** (Edisi Indonesia: 🍏 Dashboard Bento Grid bergaya Apple Weather, 🌧️ latar belakang cuaca yang dipercepat perangkat keras, 📡 peta radar Doppler, 🧭 kompas angin, 🌙 fase bulan 3D, 🎮 profil suara konsol: PS5, Nintendo Switch, Xbox & Senyap, 🔄 pembaruan otomatis OTA dalam aplikasi).
 
 > [!NOTE]
-> ### 🇲🇾 Unifi TV Box (TM Unifi Plus Box) Users: Compatibility & Warranty Safety
-> * **Can I use Glass TV Home on my Unifi TV Box? YES, 100%!** Unifi Plus Box (Skyworth HP40A3, ZTE B866V2K, and other TM Android TV boxes) runs certified Android TV. The official **unifi TV** app (for your live channels and TV subscription) remains fully functional and appears right in your app dock.
-> * **Will it void my TM warranty? NO, ABSOLUTELY NOT!** Glass TV Home is installed as a standard user-space APK. It **does NOT require root**, **does NOT unlock the bootloader**, and **does NOT modify system firmware**. It can be uninstalled at any time through standard TV Settings or wiped with a simple Factory Reset, returning the box to 100% stock TM condition.
+> ### 🇲🇾 Pengguna Unifi TV Box (TM Unifi Plus Box): Kompatibilitas & Keamanan Garansi
+> * **Bisakah saya menggunakan Glass TV Home di Unifi TV Box saya? YA, 100%!** Unifi Plus Box (Skyworth HP40A3, ZTE B866V2K, dan box Android TV TM lainnya) menjalankan Android TV bersertifikat. Aplikasi **unifi TV** resmi (untuk saluran langsung dan langganan TV Anda) tetap berfungsi penuh dan muncul tepat di dock aplikasi Anda.
+> * **Apakah ini akan membatalkan garansi TM saya? TIDAK, SAMA SEKALI TIDAK!** Glass TV Home dipasang sebagai APK ruang pengguna standar. Aplikasi ini **TIDAK memerlukan root**, **TIDAK membuka bootloader**, dan **TIDAK mengubah firmware sistem**. Aplikasi ini dapat di-uninstall kapan saja melalui Pengaturan TV standar atau dihapus dengan Factory Reset sederhana, mengembalikan box ke kondisi 100% bawaan TM.
 
 ---
 
-## 🤖 2. The Easiest Way: Let AI Do Everything Automatically! (1-Line Prompt)
+## 🤖 2. Cara Termudah: Biarkan AI Mengerjakan Semuanya Secara Otomatis! (Prompt 1 Baris)
 
-You **do not need any coding skills** or technical terminal knowledge. After enabling developer mode on your TV, simply paste this **single prompt** into any AI coding assistant (such as Google Antigravity [Free] or Claude Code):
+Anda **tidak perlu keterampilan coding** atau pengetahuan terminal teknis. Setelah mengaktifkan mode pengembang di TV, cukup tempel **satu prompt** ini ke asisten coding AI mana pun (seperti Google Antigravity [Gratis] atau Claude Code):
 
 ```text
-install ni dekat tv rumah saya: https://github.com/aqmangge/glass-tv-home
+install ni dekat tv rumah saya: https://github.com/chickencrispy/glasstv-home
 ```
 
-*(English alias: `install this on my home tv: https://github.com/aqmangge/glass-tv-home`)*
+*(Alias bahasa Inggris: `install this on my home tv: https://github.com/chickencrispy/glasstv-home`)*
 
-The AI will handle **EVERYTHING** automatically from start to finish!
+AI akan menangani **SEMUANYA** secara otomatis dari awal hingga akhir!
 
-### 🔄 Updating Existing Installations (1-Line AI Patching)
-Already running Glass TV Home and want to update to the latest patch or version? Simply send this single line to your AI assistant:
+### 🔄 Memperbarui Instalasi yang Ada (Patching AI 1 Baris)
+Sudah menjalankan Glass TV Home dan ingin memperbarui ke patch atau versi terbaru? Cukup kirim satu baris ini ke asisten AI Anda:
 ```text
-update patch latest glass tv dekat tv rumah saya: https://github.com/aqmangge/glass-tv-home
+update patch latest glass tv dekat tv rumah saya: https://github.com/chickencrispy/glasstv-home
 ```
-*(English: `update glass tv to the latest patch on my tv: https://github.com/aqmangge/glass-tv-home`)*
+*(Bahasa Inggris: `update glass tv to the latest patch on my tv: https://github.com/chickencrispy/glasstv-home`)*
 
-The AI connects via Wi-Fi ADB, updates the APK in 5 seconds (`adb install -r`), and relaunches the home screen. **Your customized dock apps, wallpapers, and prayer/sound settings are 100% retained!**
+AI terhubung melalui ADB Wi-Fi, memperbarui APK dalam 5 detik (`adb install -r`), dan menjalankan ulang layar beranda. **Aplikasi dock, wallpaper, dan pengaturan suara yang telah Anda sesuaikan tetap 100% terjaga!**
 
-### 💡 Supported AI Assistants:
-1. **Google Antigravity (Free / Zero Setup)** ⭐ *Highly Recommended*:
-   - Official AI coding agent from Google DeepMind with full terminal shell capabilities, automation tools, and script execution for free.
-2. **Claude Code (Anthropic Paid Subscription)**:
-   - Powerful CLI coding agent by Anthropic that runs inside your terminal.
-3. **Cursor / Windsurf IDE (Freemium / Paid)**:
-   - AI code editor with an integrated terminal shell.
+### 💡 Asisten AI yang Didukung:
+1. **Google Antigravity (Gratis / Tanpa Penyiapan)** ⭐ *Sangat Direkomendasikan*:
+   - Agen coding AI resmi dari Google DeepMind dengan kemampuan shell terminal penuh, alat otomasi, dan eksekusi skrip secara gratis.
+2. **Claude Code (Langganan Berbayar Anthropic)**:
+   - Agen coding CLI yang canggih dari Anthropic yang berjalan di dalam terminal Anda.
+3. **Cursor / Windsurf IDE (Freemium / Berbayar)**:
+   - Editor kode AI dengan shell terminal terintegrasi.
 
 ---
 
-### 📋 Step 1: Turn On Developer Mode & Debugging on Your TV
-Before AI can reach your TV over Wi-Fi, perform these two simple remote actions:
-1. On your TV remote, open **Settings ⚙️**.
-2. Select **Device Preferences** (or **System** on newer Google TVs).
-3. Select **About** $\rightarrow$ Scroll down to **Build** (or *Android TV OS Build*).
-4. **Press the OK button on your remote 7 times rapidly** until a toast notification appears: *"You are now a developer!"*.
-5. Press the *Back* button once. Open the new menu: **Developer options**.
-6. Locate and **ENABLE**:
-   - ✅ **USB debugging** (Turn ON).
-   - ✅ **Wireless debugging / Network debugging** (Turn ON).
-7. Ensure both your computer/phone and TV are connected to the **same Wi-Fi network**.
+### 📋 Langkah 1: Aktifkan Mode Pengembang & Debugging di TV Anda
+Sebelum AI dapat menjangkau TV Anda melalui Wi-Fi, lakukan dua tindakan sederhana dengan remote ini:
+1. Pada remote TV Anda, buka **Pengaturan ⚙️**.
+2. Pilih **Preferensi Perangkat** (atau **Sistem** pada Google TV yang lebih baru).
+3. Pilih **Tentang** $\rightarrow$ Gulir ke bawah ke **Build** (atau *Android TV OS Build*).
+4. **Tekan tombol OK pada remote Anda 7 kali dengan cepat** hingga muncul notifikasi toast: *"Anda sekarang menjadi pengembang!"*.
+5. Tekan tombol *Kembali* satu kali. Buka menu baru: **Opsi Pengembang**.
+6. Temukan dan **AKTIFKAN**:
+   - ✅ **Debugging USB** (Aktifkan).
+   - ✅ **Debugging nirkabel / Debugging jaringan** (Aktifkan).
+7. Pastikan komputer/ponsel Anda dan TV terhubung ke **jaringan Wi-Fi yang sama**.
 
 ---
 
-### 📋 Step 2: Paste This 1-Line Prompt to Your AI Assistant
-Open **Google Antigravity**, **Claude Code**, or **Cursor** on your laptop/computer. Copy and paste this single prompt:
+### 📋 Langkah 2: Tempel Prompt 1 Baris Ini ke Asisten AI Anda
+Buka **Google Antigravity**, **Claude Code**, atau **Cursor** di laptop/komputer Anda. Salin dan tempel satu prompt ini:
 
 ```text
-install ni dekat tv rumah saya: https://github.com/aqmangge/glass-tv-home
+install ni dekat tv rumah saya: https://github.com/chickencrispy/glasstv-home
 ```
 
-> **What the AI will do automatically after you send this prompt:**
-> 1. The AI will ask for your TV IP address (or probe your home Wi-Fi subnet to find the TV automatically).
-> 2. The AI will ask for your location in Malaysia (e.g. Putrajaya, Cheras, Shah Alam, Melaka, JB, Penang, Kuantan, etc.) to calibrate APIMS haze and JAKIM prayer zones.
-> 3. Connects to your TV over Wi-Fi via ADB (`adb connect <ip>:5555`).
-> 4. Creates a safety backup of your TV's factory package configuration.
-> 5. Strips away sluggish manufacturer bloatware, suppresses promotional ads, and activates AdGuard Private DNS to block background analytics.
-> 6. Installs the ultralight (~453 KB) Glass TV Home APK as your primary home launcher.
-> 7. Pulls a live screenshot from your TV to confirm everything is running smoothly!
+> **Apa yang akan dilakukan AI secara otomatis setelah Anda mengirim prompt ini:**
+> 1. AI akan meminta alamat IP TV Anda (atau memindai subnet Wi-Fi rumah Anda untuk menemukan TV secara otomatis).
+> 2. AI akan meminta lokasi Anda di Malaysia (misalnya Putrajaya, Cheras, Shah Alam, Melaka, JB, Penang, Kuantan, dll.) untuk mengkalibrasi stasiun kabut asap APIMS.
+> 3. Terhubung ke TV Anda melalui Wi-Fi via ADB (`adb connect <ip>:5555`).
+> 4. Membuat cadangan pengaman konfigurasi paket pabrik TV Anda.
+> 5. Menghapus bloatware pabrikan yang lambat, menekan iklan promosi, dan mengaktifkan AdGuard Private DNS untuk memblokir analitik latar belakang.
+> 6. Memasang APK Glass TV Home yang sangat ringan (di bawah 600 KB) sebagai launcher beranda utama Anda.
+> 7. Mengambil tangkapan layar langsung dari TV Anda untuk memastikan semuanya berjalan lancar!
 
-*(Optional: If you want to supply all info at once in a single message without back-and-forth:)*
+*(Opsional: Jika Anda ingin memberikan semua info sekaligus dalam satu pesan tanpa bolak-balik:)*
 ```text
-install ni dekat tv rumah saya: https://github.com/aqmangge/glass-tv-home
+install ni dekat tv rumah saya: https://github.com/chickencrispy/glasstv-home
 TV Model: [e.g. Xiaomi Mi Box S]
 TV IP: [e.g. 192.168.68.102]
 My Location: [e.g. Putrajaya / Cheras / Shah Alam / Johor Bahru / Penang]
 ```
 
 > [!IMPORTANT]
-> **🚨 Mandatory Instruction For AI Assistants (AI Assistant Rule)**:
-> When a user gives you the prompt `install ni dekat tv rumah saya: https://github.com/aqmangge/glass-tv-home`, the AI **MUST** ask the user:
-> 1. *"What is your TV's IP address under Settings -> Network & Internet (or your TV brand)?"* (if not auto-discovered)
-> 2. *"Where are you located in Malaysia (e.g. Putrajaya, Cheras, Shah Alam, Melaka, Johor Bahru, Penang, Kuantan, Kuching, Kota Kinabalu, etc.) so that official Jabatan Alam Sekitar (DOE / APIMS) haze / IPU readings and JAKIM prayer times can be configured automatically?"*
+> **🚨 Instruksi Wajib untuk Asisten AI (Aturan Asisten AI)**:
+> Ketika pengguna memberikan prompt `install ni dekat tv rumah saya: https://github.com/chickencrispy/glasstv-home`, AI **WAJIB** bertanya kepada pengguna:
+> 1. *"Berapa alamat IP TV Anda di Pengaturan -> Jaringan & Internet (atau sesuai merek TV Anda)?"* (jika tidak ditemukan otomatis)
+> 2. *"Di mana lokasi Anda di Malaysia (misalnya Putrajaya, Cheras, Shah Alam, Melaka, Johor Bahru, Penang, Kuantan, Kuching, Kota Kinabalu, dll.) agar pembacaan kabut asap / IPU resmi Jabatan Alam Sekitar (DOE / APIMS) dapat dikonfigurasi secara otomatis?"*
 > 
-> The AI can immediately install the prebuilt APK from `release/glass-tv-home.apk` or build it, run debloat, and set the user location via:
+> AI dapat langsung memasang APK yang sudah dibangun dari `release/glass-tv-home.apk` atau membangunnya, menjalankan debloat, dan mengatur lokasi pengguna melalui:
 > ```bash
 > adb shell am broadcast -a com.gathin.tvhome.SET_LOCATION -p com.gathin.tvhome --es query "<USER_LOCATION>"
 > ```
-> *(If the user does not specify a location, the default preset is **Putrajaya** / Station CA17W).*
+> *(Jika pengguna tidak menentukan lokasi, preset bawaan adalah **Putrajaya** / Stasiun CA17W).*
 
 ---
 
-### 📋 Step 3: Click "Allow" on Your TV Screen
-When the AI initiates the connection, a authorization prompt will pop up on your TV screen:
-* *"Allow USB debugging from this computer?"*
-* Check the box: ☑ **"Always allow from this computer"**
-* Select **OK / Allow**.
+### 📋 Langkah 3: Klik "Izinkan" di Layar TV Anda
+Saat AI memulai koneksi, prompt otorisasi akan muncul di layar TV Anda:
+* *"Izinkan debugging USB dari komputer ini?"*
+* Centang kotaknya: ☑ **"Selalu izinkan dari komputer ini"**
+* Pilih **OK / Izinkan**.
 
-The AI will handle everything else: clearing sluggish bloatware, enabling the ad blocker, deploying Glass TV Home, and showing you a screenshot of your clean, responsive TV!
-
----
-
-### ↩️ How to Undo / Restore Original Launcher
-All modifications made by the AI are **100% safe and reversible**:
-* The AI disables apps rather than permanently deleting system packages.
-* An automatic restore script (`restore.sh` / `restore.ps1`) is saved.
-* If you ever wish to return to the manufacturer's original launcher, just prompt the AI:
-  > *"Please restore my TV back to the original factory launcher and settings."*
+AI akan menangani sisanya: membersihkan bloatware yang lambat, mengaktifkan pemblokir iklan, memasang Glass TV Home, dan menunjukkan tangkapan layar TV Anda yang bersih dan responsif!
 
 ---
 
-## 🎮 3. Remote Control Navigation (D-Pad)
+### ↩️ Cara Membatalkan / Memulihkan Launcher Asli
+Semua modifikasi yang dilakukan AI **100% aman dan dapat dikembalikan**:
+* AI menonaktifkan aplikasi alih-alih menghapus paket sistem secara permanen.
+* Skrip pemulihan otomatis (`restore.sh` / `restore.ps1`) disimpan.
+* Jika Anda ingin kembali ke launcher asli pabrikan, cukup beri prompt kepada AI:
+  > *"Tolong kembalikan TV saya ke launcher dan pengaturan pabrik aslinya."*
 
-Glass TV Home is designed around standard TV remotes:
+---
 
-| Remote Button | Action / Function |
+## 🎮 3. Navigasi Remote Control (D-Pad)
+
+Glass TV Home dirancang untuk remote TV standar:
+
+| Tombol Remote | Aksi / Fungsi |
 | :--- | :--- |
-| **HOME Button (Single Press)** | Return to home dock from any third-party app. If on home, engages ambient screensaver. |
-| **HOLD HOME (Long-Press)** | Globally opens the floating Quick Settings popup from inside any application (Netflix, YouTube, etc.). |
-| **UP Button (▲)** | Navigates to the top shelf to highlight the **Weather & AQI Pill**, Inputs, Wi-Fi, or **Settings Button (⚙️)**. |
-| **OK / Center Button** | • Press on an app to launch it.<br>• Press on the weather pill to open the **Full-Screen Weather & Air Quality Dashboard**.<br>• Press on **Settings (⚙️)** to open the **Frosted Glass Dropdown Menu** (Wallpaper, Haze Location, Prayer Zone, Android Settings).<br>• **Long-Press** on an app to pick it up and rearrange/pin it to the dock. |
-| **DOWN Button (▼)** | Returns focus down to the main application dock. |
-| **LEFT / RIGHT (◀ / ▶)** | Move smoothly between dock apps or top pills with fluid glass glow transitions. |
-| **BACK Button (↩)** | Closes the Weather Dashboard, Settings Dialogs, or screensaver and returns to the home dock. |
+| **Tombol HOME (Tekan Sekali)** | Kembali ke dock beranda dari aplikasi pihak ketiga mana pun. Jika sudah di beranda, aktifkan screensaver ambient. |
+| **TAHAN HOME (Tekan Lama)** | Membuka popup Pengaturan Cepat mengambang secara global dari dalam aplikasi mana pun (Netflix, YouTube, dll.). |
+| **Tombol UP (▲)** | Menavigasi ke rak atas untuk menyorot **Pil Cuaca & AQI**, Input, Wi-Fi, atau **Tombol Pengaturan (⚙️)**. |
+| **Tombol OK / Tengah** | • Tekan pada aplikasi untuk membukanya.<br>• Tekan pada pil cuaca untuk membuka **Dashboard Cuaca & Kualitas Udara Layar Penuh**.<br>• Tekan **Pengaturan (⚙️)** untuk membuka **Menu Dropdown Kaca Buram** (Wallpaper, Lokasi Kabut Asap, Pengaturan Android).<br>• **Tekan Lama** pada aplikasi untuk memilihnya dan mengatur ulang/menyematkannya ke dock. |
+| **Tombol DOWN (▼)** | Mengembalikan fokus ke bawah ke dock aplikasi utama. |
+| **KIRI / KANAN (◀ / ▶)** | Berpindah dengan mulus antar aplikasi dock atau pil atas dengan transisi cahaya kaca yang halus. |
+| **Tombol BACK (↩)** | Menutup Dashboard Cuaca, Dialog Pengaturan, atau screensaver dan kembali ke dock beranda. |
 
 ---
 
-## 📱 4. Key Feature Walkthrough
+## 📱 4. Penjelasan Fitur Utama
 
-### A. Weather & Air Quality (AQI) Hub
-* Located under the digital clock (e.g., `☁ 27° Overcast  •  API 106 Unhealthy`).
-* **Press UP (▲) then press OK** to launch the full Leanback weather interface:
-  1. **Current Conditions**: Temperature, "Feels Like", humidity, wind velocity, UV index, sunrise and sunset times.
-  2. **Official Air Quality Index (JAS Malaysia APIMS / IPU)**: Real-time ground data directly from the Department of Environment (JAS) APIMS portal with official Malaysian scale colors (Good: Green, Moderate: Sky Blue, Unhealthy: Orange, Very Unhealthy: Red, Hazardous: Maroon) and official health guidance.
-  3. **12-Hour Hourly Forecast**: Hourly forecast cards with precipitation chance percentages.
-  4. **7-Day Outlook**: Daily weather forecast across the upcoming week.
+### A. Pusat Cuaca & Kualitas Udara (AQI)
+* Terletak di bawah jam digital (misalnya, `☁ 27° Overcast  •  API 106 Unhealthy`).
+* **Tekan UP (▲) lalu tekan OK** untuk membuka antarmuka cuaca Leanback layar penuh:
+  1. **Kondisi Saat Ini**: Suhu, "Terasa Seperti", kelembapan, kecepatan angin, indeks UV, waktu matahari terbit dan terbenam.
+  2. **Indeks Kualitas Udara Resmi (JAS Malaysia APIMS / IPU)**: Data ground real-time langsung dari portal APIMS Department of Environment (JAS) dengan warna skala resmi Malaysia (Baik: Hijau, Sedang: Biru Langit, Tidak Sehat: Oranye, Sangat Tidak Sehat: Merah, Berbahaya: Marun) dan panduan kesehatan resmi.
+  3. **Prakiraan Per Jam 12 Jam**: Kartu prakiraan per jam dengan persentase peluang hujan.
+  4. **Prakiraan 7 Hari**: Prakiraan cuaca harian sepanjang minggu mendatang.
 
-📍 **Manual Location Setup Directly on TV Remote (For Standalone APK Installs):**
-Users who install the APK manually or relocate **DO NOT NEED A COMPUTER OR AI** to configure their station:
-1. On the home screen, press **UP (▲)** and press **OK** on the weather pill to open the Weather Dashboard.
-2. Press **UP (▲)** again to highlight the **📍 Tukar Stesen / Change** button next to the location name.
-3. Press **OK**. A dialog modal will appear with 30+ official Malaysian DOE stations across all states:
+📍 **Pengaturan Lokasi Manual Langsung via Remote TV (Untuk Instalasi APK Mandiri):**
+Pengguna yang memasang APK secara manual atau pindah lokasi **TIDAK MEMERLUKAN KOMPUTER ATAU AI** untuk mengonfigurasi stasiunnya:
+1. Di layar beranda, tekan **UP (▲)** dan tekan **OK** pada pil cuaca untuk membuka Dashboard Cuaca.
+2. Tekan **UP (▲)** lagi untuk menyorot tombol **📍 Tukar Stesen / Change** di samping nama lokasi.
+3. Tekan **OK**. Modal dialog akan muncul dengan 30+ stasiun DOE Malaysia resmi di seluruh negara bagian:
    - *Putrajaya, Cheras (KL), Batu Muda (KL), Petaling Jaya, Shah Alam, Klang, Banting, Bandaraya Melaka, Alor Gajah, Bukit Rambai, Seremban, Nilai, Port Dickson, Larkin (JB), Pasir Gudang, Batu Pahat, Kluang, Tangkak, Seberang Jaya (Penang), Minden (USM), Balik Pulau, Ipoh, Taiping, Seri Manjung, Alor Setar, Sungai Petani, Langkawi, Kangar, Kuantan, Temerloh, Kuala Terengganu, Kemaman, Kota Bharu, Kota Kinabalu, Sandakan, Tawau, Kuching, Miri, Bintulu, Sibu, Labuan*.
-4. Scroll with the remote **UP / DOWN** arrows to select your station and press **OK**.
-5. Both the official JAS IPU readings and the JAKIM prayer timetable immediately calibrate to your chosen city!
+4. Gulir dengan tombol **UP / DOWN** pada remote untuk memilih stasiun Anda dan tekan **OK**.
+5. Pembacaan IPU JAS resmi langsung menyesuaikan dengan kota pilihan Anda!
 
-### B. Islamic Prayer Timetable & Daily Ayat
-* **6-Phase Prayer Timetable**: Subuh, Syuruk, Zohor, Asar, Maghrib, and Isyak synchronized with your local time zone.
-* **Active Window Glow**: The current active prayer window illuminates in emerald green.
-* **Daily Quranic Verse**: Rotating daily ayat with Arabic calligraphy and translations.
-
-### C. Dynamic 4K Wallpapers & Category Switcher
-* **Curated Themes**: Switch your home background between curated 4K categories directly from the remote:
-  - 🌿 **Natural (Default / Bing Places)**: World landmarks, mountains, lakes, and nature landscapes with informative location stories updated weekly.
-  - 🇲🇾 **Malaysia (Curated 14 States & Federal Territories)**: Pick wallpapers specifically for any of Malaysia's 14 states or rotate all states together via a dedicated sub-dialog:
-    - 📍 **Johor**: Pulau Rawa Mersing & Tropical Coastline.
-    - 📍 **Kedah**: Langkawi Sky Bridge Mount Mat Cincang & Emerald Seas.
-    - 📍 **Kelantan**: Pantai Cahaya Bulan & Pine Groves of Pantai Senok Kota Bharu.
-    - 📍 **Melaka**: UNESCO Historic City & Melaka River Night Promenade.
+### B. Wallpaper 4K Dinamis & Pengalih Kategori
+* **Tema Terkurasi**: Ganti latar belakang beranda Anda di antara kategori 4K terkurasi langsung dari remote:
+  - 🌿 **Natural (Bawaan / Bing Places)**: Landmark dunia, gunung, danau, dan lanskap alam dengan cerita lokasi informatif yang diperbarui setiap minggu.
+  - 🇲🇾 **Malaysia (Terkurasi 14 Negara Bagian & Wilayah Federal)**: Pilih wallpaper khusus untuk salah satu dari 14 negara bagian Malaysia atau putar semua negara bagian sekaligus melalui sub-dialog khusus:
+    - 📍 **Johor**: Pulau Rawa Mersing & Garis Pantai Tropis.
+    - 📍 **Kedah**: Jembatan Langit Langkawi Gunung Mat Cincang & Laut Zamrud.
+    - 📍 **Kelantan**: Pantai Cahaya Bulan & Hutan Pinus Pantai Senok Kota Bharu.
+    - 📍 **Melaka**: Kota Bersejarah UNESCO & Promenade Malam Sungai Melaka.
     - 📍 **Negeri Sembilan**: Pantai Cahaya Negeri & Teluk Kemang Port Dickson.
-    - 📍 **Pahang**: Cameron Highlands Rolling Tea Plantations & Bharat Tea Valley.
-    - 📍 **Perak**: Ipoh Colonial Heritage Town, Kellie's Castle & Kek Lok Tong Limestone Cave.
-    - 📍 **Perlis**: Gua Kelam Limestone Cavern & Nakawan Range Foothills.
-    - 📍 **Pulau Pinang**: Georgetown UNESCO Heritage Streets & Kek Lok Si Temple.
-    - 📍 **Sabah**: Mount Kinabalu Peak & South Peak Kundasang.
-    - 📍 **Sarawak**: UNESCO Mulu Pinnacles, Kuching Waterfront & Miri Coastline.
-    - 📍 **Selangor**: Batu Caves Sri Subramaniar & Shah Alam Blue Mosque.
-    - 📍 **Terengganu**: Pulau Perhentian Marine Haven & Kuala Terengganu Crystal Mosque.
-    - 📍 **Wilayah Persekutuan**: Petronas Twin Towers KLCC & Kuala Lumpur City Nightscape.
-  - 🏙️ **Skyscraper**: Famous modern architecture and skylines (Manhattan NYC, Chicago River, Dubai Marina, Hong Kong Cityscape).
-  - 🌌 **Deep Space**: Vibrant nebulae, starfields, and cosmic vistas.
-  - 🌊 **Ocean & Coastal**: Pristine coastal horizons, waves, and azure seas.
-  - 🔲 **Minimalist Dark**: Refined deep textured aesthetic, power-efficient and OLED-safe.
-* **📂 State Picker Sub-Dropdown (Clean TV UI)**:
-  - Click **`🇲🇾 Malaysia (Pilih Negeri ▶)`** on the wallpaper menu to open a leanback dialog listing all 14 Malaysian states.
-  - Your active selection is displayed right on the main menu (e.g. `🇲🇾 Malaysia: Johor (Tukar Negeri ▶)`).
-  - The TV shelf automatically highlights the location, state name, and historical story of each Malaysian landmark!
-* **📲 Phone QR Code Wallpaper Upload**:
-  - Select **`📲 Upload Wallpaper via Phone (QR Code)`** from the wallpaper options to display a clean QR code and local web link.
-  - Scan with any smartphone on the same Wi-Fi network to upload custom family photos, vacation snapshots, or artwork directly to your TV without cloud accounts or third-party apps.
-* **📱 On-TV Photo Manager & Single Wallpaper Lock**:
-  - After uploading photos, easily manage them right from your phone browser or through the TV D-pad menu: **`🗑️ Urus Gambar Dimuat Naik (Pilih / Padam)`**.
-  - **Lock Single Wallpaper**: Choose **`📌 Set as Single Wallpaper`** to lock a single photo permanently as your background without rotating.
-  - **Rotate All Photos**: Choose **`🔄 Rotate All Uploaded Photos`** to cycle through all custom photos in slideshow mode.
-  - **Delete Specific / Clear All**: Delete individual uploaded photos or wipe all custom images with one click.
-* **🖼️ Clean View for Custom Wallpapers**:
-  - When personal custom wallpapers are active, the left-hand text shelf / description is completely hidden (`View.GONE`) so your personal photos are displayed edge-to-edge without being obscured by location captions.
-* **Instant Shift**: Select **🔀 Next Wallpaper** anytime to immediately cycle to the next photo in your active category.
+    - 📍 **Pahang**: Perkebunan Teh Bergelombang Cameron Highlands & Lembah Teh Bharat.
+    - 📍 **Perak**: Kota Warisan Kolonial Ipoh, Kellie's Castle & Gua Batu Kapur Kek Lok Tong.
+    - 📍 **Perlis**: Gua Batu Kapur Gua Kelam & Kaki Bukit Pegunungan Nakawan.
+    - 📍 **Pulau Pinang**: Jalan Warisan UNESCO Georgetown & Kuil Kek Lok Si.
+    - 📍 **Sabah**: Puncak Gunung Kinabalu & Puncak Selatan Kundasang.
+    - 📍 **Sarawak**: Puncak Mulu UNESCO, Tepi Air Kuching & Garis Pantai Miri.
+    - 📍 **Selangor**: Batu Caves Sri Subramaniar & Masjid Biru Shah Alam.
+    - 📍 **Terengganu**: Surga Laut Pulau Perhentian & Masjid Kristal Kuala Terengganu.
+    - 📍 **Wilayah Persekutuan**: Menara Kembar Petronas KLCC & Pemandangan Malam Kota Kuala Lumpur.
+  - 🏙️ **Skyscraper**: Arsitektur modern dan cakrawala terkenal (Manhattan NYC, Chicago River, Dubai Marina, Hong Kong Cityscape).
+  - 🌌 **Deep Space**: Nebula berwarna-warni, hamparan bintang, dan pemandangan kosmik.
+  - 🌊 **Ocean & Coastal**: Cakrawala pesisir yang murni, ombak, dan laut biru.
+  - 🔲 **Minimalist Dark**: Estetika bertekstur dalam yang elegan, hemat daya, dan aman untuk OLED.
+* **📂 Sub-Dropdown Pemilih Negara Bagian (UI TV Bersih)**:
+  - Klik **`🇲🇾 Malaysia (Pilih Negeri ▶)`** pada menu wallpaper untuk membuka dialog leanback yang mencantumkan semua 14 negara bagian Malaysia.
+  - Pilihan aktif Anda ditampilkan tepat di menu utama (misalnya `🇲🇾 Malaysia: Johor (Tukar Negeri ▶)`).
+  - Rak TV secara otomatis menyorot lokasi, nama negara bagian, dan cerita historis setiap landmark Malaysia!
+* **📲 Unggah Wallpaper via Ponsel (Kode QR)**:
+  - Pilih **`📲 Upload Wallpaper via Phone (QR Code)`** dari opsi wallpaper untuk menampilkan kode QR yang bersih dan tautan web lokal.
+  - Pindai dengan ponsel apa pun di jaringan Wi-Fi yang sama untuk mengunggah foto keluarga kustom, foto liburan, atau karya seni langsung ke TV Anda tanpa akun cloud atau aplikasi pihak ketiga.
+* **📱 Pengelola Foto di TV & Kunci Wallpaper Tunggal**:
+  - Setelah mengunggah foto, kelola dengan mudah langsung dari browser ponsel Anda atau melalui menu D-pad TV: **`🗑️ Urus Gambar Dimuat Naik (Pilih / Padam)`**.
+  - **Kunci Wallpaper Tunggal**: Pilih **`📌 Set as Single Wallpaper`** untuk mengunci satu foto secara permanen sebagai latar belakang tanpa rotasi.
+  - **Putar Semua Foto**: Pilih **`🔄 Rotate All Uploaded Photos`** untuk bergilir melalui semua foto kustom dalam mode slideshow.
+  - **Hapus Tertentu / Hapus Semua**: Hapus foto yang diunggah satu per satu atau hapus semua gambar kustom dengan satu klik.
+* **🖼️ Tampilan Bersih untuk Wallpaper Kustom**:
+  - Saat wallpaper kustom pribadi aktif, rak teks / deskripsi di sisi kiri sepenuhnya disembunyikan (`View.GONE`) sehingga foto pribadi Anda ditampilkan hingga tepi layar tanpa tertutup keterangan lokasi.
+* **Perpindahan Instan**: Pilih **🔀 Next Wallpaper** kapan saja untuk langsung beralih ke foto berikutnya dalam kategori aktif Anda.
 
-### D. StandBy Ambient Mode & Smart Power Saving
-* **10 Minutes Idle**: Enters an ambient OLED-safe black StandBy screensaver displaying large 110sp numerals, Islamic Hijri date, and the upcoming prayer window.
-* **2 Hours Later**: If left untouched, the TV display enters sleep standby (`GLOBAL_ACTION_LOCK_SCREEN`) to save power.
-* **Wake Up**: Press any button on the TV remote to wake the TV immediately.
+### C. Mode Ambient StandBy & Hemat Daya Pintar
+* **Menganggur 10 Menit**: Masuk ke screensaver StandBy hitam yang aman untuk OLED, menampilkan angka besar 110sp, tanggal Hijriah Islam, dan waktu salat berikutnya.
+* **2 Jam Kemudian**: Jika dibiarkan tanpa sentuhan, layar TV masuk ke standby tidur (`GLOBAL_ACTION_LOCK_SCREEN`) untuk menghemat daya.
+* **Bangunkan**: Tekan tombol apa pun pada remote TV untuk membangunkan TV segera.
 
-### E. 16:9 Floating Azan Notification & Audio Settings 🕌
-A respectful spiritual living room feature synchronized live with official JAKIM Malaysia E-Solat schedules:
-* **Floating System Overlay**: At the precise time of prayer, an elegant 16:9 frosted glass notification card automatically appears on screen over running apps (Netflix, YouTube, media players) without crashing or interrupting playback.
-* **All-In-One Control Center**: Open via the **Candy Box (㗊)** icon on the top bar or by **Holding the HOME button**:
-  1. **A. Master Popup Switch**: Toggle Azan notification overlays globally *ON* or *OFF*.
-  2. **B. Individual Prayer Toggles**: Set alerts separately for each of the 6 prayer periods: *Subuh, Syuruk, Zohor, Asar, Maghrib, Isyak*.
-  3. **C. Azan Audio Presets**: Choose your preferred Azan audio: *Masjid As-Syakirin KLCC, Makkah Mukarramah, or Madinah Munawwarah*.
-  4. **D. Live Test Mode**: Click **▶️ Test Azan Popup Now** to trigger an instant test overlay and verify sound volume.
+### D. Menu Dropdown Pengaturan Kaca Buram ⚙️
+Mengklik **Pengaturan (ikon roda gigi ⚙️)** di bilah atas akan menampilkan menu kaca mengambang bergaya Apple tvOS:
+* 🖼️ **Wallpaper**: Membuka dialog pemilih kategori (*Natural, Skyscraper, Deep Space, Ocean, Minimalist Dark, Next Wallpaper*). Preferensi tetap tersimpan setelah reboot.
+* 📍 **Lokasi API Kabut Asap**: Membuka pemilih untuk 30+ stasiun pemantauan kualitas udara resmi DOE Malaysia (JAS APIMS).
+* 🔊 **Efek Suara**: Menampilkan tema audio saat ini (misalnya `Sound: PlayStation 5`) dan membuka pemilih profil suara konsol dengan pratinjau langsung.
+* 🔄 **Periksa Pembaruan**: Memeriksa GitHub secara langsung untuk rilis atau patch yang lebih baru tanpa memerlukan PC.
+* ⚙️ **Semua Pengaturan**: Membuka preferensi sistem Android TV standar.
+*(Pintasan: Menekan lama tombol Pengaturan pada remote Anda langsung membuka pengaturan Android standar).*
 
-### F. Frosted Glass Settings Dropdown Menu ⚙️
-Clicking the **Settings (gear icon ⚙️)** on the top bar reveals an Apple tvOS-style floating glass menu:
-* 🖼️ **Wallpaper**: Launches the category selector dialog (*Natural, Skyscraper, Deep Space, Ocean, Minimalist Dark, Next Wallpaper*). Preferences persist across reboots.
-* 📍 **Location API Haze**: Opens a selector for 30+ official Malaysian DOE (JAS APIMS) air quality monitoring stations.
-* 🕌 **Location Waktu Solat**: Opens a selector for 35+ official JAKIM prayer zones across all Malaysian states.
-* 🔊 **Sound Effect**: Displays current audio theme (e.g. `Sound: PlayStation 5`) and launches the console sound profile selector with live previews.
-* 🔄 **Check for Updates**: Checks GitHub directly for newer releases or patches without requiring a PC.
-* ⚙️ **All Settings**: Opens standard Android TV system preferences.
-*(Shortcut: Long-pressing the Settings button on your remote directly launches standard Android settings).*
+### E. Efek Suara Konsol & Mode Senyap (PS5, Switch, Xbox) 🎮🔊
+Sesuaikan audio navigasi TV Anda dengan profil konsol game ikonik atau senyapkan semua suara sepenuhnya:
+* **PlayStation 5 (Bawaan)**: Suara whoosh akustik definisi tinggi yang ramping dan klik yang taktil.
+* **Nintendo Switch**: Klik taktil mekanis yang tajam dan bunyi konfirmasi yang ceria.
+* **Xbox Series X/S**: Pulsa navigasi mid-bass hangat yang resonan dan lonceng naik dua nada.
+* **Senyap / Mati**: Sunyi total untuk sesi film malam yang sangat tenang.
+* **Audisi Audio Instan**: Mengetuk tema apa pun di dalam dialog langsung memutar bunyi khasnya.
+* **Preferensi Persisten**: Pengaturan tetap tersimpan setelah TV restart melalui SharedPreferences.
 
-### G. Console Sound Effects & Mute Mode (PS5, Switch, Xbox) 🎮🔊
-Customize your TV navigation audio with iconic gaming console profiles or mute all sounds entirely:
-* **PlayStation 5 (Default)**: Sleek, high-definition acoustic whooshes and tactile clicks.
-* **Nintendo Switch**: Sharp mechanical tactile clicks and cheerful confirmation snaps.
-* **Xbox Series X/S**: Resonant warm mid-bass navigation pulses and two-tone rising chime.
-* **Muted / Off**: Complete silence for whisper-quiet late night movie sessions.
-* **Instant Audio Audition**: Tapping any theme inside the dialog immediately plays its signature chime.
-* **Persistent Preferences**: Settings remain saved across TV restarts via SharedPreferences.
-
-### H. On-TV OTA Updates & Auto-Patch Checker 🔄🚀
-Glass TV Home features a built-in OTA update system so you can update directly on your TV without a computer:
-* **Manual Check**: Navigate to **Settings (⚙️) $\rightarrow$ Check for Updates**. The app contacts the GitHub release manifest and notifies you if a new version is available.
-* **Silent Startup Check**: The launcher quietly checks for new versions in the background when booted. If a new patch is found, a changelog dialog is presented.
-* **1-Click Download & Install**: Clicking **Muat Turun & Pasang** downloads the update file locally and launches Android TV's native package installer.
-* **Data Preserved**: Updating preserves all apps, dock layout, and custom configurations.
+### F. Pembaruan OTA di TV & Pemeriksa Patch Otomatis 🔄🚀
+Glass TV Home memiliki sistem pembaruan OTA bawaan sehingga Anda dapat memperbarui langsung di TV tanpa komputer:
+* **Pemeriksaan Manual**: Buka **Pengaturan (⚙️) $\rightarrow$ Periksa Pembaruan**. Aplikasi menghubungi manifes rilis GitHub dan memberi tahu Anda jika ada versi baru.
+* **Pemeriksaan Senyap Saat Mulai**: Launcher diam-diam memeriksa versi baru di latar belakang saat dinyalakan. Jika patch baru ditemukan, dialog changelog akan ditampilkan.
+* **Unduh & Pasang 1 Klik**: Mengklik **Unduh & Pasang** mengunduh file pembaruan secara lokal dan membuka pemasang paket native Android TV.
+* **Data Tetap Terjaga**: Memperbarui akan mempertahankan semua aplikasi, tata letak dock, dan konfigurasi kustom.
 
 ---
 
-## 📲 5. Mobile Phone Setup (Without Any PC / Laptop)
+## 📲 5. Penyiapan Ponsel (Tanpa PC / Laptop)
 
-You do **not** need a computer to install Glass TV Home.
+Anda **tidak** memerlukan komputer untuk memasang Glass TV Home.
 
-### Method 1: Android Phone via 'Bugjaeger' (Install APK + Debloat Directly)
-The **Bugjaeger Mobile ADB** app (free on Google Play Store) allows your phone to act as an ADB controller over Wi-Fi:
+### Metode 1: Ponsel Android via 'Bugjaeger' (Pasang APK + Debloat Langsung)
+Aplikasi **Bugjaeger Mobile ADB** (gratis di Google Play Store) memungkinkan ponsel Anda berperan sebagai pengontrol ADB melalui Wi-Fi:
 
-1. Connect both phone and TV to the **same Wi-Fi**.
-2. Open **Bugjaeger**, tap the **Connect 🔌** icon, enter your TV IP (e.g. `192.168.68.102:5555`), and tap **Connect**.
-3. Accept the *"Allow USB debugging"* prompt on your TV screen.
-4. Go to the **Packages 📦** tab in Bugjaeger, tap **+**, and select the downloaded `app-release.apk` to install it directly.
-5. In the **Commands ⚡** tab, run these commands to block ads and debloat:
+1. Hubungkan ponsel dan TV ke **Wi-Fi yang sama**.
+2. Buka **Bugjaeger**, ketuk ikon **Connect 🔌**, masukkan IP TV Anda (misalnya `192.168.68.102:5555`), dan ketuk **Connect**.
+3. Terima prompt *"Izinkan debugging USB"* di layar TV Anda.
+4. Buka tab **Packages 📦** di Bugjaeger, ketuk **+**, dan pilih `app-release.apk` yang sudah diunduh untuk memasangnya langsung.
+5. Di tab **Commands ⚡**, jalankan perintah ini untuk memblokir iklan dan debloat:
    ```bash
    settings put global private_dns_specifier dns.adguard-dns.com
    settings put global private_dns_mode hostname
@@ -273,84 +257,84 @@ The **Bugjaeger Mobile ADB** app (free on Google Play Store) allows your phone t
 
 ---
 
-### Method 2: iPhone (iOS) Users: Can You Use an iPhone?
-**Yes! You can easily install the APK and block ads on your TV using an iPhone.**
+### Metode 2: Pengguna iPhone (iOS): Bisakah Menggunakan iPhone?
+**Ya! Anda dapat dengan mudah memasang APK dan memblokir iklan di TV menggunakan iPhone.**
 
-Due to Apple App Store sandbox security policies, Apple does not allow direct low-level ADB tools like Bugjaeger on iOS. However, iPhone users can achieve a clean setup quickly:
+Karena kebijakan keamanan sandbox Apple App Store, Apple tidak mengizinkan alat ADB tingkat rendah langsung seperti Bugjaeger di iOS. Namun, pengguna iPhone dapat mencapai penyiapan yang bersih dengan cepat:
 
-#### 1. Transfer & Install the APK using 'LocalSend':
-* Download the free **LocalSend** app on your iPhone (App Store) and on your Android TV (Play Store).
-* Download `app-release.apk` on your iPhone Safari from this GitHub repository.
-* Open LocalSend on both devices (on the same Wi-Fi) and send the APK to your TV in 1 tap.
-* On your TV, click the received APK file and select **Install**.
+#### 1. Transfer & Pasang APK menggunakan 'LocalSend':
+* Unduh aplikasi **LocalSend** gratis di iPhone Anda (App Store) dan di Android TV Anda (Play Store).
+* Unduh `app-release.apk` di Safari iPhone Anda dari repositori GitHub ini.
+* Buka LocalSend di kedua perangkat (pada Wi-Fi yang sama) dan kirim APK ke TV Anda dalam 1 ketukan.
+* Di TV Anda, klik file APK yang diterima dan pilih **Pasang**.
 
-#### 2. Block Ads & Telemetry Directly from Your TV Remote (No ADB Needed):
-1. On your TV, navigate to **Settings ⚙️** $\rightarrow$ **Network & Internet**.
-2. Select **Private DNS** (switch from *Automatic* to *Private DNS provider hostname*).
-3. Type:
+#### 2. Blokir Iklan & Telemetri Langsung dari Remote TV (Tanpa ADB):
+1. Di TV Anda, buka **Pengaturan ⚙️** $\rightarrow$ **Jaringan & Internet**.
+2. Pilih **DNS Privat** (ubah dari *Otomatis* ke *Nama host penyedia DNS privat*).
+3. Ketik:
    ```text
    dns.adguard-dns.com
    ```
-4. Click **Save**. All system-wide banner ads, manufacturer analytics, and tracking domains will be blocked immediately!
+4. Klik **Simpan**. Semua iklan banner seluruh sistem, analitik pabrikan, dan domain pelacakan akan langsung diblokir!
 
-#### 3. Deep Debloat Note for iPhone Users:
-To disable deep manufacturer system packages (e.g., Xiaomi PatchWall), it is recommended to run the ADB command once from a computer, or borrow an Android phone for 2 minutes. Once disabled, the bloatware remains gone permanently.
-
----
-
-## 🛠️ 6. Alternative: Manual Installation via USB Flash Drive
-
-If you prefer using a physical USB drive:
-1. Download [**glass-tv-home.apk**](https://github.com/aqmangge/glass-tv-home/raw/main/release/glass-tv-home.apk) (also in [`release/glass-tv-home.apk`](release/glass-tv-home.apk)) onto your USB drive.
-2. Plug the USB flash drive into your Android TV or Xiaomi Mi Box.
-3. Open any file explorer app on the TV (e.g., *File Commander* or *FX File Explorer* from Google Play Store).
-4. Click `app-release.apk` and select **Install** (allow *"Install unknown apps"* if prompted).
-5. Press the **Home** button on your remote and choose **Glass TV Home** as *Always*.
+#### 3. Catatan Debloat Mendalam untuk Pengguna iPhone:
+Untuk menonaktifkan paket sistem pabrikan yang mendalam (misalnya Xiaomi PatchWall), disarankan menjalankan perintah ADB sekali dari komputer, atau meminjam ponsel Android selama 2 menit. Setelah dinonaktifkan, bloatware akan tetap hilang secara permanen.
 
 ---
 
-## ❓ 7. Frequently Asked Questions (FAQ)
+## 🛠️ 6. Alternatif: Instalasi Manual via Flash Drive USB
 
-### Q1: Can I run Claude Code on a mobile phone (iOS / Android), and does the iOS sandbox block local network access?
-* **CLI / Node.js Requirement:** Claude Code (`@anthropic-ai/claude-code`) is an interactive terminal tool that requires a full **Node.js 18+** shell environment. iOS sandbox policies strictly forbid running Node.js engines and local arbitrary shell executables directly on an iPhone.
-* **Cloud vs Local Network Barrier:** Claude Code or any cloud-hosted AI (e.g., web Claude or web ChatGPT) executes on remote cloud servers. Cloud servers **CANNOT enter your private home Wi-Fi network** to access your TV's private IP (`192.168.x.x`) due to your home router's NAT firewall.
-* **Solution:** ADB commands must be initiated by a local device on your home Wi-Fi (such as a laptop/PC running Google Antigravity or Claude Code, or an Android phone running Bugjaeger).
-
----
-
-### Q2: Is there an AI that can install and do all tasks directly without the user installing the APK manually?
-* **YES, when run on a computer/laptop on the same Wi-Fi (Google Antigravity / Claude Code / Cursor):**
-  The AI connects to the TV over wireless ADB (`adb connect 192.168.x.x`), builds the APK, installs it, removes bloatware, and verifies everything with automated screenshots. The user does not need to touch or open any APK file manually!
-* **On mobile phones without a PC:** You simply use a helper app (Bugjaeger on Android, or LocalSend on iPhone) to transfer and install the APK.
+Jika Anda lebih suka menggunakan flash drive USB fisik:
+1. Unduh [**glass-tv-home.apk**](https://github.com/chickencrispy/glasstv-home/raw/main/release/glass-tv-home.apk) (juga ada di [`release/glass-tv-home.apk`](release/glass-tv-home.apk)) ke flash drive USB Anda.
+2. Colokkan flash drive USB ke Android TV atau Xiaomi Mi Box Anda.
+3. Buka aplikasi file explorer apa pun di TV (misalnya, *File Commander* atau *FX File Explorer* dari Google Play Store).
+4. Klik `app-release.apk` dan pilih **Pasang** (izinkan *"Pasang aplikasi tidak dikenal"* jika diminta).
+5. Tekan tombol **Home** pada remote Anda dan pilih **Glass TV Home** sebagai *Selalu*.
 
 ---
 
-### Q3: If a user only installs the APK file, do they have full access with the TV remote, or do they still need AI access?
-* **100% STANDALONE! YOU ONLY NEED YOUR TV REMOTE, ZERO AI REQUIRED!**
-* Glass TV Home is a **native Android TV application** (Native Kotlin/AndroidX).
-* Once the APK is installed on the TV:
-  - **Full Remote Control**: The D-Pad (Up/Down/Left/Right/OK), Back, and Home buttons navigate everything natively.
-  - **All smart features run locally**: Clock, Hijri dates, prayer timetable, weather & AQI (APIMS), 10-minute screensaver, and 2-hour auto sleep operate entirely inside the TV without requiring an AI agent, computer, or active subscription.
-  - Family members and non-technical users can use the TV just like a standard commercial smart TV.
-* **The AI's role is purely as a "mechanic/technician"** during the initial setup to automate installation and debloating. Once installed, Glass TV Home is 100% independent.
+## ❓ 7. Pertanyaan yang Sering Diajukan (FAQ)
+
+### Q1: Bisakah saya menjalankan Claude Code di ponsel (iOS / Android), dan apakah sandbox iOS memblokir akses jaringan lokal?
+* **Persyaratan CLI / Node.js:** Claude Code (`@anthropic-ai/claude-code`) adalah alat terminal interaktif yang memerlukan lingkungan shell **Node.js 18+** lengkap. Kebijakan sandbox iOS secara ketat melarang menjalankan mesin Node.js dan eksekusi shell lokal arbitrer langsung di iPhone.
+* **Hambatan Cloud vs Jaringan Lokal:** Claude Code atau AI berbasis cloud mana pun (misalnya Claude web atau ChatGPT web) berjalan di server cloud jarak jauh. Server cloud **TIDAK DAPAT masuk ke jaringan Wi-Fi rumah pribadi Anda** untuk mengakses IP privat TV Anda (`192.168.x.x`) karena firewall NAT router rumah Anda.
+* **Solusi:** Perintah ADB harus dijalankan oleh perangkat lokal di Wi-Fi rumah Anda (seperti laptop/PC yang menjalankan Google Antigravity atau Claude Code, atau ponsel Android yang menjalankan Bugjaeger).
 
 ---
 
-### Q4: Can I use this on a Unifi TV Box (TM Unifi Plus Box), and will it void my warranty?
-* **1. Can it be installed on a Unifi TV Box?**
-  - **YES, ABSOLUTELY!** TM Unifi Plus Boxes (both the white Skyworth HP40A3 and black ZTE models) run official Android TV.
-  - You can install the Glass TV Home APK via USB flash drive, Downloader app, Send Files to TV, or wireless ADB.
-  - **The official unifi TV app works normally:** You won't lose access to TM's live channels, sports, or on-demand shows because the **unifi TV** app will automatically show up in your apps list and can be pinned to your favorite dock row.
-* **2. Will it void TM's warranty?**
-  - **NO, YOUR WARRANTY REMAINS 100% SAFE AND INTACT.**
-  - **No Rooting / Zero Firmware Modification:** Glass TV Home operates as a standard Android user-space application (just like installing Netflix or YouTube). It does not alter system firmware partitions or tamper with hardware.
-  - **100% Reversible:** If you ever need technical support from TM or want to return the box, simply go to:
+### Q2: Apakah ada AI yang bisa memasang dan mengerjakan semua tugas langsung tanpa pengguna memasang APK secara manual?
+* **YA, jika dijalankan di komputer/laptop pada Wi-Fi yang sama (Google Antigravity / Claude Code / Cursor):**
+  AI terhubung ke TV melalui ADB nirkabel (`adb connect 192.168.x.x`), membangun APK, memasangnya, menghapus bloatware, dan memverifikasi semuanya dengan tangkapan layar otomatis. Pengguna tidak perlu menyentuh atau membuka file APK secara manual!
+* **Di ponsel tanpa PC:** Anda cukup menggunakan aplikasi bantuan (Bugjaeger di Android, atau LocalSend di iPhone) untuk mentransfer dan memasang APK.
+
+---
+
+### Q3: Jika pengguna hanya memasang file APK, apakah mereka punya akses penuh dengan remote TV, atau masih perlu akses AI?
+* **100% MANDIRI! ANDA HANYA MEMERLUKAN REMOTE TV, TANPA AI!**
+* Glass TV Home adalah **aplikasi Android TV native** (Kotlin/AndroidX native).
+* Setelah APK terpasang di TV:
+  - **Kontrol Remote Penuh**: Tombol D-Pad (Atas/Bawah/Kiri/Kanan/OK), Kembali, dan Home menavigasi semuanya secara native.
+  - **Semua fitur pintar berjalan lokal**: Jam, tanggal Hijriah, cuaca & AQI (APIMS), screensaver 10 menit, dan tidur otomatis 2 jam beroperasi sepenuhnya di dalam TV tanpa memerlukan agen AI, komputer, atau langganan aktif.
+  - Anggota keluarga dan pengguna non-teknis dapat menggunakan TV seperti smart TV komersial standar.
+* **Peran AI murni sebagai "mekanik/teknisi"** selama penyiapan awal untuk mengotomatiskan pemasangan dan debloat. Setelah terpasang, Glass TV Home 100% independen.
+
+---
+
+### Q4: Bisakah saya menggunakan ini di Unifi TV Box (TM Unifi Plus Box), dan apakah garansi saya batal?
+* **1. Bisakah dipasang di Unifi TV Box?**
+  - **YA, TENTU SAJA!** TM Unifi Plus Box (baik model putih Skyworth HP40A3 maupun model hitam ZTE) menjalankan Android TV resmi.
+  - Anda dapat memasang APK Glass TV Home melalui flash drive USB, aplikasi Downloader, Send Files to TV, atau ADB nirkabel.
+  - **Aplikasi unifi TV resmi berfungsi normal:** Anda tidak akan kehilangan akses ke saluran langsung, olahraga, atau acara on-demand TM karena aplikasi **unifi TV** akan otomatis muncul di daftar aplikasi Anda dan dapat disematkan ke baris dock favorit Anda.
+* **2. Apakah ini membatalkan garansi TM?**
+  - **TIDAK, GARANSI ANDA TETAP 100% AMAN DAN UTUH.**
+  - **Tanpa Root / Tanpa Modifikasi Firmware:** Glass TV Home beroperasi sebagai aplikasi ruang pengguna Android standar (sama seperti memasang Netflix atau YouTube). Aplikasi ini tidak mengubah partisi firmware sistem atau merusak perangkat keras.
+  - **100% Dapat Dibatalkan:** Jika Anda memerlukan dukungan teknis dari TM atau ingin mengembalikan box, cukup buka:
     `Settings -> Apps -> Glass TV Home -> Uninstall`
-    or perform a standard Factory Reset. The box instantly reverts to the original TM factory launcher with zero traces left behind.
+    atau lakukan Factory Reset standar. Box langsung kembali ke launcher pabrik TM asli tanpa jejak yang tertinggal.
 
 ---
 
-## 📄 License & Credits
-* Built upon [CleanYourTV](https://github.com/Gathin23/cleanyourtv) © Gathin (MIT License).
-* Outfit font by SIL Open Font License.
-* Weather and AQI data powered by Open-Meteo & Malaysia Department of Environment (APIMS) standards.
+## 📄 Lisensi & Kredit
+* Dibangun di atas [CleanYourTV](https://github.com/Gathin23/cleanyourtv) © Gathin (Lisensi MIT).
+* Font Outfit dengan SIL Open Font License.
+* Data cuaca dan AQI didukung oleh Open-Meteo & standar Department of Environment Malaysia (APIMS).

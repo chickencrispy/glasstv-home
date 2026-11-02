@@ -32,15 +32,15 @@ public class AppLocationManager {
     public static final String KEY_STATION_PLACE = "station_place";
     public static final String KEY_LATITUDE = "latitude";
     public static final String KEY_LONGITUDE = "longitude";
-    private static final String KEY_MIGRATED_TUBAN_DEFAULT = "migrated_tuban_default_v1";
+    private static final String KEY_MIGRATED_PAYAKUMBUH_DEFAULT = "migrated_payakumbuh_default_v1";
 
-    // Defaults to Tuban, Jawa Timur, Indonesia
+    // Defaults to Payakumbuh, Sumatera Barat, Indonesia
     public static final String DEFAULT_REGION = "Indonesia";
-    public static final String DEFAULT_STATION_ID = "ID_TUBAN";
-    public static final String DEFAULT_LOCATION_NAME = "Tuban";
-    public static final String DEFAULT_STATION_PLACE = "Alun-Alun Tuban, Jawa Timur";
-    public static final double DEFAULT_LATITUDE = -6.8976;
-    public static final double DEFAULT_LONGITUDE = 112.0649;
+    public static final String DEFAULT_STATION_ID = "ID_PYK";
+    public static final String DEFAULT_LOCATION_NAME = "Payakumbuh";
+    public static final String DEFAULT_STATION_PLACE = "Kota Payakumbuh, Sumatera Barat";
+    public static final double DEFAULT_LATITUDE = -0.2223;
+    public static final double DEFAULT_LONGITUDE = 100.6327;
 
     public interface OnlineSearchCallback {
         void onResults(List<Station> stations);
@@ -91,45 +91,25 @@ public class AppLocationManager {
     static {
         // --- 🇮🇩 Indonesia (Seluruh Kabupaten & Kota se-Indonesia) ---
         List<Station> idStations = new ArrayList<>();
-        idStations.add(new Station("ID_TUBAN", "Tuban", "Jawa Timur", "Indonesia", "Alun-Alun Tuban, Jawa Timur", -6.8976, 112.0649));
-        idStations.add(new Station("ID_LMG", "Lamongan", "Jawa Timur", "Indonesia", "Alun-Alun Lamongan, Jawa Timur", -7.1193, 112.4165));
-        idStations.add(new Station("ID_BBT", "Babat", "Jawa Timur", "Indonesia", "Kec. Babat, Kab. Lamongan, Jawa Timur", -7.1044, 112.1672));
-        idStations.add(new Station("ID_BJN", "Bojonegoro", "Jawa Timur", "Indonesia", "Pusat Kota Bojonegoro, Jawa Timur", -7.1502, 111.8817));
-        idStations.add(new Station("ID_GRS", "Gresik", "Jawa Timur", "Indonesia", "Alun-Alun Gresik, Jawa Timur", -7.1566, 112.6555));
-        idStations.add(new Station("ID_SBY", "Surabaya", "Jawa Timur", "Indonesia", "Pusat Kota Surabaya, Jawa Timur", -7.2575, 112.7521));
-        idStations.add(new Station("ID_SDA", "Sidoarjo", "Jawa Timur", "Indonesia", "Alun-Alun Sidoarjo, Jawa Timur", -7.4478, 112.7183));
-        idStations.add(new Station("ID_MJK", "Mojokerto", "Jawa Timur", "Indonesia", "Kota Mojokerto, Jawa Timur", -7.4704, 112.4401));
-        idStations.add(new Station("ID_MJK_KAB", "Kab. Mojokerto (Mojosari)", "Jawa Timur", "Indonesia", "Mojosari, Kab. Mojokerto, Jawa Timur", -7.5194, 112.5567));
-        idStations.add(new Station("ID_JBG", "Jombang", "Jawa Timur", "Indonesia", "Alun-Alun Jombang, Jawa Timur", -7.546, 112.2331));
-        idStations.add(new Station("ID_NGK", "Nganjuk", "Jawa Timur", "Indonesia", "Alun-Alun Nganjuk, Jawa Timur", -7.6042, 111.9035));
-        idStations.add(new Station("ID_MDN", "Madiun", "Jawa Timur", "Indonesia", "Kota Madiun, Jawa Timur", -7.6298, 111.5239));
-        idStations.add(new Station("ID_MDN_KAB", "Kab. Madiun (Caruban)", "Jawa Timur", "Indonesia", "Caruban, Kab. Madiun, Jawa Timur", -7.5472, 111.6539));
-        idStations.add(new Station("ID_NGW", "Ngawi", "Jawa Timur", "Indonesia", "Alun-Alun Ngawi, Jawa Timur", -7.4038, 111.4464));
-        idStations.add(new Station("ID_MGT", "Magetan", "Jawa Timur", "Indonesia", "Alun-Alun Magetan, Jawa Timur", -7.6542, 111.3281));
-        idStations.add(new Station("ID_PNG", "Ponorogo", "Jawa Timur", "Indonesia", "Alun-Alun Ponorogo, Jawa Timur", -7.8667, 111.4667));
-        idStations.add(new Station("ID_PCT", "Pacitan", "Jawa Timur", "Indonesia", "Pusat Kota Pacitan, Jawa Timur", -8.1945, 111.1025));
-        idStations.add(new Station("ID_KDR", "Kediri", "Jawa Timur", "Indonesia", "Kota Kediri, Jawa Timur", -7.8166, 112.0114));
-        idStations.add(new Station("ID_KDR_KAB", "Kab. Kediri (Pare / Ngasem)", "Jawa Timur", "Indonesia", "Pare / Ngasem, Kab. Kediri, Jawa Timur", -7.7667, 112.1969));
-        idStations.add(new Station("ID_BLT", "Blitar", "Jawa Timur", "Indonesia", "Kota Blitar, Jawa Timur", -8.0955, 112.1609));
-        idStations.add(new Station("ID_BLT_KAB", "Kab. Blitar (Kanigoro)", "Jawa Timur", "Indonesia", "Kanigoro, Kab. Blitar, Jawa Timur", -8.1303, 112.2189));
-        idStations.add(new Station("ID_TLG", "Tulungagung", "Jawa Timur", "Indonesia", "Alun-Alun Tulungagung, Jawa Timur", -8.0657, 111.9026));
-        idStations.add(new Station("ID_TRG", "Trenggalek", "Jawa Timur", "Indonesia", "Alun-Alun Trenggalek, Jawa Timur", -8.0504, 111.7081));
-        idStations.add(new Station("ID_MLG", "Malang", "Jawa Timur", "Indonesia", "Alun-Alun Kota Malang, Jawa Timur", -7.9826, 112.6308));
-        idStations.add(new Station("ID_MLG_KAB", "Kab. Malang (Kepanjen)", "Jawa Timur", "Indonesia", "Kepanjen, Kab. Malang, Jawa Timur", -8.1307, 112.5731));
-        idStations.add(new Station("ID_BATU", "Batu", "Jawa Timur", "Indonesia", "Alun-Alun Kota Wisata Batu, Jawa Timur", -7.8671, 112.5239));
-        idStations.add(new Station("ID_PSR", "Pasuruan", "Jawa Timur", "Indonesia", "Kota Pasuruan, Jawa Timur", -7.6453, 112.9075));
-        idStations.add(new Station("ID_PSR_KAB", "Kab. Pasuruan (Bangil)", "Jawa Timur", "Indonesia", "Bangil, Kab. Pasuruan, Jawa Timur", -7.5969, 112.8181));
-        idStations.add(new Station("ID_PBL", "Probolinggo", "Jawa Timur", "Indonesia", "Kota Probolinggo, Jawa Timur", -7.7543, 113.2159));
-        idStations.add(new Station("ID_PBL_KAB", "Kab. Probolinggo (Kraksaan)", "Jawa Timur", "Indonesia", "Kraksaan, Kab. Probolinggo, Jawa Timur", -7.76, 113.415));
-        idStations.add(new Station("ID_LMJ", "Lumajang", "Jawa Timur", "Indonesia", "Alun-Alun Lumajang, Jawa Timur", -8.1335, 113.2248));
-        idStations.add(new Station("ID_JBR", "Jember", "Jawa Timur", "Indonesia", "Alun-Alun Jember, Jawa Timur", -8.1724, 113.6995));
-        idStations.add(new Station("ID_BDW", "Bondowoso", "Jawa Timur", "Indonesia", "Alun-Alun Bondowoso, Jawa Timur", -7.9135, 113.8214));
-        idStations.add(new Station("ID_STB", "Situbondo", "Jawa Timur", "Indonesia", "Alun-Alun Situbondo, Jawa Timur", -7.7062, 114.0098));
-        idStations.add(new Station("ID_BWI", "Banyuwangi", "Jawa Timur", "Indonesia", "Pusat Kota Banyuwangi, Jawa Timur", -8.2192, 114.3691));
-        idStations.add(new Station("ID_BKL", "Bangkalan", "Jawa Timur", "Indonesia", "Alun-Alun Bangkalan, Madura, Jawa Timur", -7.0455, 112.7453));
-        idStations.add(new Station("ID_SMP", "Sampang", "Jawa Timur", "Indonesia", "Pusat Kota Sampang, Madura, Jawa Timur", -7.1872, 113.2394));
-        idStations.add(new Station("ID_PMK", "Pamekasan", "Jawa Timur", "Indonesia", "Alun-Alun Pamekasan, Madura, Jawa Timur", -7.1568, 113.4746));
-        idStations.add(new Station("ID_SMN", "Sumenep", "Jawa Timur", "Indonesia", "Pusat Kota Sumenep, Madura, Jawa Timur", -7.0167, 113.8667));
+        idStations.add(new Station("ID_PDG", "Padang", "Sumatera Barat", "Indonesia", "Pantai Padang, Kota Padang, Sumatera Barat", -0.9471, 100.4172));
+        idStations.add(new Station("ID_BKT", "Bukittinggi", "Sumatera Barat", "Indonesia", "Jam Gadang, Kota Bukittinggi, Sumatera Barat", -0.3056, 100.3692));
+        idStations.add(new Station("ID_PYK", "Payakumbuh", "Sumatera Barat", "Indonesia", "Kota Payakumbuh, Sumatera Barat", -0.2223, 100.6327));
+        idStations.add(new Station("ID_PDP", "Padang Panjang", "Sumatera Barat", "Indonesia", "Kota Padang Panjang, Sumatera Barat", -0.4628, 100.4081));
+        idStations.add(new Station("ID_PRM", "Pariaman", "Sumatera Barat", "Indonesia", "Pantai Gandoriah, Kota Pariaman, Sumatera Barat", -0.6264, 100.1205));
+        idStations.add(new Station("ID_SLK", "Solok", "Sumatera Barat", "Indonesia", "Kota Solok, Sumatera Barat", -0.7931, 100.6561));
+        idStations.add(new Station("ID_SLK_KAB", "Kab. Solok (Arosuka)", "Sumatera Barat", "Indonesia", "Arosuka, Kab. Solok, Sumatera Barat", -0.9428, 100.5989));
+        idStations.add(new Station("ID_SWL", "Sawahlunto", "Sumatera Barat", "Indonesia", "Kota Sawahlunto, Sumatera Barat", -0.6819, 100.7789));
+        idStations.add(new Station("ID_AGAM", "Agam (Lubuk Basung)", "Sumatera Barat", "Indonesia", "Lubuk Basung, Kab. Agam, Sumatera Barat", -0.3133, 100.0322));
+        idStations.add(new Station("ID_TDTR", "Tanah Datar (Batusangkar)", "Sumatera Barat", "Indonesia", "Batusangkar, Kab. Tanah Datar, Sumatera Barat", -0.4567, 100.5919));
+        idStations.add(new Station("ID_LPK", "Lima Puluh Kota (Sarilamak)", "Sumatera Barat", "Indonesia", "Sarilamak, Kab. Lima Puluh Kota, Sumatera Barat", -0.1583, 100.6639));
+        idStations.add(new Station("ID_PDPR", "Padang Pariaman (Parit Malintang)", "Sumatera Barat", "Indonesia", "Parit Malintang, Kab. Padang Pariaman, Sumatera Barat", -0.625, 100.2583));
+        idStations.add(new Station("ID_PSSL", "Pesisir Selatan (Painan)", "Sumatera Barat", "Indonesia", "Painan, Kab. Pesisir Selatan, Sumatera Barat", -1.35, 100.5667));
+        idStations.add(new Station("ID_SLKS", "Solok Selatan (Padang Aro)", "Sumatera Barat", "Indonesia", "Padang Aro, Kab. Solok Selatan, Sumatera Barat", -1.5644, 101.2647));
+        idStations.add(new Station("ID_SJJ", "Sijunjung (Muaro Sijunjung)", "Sumatera Barat", "Indonesia", "Muaro Sijunjung, Sumatera Barat", -0.6928, 100.9539));
+        idStations.add(new Station("ID_DHR", "Dharmasraya (Pulau Punjung)", "Sumatera Barat", "Indonesia", "Pulau Punjung, Kab. Dharmasraya, Sumatera Barat", -0.9667, 101.4833));
+        idStations.add(new Station("ID_PSM", "Pasaman (Lubuk Sikaping)", "Sumatera Barat", "Indonesia", "Lubuk Sikaping, Kab. Pasaman, Sumatera Barat", 0.1306, 100.1672));
+        idStations.add(new Station("ID_PSMB", "Pasaman Barat (Simpang Empat)", "Sumatera Barat", "Indonesia", "Simpang Empat, Kab. Pasaman Barat, Sumatera Barat", 0.0881, 99.8219));
+        idStations.add(new Station("ID_MTW", "Kepulauan Mentawai (Tuapejat)", "Sumatera Barat", "Indonesia", "Tuapejat, Kep. Mentawai, Sumatera Barat", -2.0297, 99.5886));
         idStations.add(new Station("ID_JKT", "Jakarta", "DKI Jakarta", "Indonesia", "Monas / Gambir, DKI Jakarta", -6.1754, 106.8272));
         idStations.add(new Station("ID_JKP", "Jakarta Pusat", "DKI Jakarta", "Indonesia", "Menteng / Tanah Abang, DKI Jakarta", -6.1805, 106.8284));
         idStations.add(new Station("ID_JKS", "Jakarta Selatan", "DKI Jakarta", "Indonesia", "Kebayoran Baru / Kemang, DKI Jakarta", -6.2615, 106.8106));
@@ -281,25 +261,6 @@ public class AppLocationManager {
         idStations.add(new Station("ID_NIAS_SEL", "Nias Selatan (Teluk Dalam)", "Sumatera Utara", "Indonesia", "Teluk Dalam, Kab. Nias Selatan, Sumatera Utara", 0.5653, 97.8214));
         idStations.add(new Station("ID_NIAS_UT", "Nias Utara (Lotu)", "Sumatera Utara", "Indonesia", "Lotu, Kab. Nias Utara, Sumatera Utara", 1.3831, 97.405));
         idStations.add(new Station("ID_NIAS_BAR", "Nias Barat (Lahomi)", "Sumatera Utara", "Indonesia", "Lahomi, Kab. Nias Barat, Sumatera Utara", 1.0597, 97.4792));
-        idStations.add(new Station("ID_PDG", "Padang", "Sumatera Barat", "Indonesia", "Pantai Padang, Kota Padang, Sumatera Barat", -0.9471, 100.4172));
-        idStations.add(new Station("ID_BKT", "Bukittinggi", "Sumatera Barat", "Indonesia", "Jam Gadang, Kota Bukittinggi, Sumatera Barat", -0.3056, 100.3692));
-        idStations.add(new Station("ID_PYK", "Payakumbuh", "Sumatera Barat", "Indonesia", "Kota Payakumbuh, Sumatera Barat", -0.2223, 100.6327));
-        idStations.add(new Station("ID_PDP", "Padang Panjang", "Sumatera Barat", "Indonesia", "Kota Padang Panjang, Sumatera Barat", -0.4628, 100.4081));
-        idStations.add(new Station("ID_PRM", "Pariaman", "Sumatera Barat", "Indonesia", "Pantai Gandoriah, Kota Pariaman, Sumatera Barat", -0.6264, 100.1205));
-        idStations.add(new Station("ID_SLK", "Solok", "Sumatera Barat", "Indonesia", "Kota Solok, Sumatera Barat", -0.7931, 100.6561));
-        idStations.add(new Station("ID_SLK_KAB", "Kab. Solok (Arosuka)", "Sumatera Barat", "Indonesia", "Arosuka, Kab. Solok, Sumatera Barat", -0.9428, 100.5989));
-        idStations.add(new Station("ID_SWL", "Sawahlunto", "Sumatera Barat", "Indonesia", "Kota Sawahlunto, Sumatera Barat", -0.6819, 100.7789));
-        idStations.add(new Station("ID_AGAM", "Agam (Lubuk Basung)", "Sumatera Barat", "Indonesia", "Lubuk Basung, Kab. Agam, Sumatera Barat", -0.3133, 100.0322));
-        idStations.add(new Station("ID_TDTR", "Tanah Datar (Batusangkar)", "Sumatera Barat", "Indonesia", "Batusangkar, Kab. Tanah Datar, Sumatera Barat", -0.4567, 100.5919));
-        idStations.add(new Station("ID_LPK", "Lima Puluh Kota (Sarilamak)", "Sumatera Barat", "Indonesia", "Sarilamak, Kab. Lima Puluh Kota, Sumatera Barat", -0.1583, 100.6639));
-        idStations.add(new Station("ID_PDPR", "Padang Pariaman (Parit Malintang)", "Sumatera Barat", "Indonesia", "Parit Malintang, Kab. Padang Pariaman, Sumatera Barat", -0.625, 100.2583));
-        idStations.add(new Station("ID_PSSL", "Pesisir Selatan (Painan)", "Sumatera Barat", "Indonesia", "Painan, Kab. Pesisir Selatan, Sumatera Barat", -1.35, 100.5667));
-        idStations.add(new Station("ID_SLKS", "Solok Selatan (Padang Aro)", "Sumatera Barat", "Indonesia", "Padang Aro, Kab. Solok Selatan, Sumatera Barat", -1.5644, 101.2647));
-        idStations.add(new Station("ID_SJJ", "Sijunjung (Muaro Sijunjung)", "Sumatera Barat", "Indonesia", "Muaro Sijunjung, Sumatera Barat", -0.6928, 100.9539));
-        idStations.add(new Station("ID_DHR", "Dharmasraya (Pulau Punjung)", "Sumatera Barat", "Indonesia", "Pulau Punjung, Kab. Dharmasraya, Sumatera Barat", -0.9667, 101.4833));
-        idStations.add(new Station("ID_PSM", "Pasaman (Lubuk Sikaping)", "Sumatera Barat", "Indonesia", "Lubuk Sikaping, Kab. Pasaman, Sumatera Barat", 0.1306, 100.1672));
-        idStations.add(new Station("ID_PSMB", "Pasaman Barat (Simpang Empat)", "Sumatera Barat", "Indonesia", "Simpang Empat, Kab. Pasaman Barat, Sumatera Barat", 0.0881, 99.8219));
-        idStations.add(new Station("ID_MTW", "Kepulauan Mentawai (Tuapejat)", "Sumatera Barat", "Indonesia", "Tuapejat, Kep. Mentawai, Sumatera Barat", -2.0297, 99.5886));
         idStations.add(new Station("ID_PKU", "Pekanbaru", "Riau", "Indonesia", "Pusat Kota Pekanbaru, Riau", 0.5071, 101.4478));
         idStations.add(new Station("ID_DMI", "Dumai", "Riau", "Indonesia", "Kota Dumai, Riau", 1.6675, 101.4478));
         idStations.add(new Station("ID_KPR", "Kampar (Bangkinang)", "Riau", "Indonesia", "Bangkinang, Kab. Kampar, Riau", 0.3364, 101.0253));
@@ -769,23 +730,38 @@ public class AppLocationManager {
         if (place != null && place.contains(",")) {
             return place.substring(place.lastIndexOf(',') + 1).trim();
         }
-        return "Jawa Timur";
+        return "Sumatera Barat";
     }
 
-    private static void ensureDefaultTubanMigrated(Context context) {
+    /**
+     * Older builds defaulted to Tuban. On the first run of this build, move installs that are
+     * still on that old default to Payakumbuh; a location the person picked themselves is kept.
+     */
+    /** Applies the one-time default-location migration. Call once when the launcher starts. */
+    public static void ensureDefaults(Context context) {
+        ensureDefaultLocationMigrated(context);
+    }
+
+    private static void ensureDefaultLocationMigrated(Context context) {
         if (context == null) return;
         SharedPreferences prefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
-        if (!prefs.getBoolean(KEY_MIGRATED_TUBAN_DEFAULT, false)) {
-            prefs.edit()
-                    .putString(KEY_REGION, DEFAULT_REGION)
+        if (prefs.getBoolean(KEY_MIGRATED_PAYAKUMBUH_DEFAULT, false)) return;
+
+        String savedId = prefs.getString(KEY_STATION_ID, null);
+        boolean onOldDefault = savedId == null || "ID_TUBAN".equalsIgnoreCase(savedId);
+
+        SharedPreferences.Editor editor = prefs.edit().putBoolean(KEY_MIGRATED_PAYAKUMBUH_DEFAULT, true);
+        if (onOldDefault) {
+            editor.putString(KEY_REGION, DEFAULT_REGION)
                     .putString(KEY_STATION_ID, DEFAULT_STATION_ID)
                     .putString(KEY_LOCATION_NAME, DEFAULT_LOCATION_NAME)
                     .putString(KEY_STATION_PLACE, DEFAULT_STATION_PLACE)
                     .putString(KEY_LATITUDE, String.valueOf(DEFAULT_LATITUDE))
-                    .putString(KEY_LONGITUDE, String.valueOf(DEFAULT_LONGITUDE))
-                    .putBoolean(KEY_MIGRATED_TUBAN_DEFAULT, true)
-                    .apply();
+                    .putString(KEY_LONGITUDE, String.valueOf(DEFAULT_LONGITUDE));
+        }
+        editor.apply();
 
+        if (onOldDefault) {
             SharedPreferences wPrefs = context.getSharedPreferences("weather_aqi_cache", Context.MODE_PRIVATE);
             wPrefs.edit()
                     .putLong("last_update", 0L)
@@ -795,38 +771,38 @@ public class AppLocationManager {
     }
 
     public static String getActiveRegion(Context context) {
-        ensureDefaultTubanMigrated(context);
+        ensureDefaultLocationMigrated(context);
         SharedPreferences prefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
         return prefs.getString(KEY_REGION, DEFAULT_REGION);
     }
 
     public static void setActiveRegion(Context context, String region) {
         if (region == null) return;
-        ensureDefaultTubanMigrated(context);
+        ensureDefaultLocationMigrated(context);
         SharedPreferences prefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
         prefs.edit().putString(KEY_REGION, region).apply();
     }
 
     public static String getStationId(Context context) {
-        ensureDefaultTubanMigrated(context);
+        ensureDefaultLocationMigrated(context);
         SharedPreferences prefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
         return prefs.getString(KEY_STATION_ID, DEFAULT_STATION_ID);
     }
 
     public static String getLocationName(Context context) {
-        ensureDefaultTubanMigrated(context);
+        ensureDefaultLocationMigrated(context);
         SharedPreferences prefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
         return prefs.getString(KEY_LOCATION_NAME, DEFAULT_LOCATION_NAME);
     }
 
     public static String getStationPlace(Context context) {
-        ensureDefaultTubanMigrated(context);
+        ensureDefaultLocationMigrated(context);
         SharedPreferences prefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
         return prefs.getString(KEY_STATION_PLACE, DEFAULT_STATION_PLACE);
     }
 
     public static double getLatitude(Context context) {
-        ensureDefaultTubanMigrated(context);
+        ensureDefaultLocationMigrated(context);
         SharedPreferences prefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
         try {
             return Double.parseDouble(prefs.getString(KEY_LATITUDE, String.valueOf(DEFAULT_LATITUDE)));
@@ -836,7 +812,7 @@ public class AppLocationManager {
     }
 
     public static double getLongitude(Context context) {
-        ensureDefaultTubanMigrated(context);
+        ensureDefaultLocationMigrated(context);
         SharedPreferences prefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
         try {
             return Double.parseDouble(prefs.getString(KEY_LONGITUDE, String.valueOf(DEFAULT_LONGITUDE)));
