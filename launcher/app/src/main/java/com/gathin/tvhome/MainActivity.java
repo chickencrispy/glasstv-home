@@ -4236,17 +4236,12 @@ public class MainActivity extends Activity implements AppAdapter.TileListener {
         Collections.sort(appList, (a, b) -> a.label.compareToIgnoreCase(b.label));
 
         FrameLayout overlay = new FrameLayout(this);
-        overlay.setBackgroundColor(0x78050912);
+        overlay.setBackgroundColor(0x99050912);
         overlay.setClickable(true);
         overlay.setFocusable(false);
         overlay.setOnClickListener(v -> closeAppDrawer(true));
 
-        int rootW = root.getWidth() > 0 ? root.getWidth() : getResources().getDisplayMetrics().widthPixels;
-        int rootH = root.getHeight() > 0 ? root.getHeight() : getResources().getDisplayMetrics().heightPixels;
-        int insetH = Math.round(24 * density);
-        int insetV = Math.round(18 * density);
-        int maxW = rootW - (insetH * 2);
-        int maxH = rootH - (insetV * 2);
+        int maxW = root.getWidth() > 0 ? root.getWidth() : getResources().getDisplayMetrics().widthPixels;
 
         LinearLayout panel = new LinearLayout(this);
         panel.setOrientation(LinearLayout.VERTICAL);
@@ -4257,13 +4252,15 @@ public class MainActivity extends Activity implements AppAdapter.TileListener {
         int padV = Math.round(22 * density);
         panel.setPadding(padH, padV, padH, padV);
 
-        GlassDrawable glassBg = new GlassDrawable(panel, 26 * density, density, null, 0.45f);
-        panel.setBackground(glassBg);
+        // Panel: blurred wallpaper under a dark tint, square and borderless.
+        GlassDrawable glassBg = new GlassDrawable(panel, 0f, density, null, 0.45f);
+        GradientDrawable darkTint = new GradientDrawable();
+        darkTint.setColor(0xF0050912);
+        panel.setBackground(new android.graphics.drawable.LayerDrawable(new Drawable[]{glassBg, darkTint}));
         Backdrop.watch(panel);
 
         FrameLayout.LayoutParams panelLp = new FrameLayout.LayoutParams(
-                ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT, Gravity.CENTER);
-        panelLp.setMargins(insetH, insetV, insetH, insetV);
+                ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
         overlay.addView(panel, panelLp);
 
         // Header Row
@@ -4295,8 +4292,8 @@ public class MainActivity extends Activity implements AppAdapter.TileListener {
         divider.setBackgroundColor(0x24FFFFFF);
         LinearLayout.LayoutParams divLp = new LinearLayout.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT, Math.max(1, Math.round(1 * density)));
-        divLp.topMargin = Math.round(10 * density);
-        divLp.bottomMargin = Math.round(10 * density);
+        divLp.topMargin = Math.round(16 * density);
+        divLp.bottomMargin = Math.round(12 * density);
         panel.addView(divider, divLp);
 
         ScrollView scroll = new ScrollView(this);
@@ -4315,12 +4312,13 @@ public class MainActivity extends Activity implements AppAdapter.TileListener {
         final List<View> cells = new ArrayList<>();
         final int total = appList.size();
 
-        int cellMargin = Math.round(10 * density);
+        int cellMarginX = Math.round(18 * density);
+        int cellMarginY = Math.round(12 * density);
         int innerW = maxW - (padH * 2) - (gridPad * 2);
         final int COLS = 6;
         int rowCount = (total + COLS - 1) / COLS;
 
-        int cardW = Math.max(Math.round(80 * density), (innerW / COLS) - (cellMargin * 2));
+        int cardW = Math.max(Math.round(80 * density), (innerW / COLS) - (cellMarginX * 2));
         int cardH = Math.round(cardW * 101f / 180f);
         final float cardRadius = 11f * density;
 
@@ -4336,7 +4334,7 @@ public class MainActivity extends Activity implements AppAdapter.TileListener {
                 if (idx >= total) {
                     View spacer = new View(this);
                     LinearLayout.LayoutParams spLp = new LinearLayout.LayoutParams(0, 1, 1f);
-                    spLp.setMargins(cellMargin, cellMargin, cellMargin, cellMargin);
+                    spLp.setMargins(cellMarginX, cellMarginY, cellMarginX, cellMarginY);
                     rowLayout.addView(spacer, spLp);
                     continue;
                 }
@@ -4412,7 +4410,7 @@ public class MainActivity extends Activity implements AppAdapter.TileListener {
                     if (hasFocus) SoundEffects.playNav();
                     focusRim.animate().alpha(hasFocus ? 1f : 0f).setDuration(140).start();
                     nameView.setTextColor(hasFocus ? 0xFFFFFFFF : 0xB3FFFFFF);
-                    float s = hasFocus ? 1.08f : 1.0f;
+                    float s = hasFocus ? 1.2f : 1.0f;
                     cardBox.animate().scaleX(s).scaleY(s).translationZ(hasFocus ? 8 * density : 0f)
                             .setDuration(160).setInterpolator(new android.view.animation.DecelerateInterpolator()).start();
                 });
@@ -4486,7 +4484,7 @@ public class MainActivity extends Activity implements AppAdapter.TileListener {
                 });
 
                 LinearLayout.LayoutParams cellLp = new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1f);
-                cellLp.setMargins(cellMargin, cellMargin, cellMargin, cellMargin);
+                cellLp.setMargins(cellMarginX, cellMarginY, cellMarginX, cellMarginY);
                 rowLayout.addView(cell, cellLp);
                 cells.add(cell);
             }

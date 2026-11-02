@@ -79,11 +79,14 @@ final class GlassDrawable extends Drawable {
                 highlight.drawShape(canvas, highlightAt[0] - at[0], highlightAt[1] - at[1], owner);
                 canvas.restore();
             }
-            float half = rim.paint.getStrokeWidth() / 2f;
-            rect.inset(half, half);
-            rim.fit(rect);
-            rim.paint.setAlpha(Math.round(255 * glass));
-            canvas.drawRoundRect(rect, radius - half, radius - half, rim.paint);
+            // A square panel (radius 0) has no edge, so it gets no rim either.
+            if (radius > 0f) {
+                float half = rim.paint.getStrokeWidth() / 2f;
+                rect.inset(half, half);
+                rim.fit(rect);
+                rim.paint.setAlpha(Math.round(255 * glass));
+                canvas.drawRoundRect(rect, radius - half, radius - half, rim.paint);
+            }
         }
         // The fill itself is the highlight view behind the pills, showing through as the glass clears;
         // painting it here as well would darken a focused pill twice over.
