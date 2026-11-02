@@ -795,6 +795,21 @@ public class AppLocationManager {
         return prefs.getString(KEY_LOCATION_NAME, DEFAULT_LOCATION_NAME);
     }
 
+    /**
+     * The city the TV is set to: the bundled station with that id or name, or one built from what
+     * is stored when it came from a search that is not in the list.
+     */
+    public static Station getCurrentStation(Context context) {
+        String id = getStationId(context);
+        String name = getLocationName(context);
+        for (Station s : ALL_STATIONS) {
+            if (s.id.equalsIgnoreCase(id) || s.name.equalsIgnoreCase(name)) return s;
+        }
+        if (name == null || name.isEmpty()) return null;
+        return new Station(id, name, getActiveProvince(context), getActiveRegion(context),
+                getStationPlace(context), getLatitude(context), getLongitude(context));
+    }
+
     public static String getStationPlace(Context context) {
         ensureDefaultLocationMigrated(context);
         SharedPreferences prefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);

@@ -3102,56 +3102,62 @@ public class MainActivity extends Activity implements AppAdapter.TileListener {
         wallpaperDialog = dialog;
         styleGlassDialog(dialog);
 
-        if (dialog.getWindow() != null) {
-            // Same size and place as the launcher's menu panel: the dropdown that opens under the
-            // Candy Box pill, with no dimmed backdrop. Opened from that menu, the panel simply
-            // stays where the menu was.
-            View anchor = btnCandyBox != null ? btnCandyBox : findViewById(R.id.btnSettings);
-            int width = menuPanelWidth;
-            int height = menuPanelHeight;
-            int left = 0;
-            int top = 0;
-            if (anchor != null) {
-                int[] at = new int[2];
-                anchor.getLocationOnScreen(at);
-                int gap = (int) (10 * density);
-                int sideMargin = Math.round(56 * density);
-                int screenW = getResources().getDisplayMetrics().widthPixels;
-                int screenH = getResources().getDisplayMetrics().heightPixels;
-                int rightLimit = screenW - sideMargin;
-                View settingsBtn = topSettings != null ? topSettings : findViewById(R.id.btnSettings);
-                if (settingsBtn != null && settingsBtn.getWidth() > 0) {
-                    int[] setAt = new int[2];
-                    settingsBtn.getLocationOnScreen(setAt);
-                    rightLimit = setAt[0] + settingsBtn.getWidth();
-                }
-                if (width <= 0) {
-                    layout.measure(View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED),
-                            View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
-                    width = Math.min((int) (400 * density),
-                            Math.max((int) (230 * density), layout.getMeasuredWidth()));
-                }
-                left = Math.max(sideMargin, Math.min(at[0], rightLimit - width));
-                top = at[1] + anchor.getHeight() + gap;
-                int maxHeight = screenH - top - Math.round(24 * density);
-                if (height <= 0) {
-                    height = Math.min((int) (430 * density), (int) (screenH * 0.75f));
-                }
-                height = Math.min(height, maxHeight);
-            }
-            dialog.getWindow().setLayout(width, height);
-            android.view.WindowManager.LayoutParams lp = dialog.getWindow().getAttributes();
-            lp.gravity = Gravity.TOP | Gravity.START;
-            lp.x = left;
-            lp.y = top;
-            dialog.getWindow().setAttributes(lp);
-        }
+        // Same place and size as the launcher's menu panel it opened from.
+        placeLikeMenuPanel(this, dialog.getWindow(), layout, menuPanelWidth, menuPanelHeight);
 
         if (viewToFocus[0] != null) {
             viewToFocus[0].requestFocus();
         } else if (list.getChildCount() > 0) {
             list.getChildAt(0).requestFocus();
         }
+    }
+
+    /**
+     * Gives a floating panel the launcher menu's size and place: under the Candy Box pill, as wide
+     * as the dropdown that opened it, and no taller than the screen allows. Shared by the wallpaper
+     * selector and the weather-location panel, so both open exactly where their menu was.
+     */
+    static void placeLikeMenuPanel(Activity activity, Window window, View content, int width, int height) {
+        if (window == null) return;
+        float density = activity.getResources().getDisplayMetrics().density;
+        View anchor = activity.findViewById(R.id.btnCandyBox);
+        if (anchor == null) anchor = activity.findViewById(R.id.btnSettings);
+        int left = 0;
+        int top = 0;
+        if (anchor != null) {
+            int[] at = new int[2];
+            anchor.getLocationOnScreen(at);
+            int gap = (int) (10 * density);
+            int sideMargin = Math.round(56 * density);
+            int screenW = activity.getResources().getDisplayMetrics().widthPixels;
+            int screenH = activity.getResources().getDisplayMetrics().heightPixels;
+            int rightLimit = screenW - sideMargin;
+            View settingsBtn = activity.findViewById(R.id.btnSettings);
+            if (settingsBtn != null && settingsBtn.getWidth() > 0) {
+                int[] setAt = new int[2];
+                settingsBtn.getLocationOnScreen(setAt);
+                rightLimit = setAt[0] + settingsBtn.getWidth();
+            }
+            if (width <= 0) {
+                content.measure(View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED),
+                        View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
+                width = Math.min((int) (400 * density),
+                        Math.max((int) (230 * density), content.getMeasuredWidth()));
+            }
+            left = Math.max(sideMargin, Math.min(at[0], rightLimit - width));
+            top = at[1] + anchor.getHeight() + gap;
+            int maxHeight = screenH - top - Math.round(24 * density);
+            if (height <= 0) {
+                height = Math.min((int) (430 * density), (int) (screenH * 0.75f));
+            }
+            height = Math.min(height, maxHeight);
+        }
+        window.setLayout(width, height);
+        android.view.WindowManager.LayoutParams lp = window.getAttributes();
+        lp.gravity = Gravity.TOP | Gravity.START;
+        lp.x = left;
+        lp.y = top;
+        window.setAttributes(lp);
     }
 
     private void triggerGoogleAssistant() {
@@ -3972,11 +3978,12 @@ public class MainActivity extends Activity implements AppAdapter.TileListener {
     }
 
     private void showAsiaCountryDialog() {
-        CitySearchDialog.show(this, this::refreshLocationDependentData);
+        // Same card, place and size as the menu panel this opened from.
+        CitySearchDialog.show(this, menuPanelWidth, menuPanelHeight, this::refreshLocationDependentData);
     }
 
     private void showStationListDialog(String region) {
-        CitySearchDialog.show(this, this::refreshLocationDependentData);
+        CitySearchDialog.show(this, menuPanelWidth, menuPanelHeight, this::refreshLocationDependentData);
     }
 
 

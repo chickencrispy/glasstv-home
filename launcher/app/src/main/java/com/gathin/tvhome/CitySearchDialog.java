@@ -3,11 +3,8 @@ package com.gathin.tvhome;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
-import android.graphics.Color;
 import android.graphics.Typeface;
-import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.GradientDrawable;
-import android.graphics.drawable.StateListDrawable;
 import android.os.Handler;
 import android.os.Looper;
 import android.text.Editable;
@@ -35,103 +32,91 @@ import java.util.Locale;
 import java.util.Set;
 
 /**
- * Frosted Glass Search Dialog for selecting any Indonesian city by typing its name.
- * Initially shows only the search box with hint "Ketik nama kota"; dynamically reveals
- * matching available cities below as the user types.
+ * The weather-location panel: a glass card like the wallpaper selector, with a search field on
+ * top and, below it, the city in use plus the six nearest to it. Typing replaces that list with
+ * matching cities from the bundled Indonesian list, and then from the online geocoder.
+ *
+ * <p>Opened from Home it takes the place and size of the launcher menu panel it came from
+ * ({@link MainActivity#placeLikeMenuPanel}); opened elsewhere it is centred.
  */
 public final class CitySearchDialog {
 
     private CitySearchDialog() {
     }
 
+    /** Centred panel, for a screen other than Home. */
     public static void show(final Activity activity, final Runnable onCityChanged) {
+        show(activity, 0, 0, false, onCityChanged);
+    }
+
+    /**
+     * Panel in the launcher menu's place and size ({@code width}, {@code height} as the menu
+     * recorded them), under the Candy Box pill.
+     */
+    public static void show(final Activity activity, final int menuWidth, final int menuHeight,
+                            final Runnable onCityChanged) {
+        show(activity, menuWidth, menuHeight, true, onCityChanged);
+    }
+
+    private static void show(final Activity activity, final int menuWidth, final int menuHeight,
+                             final boolean likeMenu, final Runnable onCityChanged) {
         if (activity == null || activity.isFinishing()) return;
 
         final float density = activity.getResources().getDisplayMetrics().density;
-        final Typeface outfit = activity.getResources().getFont(R.font.inter);
+        final Typeface inter = activity.getResources().getFont(R.font.inter);
         final Handler uiHandler = new Handler(Looper.getMainLooper());
         final Runnable[] pendingOnlineSearch = new Runnable[1];
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(activity, R.style.Theme_TvHome_GlassDialog);
+        AlertDialog.Builder builder =
+                new AlertDialog.Builder(activity, R.style.Theme_TvHome_GlassDialog_SemiTransparent);
 
-        // Root Frosted Glass Container
+        // The same card as the wallpaper selector: the blurred wallpaper behind it (Backdrop,
+        // lined up with the screen), a light veil, and GlassRim's edge at the two corners. The
+        // dialog window itself is clear, so this is the only surface drawn.
         LinearLayout root = new LinearLayout(activity);
         root.setOrientation(LinearLayout.VERTICAL);
-        int padH = dp(20, density);
-        int padV = dp(18, density);
-        root.setPadding(padH, padV, padH, padV);
+        int pad = Math.round(6 * density);
+        root.setPadding(pad, pad, pad, pad);
+        root.setBackground(new GlassDrawable(root, 20 * density, density, null, 0.45f));
+        Backdrop.watch(root);
 
-        GradientDrawable dialogBg = new GradientDrawable(
-                GradientDrawable.Orientation.TL_BR,
-                new int[]{0xF2141E30, 0xF20B111E}
-        );
-        dialogBg.setCornerRadius(dp(20, density));
-        dialogBg.setStroke(dp(1.5f, density), 0x4D64D2FF);
-        root.setBackground(dialogBg);
-
-        // Header Row: Title + Current City Subtitle
-        TextView titleView = new TextView(activity);
-        titleView.setText("📍 Ubah Kota Cuaca");
-        titleView.setTextSize(17f);
-        titleView.setTextColor(0xFFFFFFFF);
-        titleView.setTypeface(outfit, Typeface.BOLD);
-        titleView.setFontVariationSettings("'wght' 700");
-        root.addView(titleView);
-
-        String currentCity = AppLocationManager.getLocationName(activity);
-        String currentProvince = AppLocationManager.getActiveProvince(activity);
-        TextView subView = new TextView(activity);
-        subView.setText("Kota saat ini: " + currentCity + ", " + currentProvince);
-        subView.setTextSize(12f);
-        subView.setTextColor(0xFF94A3B8);
-        subView.setTypeface(outfit);
-        subView.setFontVariationSettings("'wght' 500");
-        subView.setPadding(0, dp(2, density), 0, dp(12, density));
-        root.addView(subView);
-
-        // Search Input Box Container
+        // Same corners and inner padding as the menu's rows.
         LinearLayout searchBox = new LinearLayout(activity);
         searchBox.setOrientation(LinearLayout.HORIZONTAL);
         searchBox.setGravity(Gravity.CENTER_VERTICAL);
-        searchBox.setPadding(dp(14, density), dp(10, density), dp(14, density), dp(10, density));
+        searchBox.setPadding(Math.round(12 * density), 0, Math.round(12 * density), 0);
 
         final GradientDrawable searchBgNormal = new GradientDrawable();
         searchBgNormal.setColor(0x1FFFFFFF);
-        searchBgNormal.setCornerRadius(dp(14, density));
-        searchBgNormal.setStroke(dp(1.5f, density), 0x40FFFFFF);
+        searchBgNormal.setCornerRadius(13 * density);
+        searchBgNormal.setStroke(Math.round(1.5f * density), 0x40FFFFFF);
 
         final GradientDrawable searchBgFocused = new GradientDrawable();
         searchBgFocused.setColor(0x2BFFFFFF);
-        searchBgFocused.setCornerRadius(dp(14, density));
-        searchBgFocused.setStroke(dp(1.8f, density), 0xFF64D2FF);
+        searchBgFocused.setCornerRadius(13 * density);
+        searchBgFocused.setStroke(Math.round(1.8f * density), 0xFF64D2FF);
 
-        searchBox.setBackground(searchBgFocused);
-
-        TextView searchIcon = new TextView(activity);
-        searchIcon.setText("🔍");
-        searchIcon.setTextSize(14f);
-        searchIcon.setPadding(0, 0, dp(10, density), 0);
-        searchBox.addView(searchIcon);
+        searchBox.setBackground(searchBgNormal);
 
         final EditText searchInput = new EditText(activity);
-        searchInput.setHint("Ketik nama kota");
+        searchInput.setHint("Cari nama kota");
         searchInput.setHintTextColor(0x80FFFFFF);
         searchInput.setTextColor(0xFFFFFFFF);
-        searchInput.setTextSize(15f);
-        searchInput.setTypeface(outfit);
-        searchInput.setFontVariationSettings("'wght' 500");
+        searchInput.setTextSize(16f);
+        searchInput.setTypeface(inter, Typeface.BOLD);
+        searchInput.setFontVariationSettings("'wght' 700");
         searchInput.setSingleLine(true);
         searchInput.setBackground(null);
         searchInput.setPadding(0, 0, 0, 0);
         searchInput.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS);
         searchInput.setImeOptions(EditorInfo.IME_ACTION_SEARCH | EditorInfo.IME_FLAG_NO_EXTRACT_UI);
-        searchBox.addView(searchInput, new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1f));
+        searchBox.addView(searchInput, new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.MATCH_PARENT, 1f));
 
         final TextView clearBtn = new TextView(activity);
         clearBtn.setText("✕");
         clearBtn.setTextSize(13f);
         clearBtn.setTextColor(0xB3FFFFFF);
-        clearBtn.setPadding(dp(8, density), dp(2, density), dp(4, density), dp(2, density));
+        clearBtn.setPadding(Math.round(10 * density), 0, 0, 0);
         clearBtn.setVisibility(View.GONE);
         clearBtn.setClickable(true);
         clearBtn.setFocusable(true);
@@ -142,45 +127,61 @@ public final class CitySearchDialog {
         searchBox.addView(clearBtn);
 
         root.addView(searchBox, new LinearLayout.LayoutParams(
-                ViewGroup.LayoutParams.MATCH_PARENT,
-                ViewGroup.LayoutParams.WRAP_CONTENT
-        ));
+                ViewGroup.LayoutParams.MATCH_PARENT, Math.round(42 * density)));
 
-        searchInput.setOnFocusChangeListener((v, hasFocus) ->
-                searchBox.setBackground(hasFocus ? searchBgFocused : searchBgNormal));
+        // The list below the field: the city in use first, then the six nearest to it.
+        final AppLocationManager.Station currentStation = AppLocationManager.getCurrentStation(activity);
 
-        // Scrollable Results Container (Initially GONE until user types!)
         final ScrollView resultsScroll = new ScrollView(activity);
         resultsScroll.setVerticalScrollBarEnabled(false);
         resultsScroll.setOverScrollMode(View.OVER_SCROLL_NEVER);
         resultsScroll.setClipChildren(true);
         resultsScroll.setClipToPadding(true);
-        resultsScroll.setVisibility(View.GONE);
+        resultsScroll.setFocusable(false);
 
         final LinearLayout resultsContainer = new LinearLayout(activity);
         resultsContainer.setOrientation(LinearLayout.VERTICAL);
-        resultsContainer.setPadding(0, dp(10, density), 0, dp(4, density));
         resultsScroll.addView(resultsContainer, new ViewGroup.LayoutParams(
-                ViewGroup.LayoutParams.MATCH_PARENT,
-                ViewGroup.LayoutParams.WRAP_CONTENT
-        ));
+                ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
 
+        // The list fills what is left of the panel's height, so the card keeps the menu's size
+        // whichever list is in it, with a gap under the field so the two do not touch.
         LinearLayout.LayoutParams scrollLp = new LinearLayout.LayoutParams(
-                ViewGroup.LayoutParams.MATCH_PARENT,
-                ViewGroup.LayoutParams.WRAP_CONTENT
-        );
+                ViewGroup.LayoutParams.MATCH_PARENT, 0, 1f);
+        scrollLp.topMargin = Math.round(10 * density);
         root.addView(resultsScroll, scrollLp);
 
         builder.setView(root);
         final AlertDialog dialog = builder.create();
 
-        // Helper to select a city station
+        // The OK that opened the panel is still on its way out as the first row takes focus; on
+        // this TV its release can land on that row. Swallow clicks for a moment.
+        final long openedAt = android.os.SystemClock.uptimeMillis();
+
+        searchInput.setOnFocusChangeListener((v, hasFocus) ->
+                searchBox.setBackground(hasFocus ? searchBgFocused : searchBgNormal));
+
         final List<AppLocationManager.Station> currentMatches = new ArrayList<>();
+        // It: the city in use, then the six nearest.
+        final List<AppLocationManager.Station> nearby = new ArrayList<>();
+        if (currentStation != null) nearby.add(currentStation);
+        nearby.addAll(AppLocationManager.getNearbyCities(AppLocationManager.getLatitude(activity),
+                AppLocationManager.getLongitude(activity), 6));
+
         final Runnable renderResults = () -> {
             resultsContainer.removeAllViews();
             String q = searchInput.getText() != null ? searchInput.getText().toString().trim() : "";
+
             if (q.isEmpty()) {
-                resultsScroll.setVisibility(View.GONE);
+                resultsScroll.setVisibility(nearby.isEmpty() ? View.GONE : View.VISIBLE);
+                for (AppLocationManager.Station station : nearby) {
+                    boolean isCurrent = currentStation != null
+                            && (station.id.equalsIgnoreCase(currentStation.id)
+                            || station.name.equalsIgnoreCase(currentStation.name));
+                    resultsContainer.addView(createCityRow(activity, inter, density, dialog,
+                            station, isCurrent, openedAt, onCityChanged));
+                }
+                resultsScroll.scrollTo(0, 0);
                 return;
             }
 
@@ -188,77 +189,19 @@ public final class CitySearchDialog {
             if (currentMatches.isEmpty()) {
                 TextView emptyView = new TextView(activity);
                 emptyView.setText("Kota \"" + q + "\" tidak ditemukan");
-                emptyView.setTextSize(13.5f);
+                emptyView.setTextSize(14f);
                 emptyView.setTextColor(0x99FFFFFF);
-                emptyView.setTypeface(outfit);
-                emptyView.setPadding(dp(8, density), dp(12, density), dp(8, density), dp(8, density));
+                emptyView.setTypeface(inter);
+                emptyView.setPadding(Math.round(12 * density), Math.round(10 * density),
+                        Math.round(12 * density), 0);
                 resultsContainer.addView(emptyView);
                 return;
             }
-
-            for (int i = 0; i < currentMatches.size(); i++) {
-                final AppLocationManager.Station station = currentMatches.get(i);
-                LinearLayout row = new LinearLayout(activity);
-                row.setOrientation(LinearLayout.VERTICAL);
-                row.setPadding(dp(14, density), dp(9, density), dp(14, density), dp(9, density));
-                row.setFocusable(true);
-                row.setClickable(true);
-                row.setBackground(createCityRowBackground(density));
-
-                TextView cityTitle = new TextView(activity);
-                cityTitle.setText(station.name);
-                cityTitle.setTextSize(14.5f);
-                cityTitle.setTextColor(0xFFFFFFFF);
-                cityTitle.setTypeface(outfit, Typeface.BOLD);
-                cityTitle.setFontVariationSettings("'wght' 600");
-                cityTitle.setSingleLine(true);
-                row.addView(cityTitle);
-
-                TextView citySub = new TextView(activity);
-                String sub = (station.state != null && !station.state.isEmpty())
-                        ? (station.place + "  •  " + station.state)
-                        : station.place;
-                if (station.place != null && station.state != null
-                        && station.place.toLowerCase(Locale.ROOT).contains(station.state.toLowerCase(Locale.ROOT))) {
-                    sub = station.place;
-                }
-                citySub.setText(sub);
-                citySub.setTextSize(11.5f);
-                citySub.setTextColor(0xB3CBD5E1);
-                citySub.setTypeface(outfit);
-                citySub.setFontVariationSettings("'wght' 400");
-                citySub.setSingleLine(true);
-                row.addView(citySub);
-
-                row.setOnClickListener(v -> {
-                    SoundEffects.playSelect();
-                    AppLocationManager.setStation(activity, station);
-                    HomeWeather.forget(activity);
-                    Toast.makeText(activity, "Lokasi diubah ke: " + station.name, Toast.LENGTH_SHORT).show();
-                    dialog.dismiss();
-                    if (onCityChanged != null) {
-                        onCityChanged.run();
-                    }
-                });
-
-                LinearLayout.LayoutParams rowLp = new LinearLayout.LayoutParams(
-                        ViewGroup.LayoutParams.MATCH_PARENT,
-                        ViewGroup.LayoutParams.WRAP_CONTENT
-                );
-                rowLp.bottomMargin = dp(6, density);
-                resultsContainer.addView(row, rowLp);
+            for (AppLocationManager.Station station : currentMatches) {
+                resultsContainer.addView(createCityRow(activity, inter, density, dialog,
+                        station, false, openedAt, onCityChanged));
             }
-
-            // Cap scroll height so dialog stays well-proportioned on screen
-            int maxScrollHeight = dp(230, density);
-            resultsContainer.measure(
-                    View.MeasureSpec.makeMeasureSpec( dp(380, density), View.MeasureSpec.AT_MOST),
-                    View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED)
-            );
-            int measuredH = resultsContainer.getMeasuredHeight();
-            ViewGroup.LayoutParams lp = resultsScroll.getLayoutParams();
-            lp.height = measuredH > maxScrollHeight ? maxScrollHeight : ViewGroup.LayoutParams.WRAP_CONTENT;
-            resultsScroll.setLayoutParams(lp);
+            resultsScroll.scrollTo(0, 0);
         };
 
         searchInput.addTextChangedListener(new TextWatcher() {
@@ -280,14 +223,13 @@ public final class CitySearchDialog {
                     return;
                 }
 
-                // 1. Instant offline search across all 500+ Indonesian Kabupaten & Kota
+                // 1. Instant offline search across all bundled Indonesian kabupaten and kota.
                 List<AppLocationManager.Station> localResults = AppLocationManager.searchIndonesianCities(q);
                 currentMatches.clear();
                 currentMatches.addAll(localResults);
-                resultsScroll.scrollTo(0, 0);
                 renderResults.run();
 
-                // 2. Debounced online geocoding fallback for smaller kecamatan/desa in Indonesia
+                // 2. Debounced online geocoding fallback for smaller kecamatan and desa.
                 if (q.length() >= 2) {
                     pendingOnlineSearch[0] = () -> AppLocationManager.searchOnlineIndonesianCities(q, extra -> {
                         if (!dialog.isShowing()) return;
@@ -320,7 +262,7 @@ public final class CitySearchDialog {
             }
         });
 
-        // Allow pressing Down / Enter from searchInput to focus first matching city
+        // Enter closes the keyboard and moves on to the list; Down does the same straight away.
         searchInput.setOnEditorActionListener((v, actionId, event) -> {
             if (actionId == EditorInfo.IME_ACTION_SEARCH || actionId == EditorInfo.IME_ACTION_DONE
                     || (event != null && event.getKeyCode() == KeyEvent.KEYCODE_ENTER)) {
@@ -352,51 +294,98 @@ public final class CitySearchDialog {
             return false;
         });
 
+        renderResults.run();
+
         dialog.show();
 
         Window window = dialog.getWindow();
         if (window != null) {
-            window.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-            DisplayMetrics dm = activity.getResources().getDisplayMetrics();
-            int targetWidth = Math.min(dp(420, density), (int) (dm.widthPixels * 0.88f));
-            window.setLayout(targetWidth, WindowManager.LayoutParams.WRAP_CONTENT);
-            window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE
-                    | WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
+            if (likeMenu) {
+                // Exactly where the menu panel it was opened from was.
+                MainActivity.placeLikeMenuPanel(activity, window, root, menuWidth, menuHeight);
+                window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN
+                        | WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
+                // The dialog's content scrolls, and a scrolling container measures its content
+                // without a height to fill: with five rows the card would come out shorter than
+                // the menu it opens from. Give it the panel's height outright.
+                final int cardHeight = window.getAttributes().height;
+                root.post(() -> {
+                    ViewGroup.LayoutParams lp = root.getLayoutParams();
+                    if (lp != null && cardHeight > 0) {
+                        lp.height = cardHeight;
+                        root.setLayoutParams(lp);
+                    }
+                });
+            } else {
+                DisplayMetrics dm = activity.getResources().getDisplayMetrics();
+                int targetWidth = Math.min(Math.round(420 * density), (int) (dm.widthPixels * 0.88f));
+                int targetHeight = Math.min(Math.round(460 * density), (int) (dm.heightPixels * 0.8f));
+                window.setLayout(targetWidth, targetHeight);
+                window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE
+                        | WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
+            }
         }
 
         searchInput.requestFocus();
-        searchInput.postDelayed(() -> {
-            InputMethodManager imm = (InputMethodManager) activity.getSystemService(Context.INPUT_METHOD_SERVICE);
-            if (imm != null) {
-                imm.showSoftInput(searchInput, InputMethodManager.SHOW_IMPLICIT);
+        if (!likeMenu) {
+            searchInput.postDelayed(() -> {
+                InputMethodManager imm = (InputMethodManager) activity.getSystemService(Context.INPUT_METHOD_SERVICE);
+                if (imm != null) {
+                    imm.showSoftInput(searchInput, InputMethodManager.SHOW_IMPLICIT);
+                }
+            }, 120);
+        }
+    }
+
+    /** One city, drawn as the launcher menu's and wallpaper panel's rows are: 42dp, 16sp bold. */
+    private static LinearLayout createCityRow(final Activity activity, Typeface inter, float density,
+                                              final AlertDialog dialog,
+                                              final AppLocationManager.Station station,
+                                              final boolean isCurrent,
+                                              final long openedAt, final Runnable onCityChanged) {
+        LinearLayout row = new LinearLayout(activity);
+        row.setOrientation(LinearLayout.HORIZONTAL);
+        row.setGravity(Gravity.CENTER_VERTICAL);
+        row.setPadding(Math.round(12 * density), 0, Math.round(12 * density), 0);
+        row.setFocusable(true);
+        row.setClickable(true);
+        row.setBackground(null);
+        row.setOnFocusChangeListener((v, hasFocus) -> {
+            if (hasFocus) {
+                GradientDrawable focusedBg = new GradientDrawable();
+                focusedBg.setColor(0xA0000000);
+                focusedBg.setCornerRadius(13 * density);
+                v.setBackground(focusedBg);
+            } else {
+                v.setBackground(null);
             }
-        }, 120);
-    }
+        });
 
-    private static StateListDrawable createCityRowBackground(float density) {
-        GradientDrawable focused = new GradientDrawable();
-        focused.setColor(0x3864D2FF);
-        focused.setCornerRadius(dp(12, density));
-        focused.setStroke(dp(1.5f, density), 0xFF64D2FF);
+        TextView rowTitle = new TextView(activity);
+        rowTitle.setText(station.name);
+        rowTitle.setTextSize(16f);
+        rowTitle.setTextColor(isCurrent ? 0xFF64D2FF : 0xFFFFFFFF);
+        rowTitle.setSingleLine(true);
+        rowTitle.setEllipsize(android.text.TextUtils.TruncateAt.END);
+        rowTitle.setTypeface(inter, Typeface.BOLD);
+        rowTitle.setFontVariationSettings("'wght' 700");
+        rowTitle.setShadowLayer(3 * density, 0, 1 * density, 0xCC000000);
+        row.addView(rowTitle, new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1f));
 
-        GradientDrawable pressed = new GradientDrawable();
-        pressed.setColor(0x2E64D2FF);
-        pressed.setCornerRadius(dp(12, density));
-        pressed.setStroke(dp(1f, density), 0xAA64D2FF);
+        row.setOnClickListener(v -> {
+            if (android.os.SystemClock.uptimeMillis() - openedAt < 400) return;
+            SoundEffects.playSelect();
+            AppLocationManager.setStation(activity, station);
+            HomeWeather.forget(activity);
+            Toast.makeText(activity, "Lokasi diubah ke: " + station.name, Toast.LENGTH_SHORT).show();
+            dialog.dismiss();
+            if (onCityChanged != null) {
+                onCityChanged.run();
+            }
+        });
 
-        GradientDrawable normal = new GradientDrawable();
-        normal.setColor(0x16FFFFFF);
-        normal.setCornerRadius(dp(12, density));
-        normal.setStroke(dp(1f, density), 0x22FFFFFF);
-
-        StateListDrawable states = new StateListDrawable();
-        states.addState(new int[]{android.R.attr.state_focused}, focused);
-        states.addState(new int[]{android.R.attr.state_pressed}, pressed);
-        states.addState(new int[]{}, normal);
-        return states;
-    }
-
-    private static int dp(float val, float density) {
-        return Math.round(val * density);
+        row.setLayoutParams(new LinearLayout.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT, Math.round(42 * density)));
+        return row;
     }
 }
