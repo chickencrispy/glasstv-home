@@ -2,6 +2,6 @@
   "versionCode": 22,
   "versionName": "3.3.1-id",
   "apkUrl": "https://github.com/chickencrispy/glasstv-home/releases/latest/download/glass-tv-home.apk",
-  "changelog": "feat: move the sound-effects picker into the launcher's glass panel",
+  "changelog": "feat: give each sound choice its white vector icon",
   "releaseDate": "2026-11-02"
 }
