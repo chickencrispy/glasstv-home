@@ -305,17 +305,6 @@ public final class CitySearchDialog {
                 MainActivity.placeLikeMenuPanel(activity, window, root, menuWidth, menuHeight);
                 window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN
                         | WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
-                // The dialog's content scrolls, and a scrolling container measures its content
-                // without a height to fill: with five rows the card would come out shorter than
-                // the menu it opens from. Give it the panel's height outright.
-                final int cardHeight = window.getAttributes().height;
-                root.post(() -> {
-                    ViewGroup.LayoutParams lp = root.getLayoutParams();
-                    if (lp != null && cardHeight > 0) {
-                        lp.height = cardHeight;
-                        root.setLayoutParams(lp);
-                    }
-                });
             } else {
                 DisplayMetrics dm = activity.getResources().getDisplayMetrics();
                 int targetWidth = Math.min(Math.round(420 * density), (int) (dm.widthPixels * 0.88f));

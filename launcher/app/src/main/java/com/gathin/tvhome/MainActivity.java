@@ -2453,11 +2453,14 @@ public class MainActivity extends Activity implements AppAdapter.TileListener {
     }
 
     private void showSoundEffectsDialog() {
+        // Already up: a second request would put a second panel on the first.
+        if (soundDialog != null && soundDialog.isShowing()) return;
+
         final String[] soundOptions = new String[]{
-                "🎮 PlayStation 5 (Bawaan / Default Chime)",
-                "🕹️ Nintendo Switch (Click & Snap Pop)",
-                "🟩 Xbox Series X/S (Warm Harmonic Chime)",
-                "🔇 Matikan Suara (Off / Bisu)"
+                "PlayStation 5",
+                "Nintendo Switch",
+                "XBox X/S Series",
+                "Off"
         };
 
         final String[] soundKeys = new String[]{
@@ -2476,26 +2479,103 @@ public class MainActivity extends Activity implements AppAdapter.TileListener {
             }
         }
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.Theme_TvHome_GlassDialog);
-        builder.setTitle("🔊 Pilih Efek Suara");
-        builder.setSingleChoiceItems(soundOptions, selectedIndex, (dialog, which) -> {
-            dialog.dismiss();
-            String chosenKey = soundKeys[which];
-            SoundEffects.setTheme(MainActivity.this, chosenKey);
-            String displayName = SoundEffects.getThemeDisplayName(chosenKey);
+        // The same card as the wallpaper selector and the weather-location panel: the blurred
+        // wallpaper under GlassRim's edge, in the place and size of the menu it was opened from.
+        LinearLayout layout = new LinearLayout(this);
+        layout.setOrientation(LinearLayout.VERTICAL);
+        int pad = Math.round(6 * density);
+        layout.setPadding(pad, pad, pad, pad);
+        layout.setBackground(new GlassDrawable(layout, 20 * density, density, null, 0.45f));
+        Backdrop.watch(layout);
 
-            if (SoundEffects.THEME_OFF.equalsIgnoreCase(chosenKey)) {
-                Toast.makeText(MainActivity.this, "🔇 Efek Suara Dimatikan", Toast.LENGTH_SHORT).show();
-            } else {
-                Toast.makeText(MainActivity.this, "🔊 Efek Suara: " + displayName, Toast.LENGTH_SHORT).show();
-                // Play sample of the selected theme
-                handler.postDelayed(() -> SoundEffects.playSelect(), 120);
-            }
-        });
-        builder.setNegativeButton("Tutup", (dialog, which) -> dialog.dismiss());
+        ScrollView scroll = new ScrollView(this);
+        scroll.setVerticalScrollBarEnabled(false);
+        LinearLayout list = new LinearLayout(this);
+        list.setOrientation(LinearLayout.VERTICAL);
+
+        AlertDialog[] dialogHolder = new AlertDialog[1];
+        View[] viewToFocus = new View[1];
+        // The OK that opened this panel is still on its way out as the first row takes focus; on
+        // this TV its release can land on that row and pick a sound before the panel is seen.
+        final long openedAt = android.os.SystemClock.uptimeMillis();
+
+        for (int i = 0; i < soundKeys.length; i++) {
+            final String chosenKey = soundKeys[i];
+            boolean isActive = i == selectedIndex;
+
+            LinearLayout row = new LinearLayout(this);
+            row.setOrientation(LinearLayout.HORIZONTAL);
+            row.setGravity(Gravity.CENTER_VERTICAL);
+            row.setFocusable(true);
+            row.setClickable(true);
+            // Same row metrics as the launcher menu's items.
+            row.setPadding((int) (12 * density), 0, (int) (12 * density), 0);
+            row.setOnFocusChangeListener((v, hasFocus) -> {
+                if (hasFocus) {
+                    // Same focus shape as the launcher menu's rows: 13dp corners, 0xA0 black.
+                    GradientDrawable focusedBg = new GradientDrawable();
+                    focusedBg.setColor(0xA0000000);
+                    focusedBg.setCornerRadius(13 * density);
+                    v.setBackground(focusedBg);
+                } else {
+                    v.setBackground(null);
+                }
+            });
+
+            TextView rowTitle = new TextView(this);
+            rowTitle.setText(soundOptions[i]);
+            rowTitle.setTextSize(16);
+            rowTitle.setTextColor(isActive ? 0xFF64D2FF : 0xFFFFFFFF);
+            rowTitle.setSingleLine(true);
+            rowTitle.setEllipsize(TextUtils.TruncateAt.END);
+            rowTitle.setTypeface(getResources().getFont(R.font.inter), Typeface.BOLD);
+            rowTitle.setFontVariationSettings("'wght' 700");
+            rowTitle.setShadowLayer(3 * density, 0, 1 * density, 0xCC000000);
+            row.addView(rowTitle, new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1f));
+
+            row.setOnClickListener(v -> {
+                if (android.os.SystemClock.uptimeMillis() - openedAt < 400) return;
+                if (dialogHolder[0] != null) dialogHolder[0].dismiss();
+                SoundEffects.setTheme(MainActivity.this, chosenKey);
+                String displayName = SoundEffects.getThemeDisplayName(chosenKey);
+                if (SoundEffects.THEME_OFF.equalsIgnoreCase(chosenKey)) {
+                    Toast.makeText(MainActivity.this, "🔇 Efek Suara Dimatikan", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(MainActivity.this, "🔊 Efek Suara: " + displayName, Toast.LENGTH_SHORT).show();
+                    // Play sample of the selected theme
+                    handler.postDelayed(() -> SoundEffects.playSelect(), 120);
+                }
+            });
+
+            list.addView(row, new LinearLayout.LayoutParams(
+                    ViewGroup.LayoutParams.MATCH_PARENT, (int) (42 * density)));
+            if (isActive) viewToFocus[0] = row;
+        }
+
+        scroll.addView(list);
+        layout.addView(scroll, new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 0, 1f));
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.Theme_TvHome_GlassDialog_SemiTransparent);
+        builder.setView(layout);
         AlertDialog dialog = builder.create();
+        dialogHolder[0] = dialog;
+        dialog.setOnDismissListener(d -> {
+            if (soundDialog == d) soundDialog = null;
+            // On this TV a key sent while the panel takes focus can still reach the launcher
+            // behind it, where the Candy Box pill is focused: that built a menu hidden behind
+            // the panel, which then looked as if Back had opened the menu. Drop any such menu.
+            closeMenu(false);
+        });
         dialog.show();
-        styleGlassDialog(dialog);
+        soundDialog = dialog;
+        // Only four short rows: the panel is as tall as what is in it, in the menu's place.
+        int rowHeight = Math.round(42 * density);
+        int padding = Math.round(6 * density);
+        int contentHeight = soundKeys.length * rowHeight + 2 * padding;
+        placeLikeMenuPanel(this, dialog.getWindow(), layout, menuPanelWidth, contentHeight);
+
+        if (viewToFocus[0] != null) viewToFocus[0].requestFocus();
+        else if (list.getChildCount() > 0) list.getChildAt(0).requestFocus();
     }
 
 
@@ -2952,6 +3032,8 @@ public class MainActivity extends Activity implements AppAdapter.TileListener {
     private Dialog qrUploadDialog;
     /** The wallpaper selector while it is up; see {@link #showMenu} for why it matters there. */
     private AlertDialog wallpaperDialog;
+    /** The sound-effects picker while it is up, so it is never opened twice. */
+    private AlertDialog soundDialog;
     private WallpaperUploadServer uploadServer;
     private ImageView qrImageView;
     private TextView qrStatusText;
@@ -3158,6 +3240,19 @@ public class MainActivity extends Activity implements AppAdapter.TileListener {
         lp.x = left;
         lp.y = top;
         window.setAttributes(lp);
+        // A dialog measures its content to the content, and a scrolling container gives it no
+        // height to fill: a panel with only a few rows would come out smaller than the menu it
+        // replaces. Give the card the height the window was just given.
+        if (height > 0) {
+            final int cardHeight = height;
+            content.post(() -> {
+                ViewGroup.LayoutParams cardLp = content.getLayoutParams();
+                if (cardLp != null) {
+                    cardLp.height = cardHeight;
+                    content.setLayoutParams(cardLp);
+                }
+            });
+        }
     }
 
     private void triggerGoogleAssistant() {
