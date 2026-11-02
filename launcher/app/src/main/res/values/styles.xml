@@ -36,6 +36,14 @@
         <item name="android:buttonBarButtonStyle">@style/GlassDialogButton</item>
     </style>
 
+    <!-- Same glass dialog, but the window itself is clear so the panel can draw the launcher's
+         blurred-walled glass (GlassDrawable + GlassRim) and let the wallpaper show through. No dim
+         behind it: it sits on Home like one of the launcher's own dropdown menus. -->
+    <style name="Theme.TvHome.GlassDialog.SemiTransparent" parent="Theme.TvHome.GlassDialog">
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:backgroundDimEnabled">false</item>
+    </style>
+
     <style name="GlassDialogTitle" parent="android:Widget.Material.TextView">
         <item name="android:fontFamily">@font/inter</item>
         <item name="android:textStyle">bold</item>

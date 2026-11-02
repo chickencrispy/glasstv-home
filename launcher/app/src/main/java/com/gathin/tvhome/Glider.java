@@ -30,6 +30,8 @@ final class Glider extends View {
 
     /** About 63% black: bright text reads on it, and every place that uses it matches. */
     static final int FOCUS_ALPHA = 0xA0;
+    /** Denser, for the top bar: its pills sit right on the wallpaper, where 63% washed out. */
+    static final int PILL_ALPHA = 0xD0;
     /** The top menu's look: a dark fill. */
     static final int DARK = 0;
     /** Between apps: a pane of glass, the same as the pills and the tray. */
@@ -66,6 +68,8 @@ final class Glider extends View {
     private final GlassRim rim;
     private final android.graphics.RectF shape = new android.graphics.RectF();
     private int style = DARK;
+    /** How opaque the dark fill is; menus keep {@link #FOCUS_ALPHA}, the top bar is denser. */
+    private int darkAlpha = FOCUS_ALPHA;
     private boolean paneHidden;
     /**
      * The selected app's drop shadow, drawn by the glass glider behind it: soft and even all round,
@@ -214,6 +218,13 @@ final class Glider extends View {
         changed();
     }
 
+    /** How opaque the dark look is ({@link #FOCUS_ALPHA} or {@link #PILL_ALPHA}). */
+    void setDarkAlpha(int alpha) {
+        if (darkAlpha == alpha) return;
+        darkAlpha = alpha;
+        changed();
+    }
+
     /** Switches look at once; there is no blend between the two. The shadow eases in with the glass. */
     void setStyle(int style) {
         if (this.style == style) return;
@@ -283,7 +294,7 @@ final class Glider extends View {
         float r = Math.min(edges[RADIUS], Math.min(b - t, edges[RIGHT] - edges[LEFT]) / 2f);
         shape.set(edges[LEFT] + dx, t + dy, edges[RIGHT] + dx, b + dy);
         if (style == DARK) {
-            paint.setColor((int) (FOCUS_ALPHA * opacity) << 24);
+            paint.setColor((int) (darkAlpha * opacity) << 24);
             canvas.drawRoundRect(shape, r, r, paint);
             return;
         }

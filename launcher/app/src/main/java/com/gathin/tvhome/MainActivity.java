@@ -1520,6 +1520,7 @@ public class MainActivity extends Activity implements AppAdapter.TileListener {
         // Up to the top menu it is dark at once, and travels that way.
         gliderOnPill = true;
         glider.setStyle(Glider.DARK);
+        glider.setDarkAlpha(Glider.PILL_ALPHA);
         glider.moveTo(l, t, l + pill.getWidth(), t + pill.getHeight(), pill.getHeight() / 2f);
     }
 
@@ -2966,41 +2967,30 @@ public class MainActivity extends Activity implements AppAdapter.TileListener {
         }
 
         List<WallpaperOption> options = new ArrayList<>();
-        options.add(new WallpaperOption("Indonesia", "🇮🇩 Pesona Nusantara (Indonesia)", "Koleksi 4K Alam & Candi Ikonik Indonesia"));
-        options.add(new WallpaperOption("Anime", "🎌 Anime HD", "Ilustrasi Sinematik, Langit Senja & Pemandangan Anime"));
-        options.add(new WallpaperOption("Natural", "🌿 Alam & Pemandangan", "Pegunungan, Hutan & Aurora 4K"));
-        options.add(new WallpaperOption("Skyscraper", "🏙️ Gedung Pencakar Langit & Kota", "Metropolis Modern & Arsitektur"));
-        options.add(new WallpaperOption("Space", "🌌 Luar Angkasa & Kosmos", "Galaksi, Nebula & Bintang (Deep Space)"));
-        options.add(new WallpaperOption("Ocean", "🌊 Lautan & Pesisir Pantai", "Air Jernih, Terumbu Karang & Pantai"));
-        options.add(new WallpaperOption("Minimalist", "🔲 Minimalis Gelap (OLED)", "Gelap Murni, Kurva Abstrak 3D & Siluet Malam"));
-        options.add(new WallpaperOption("MANAGE_CUSTOM", "📁 Kelola Gambar Unggahan",
+        options.add(new WallpaperOption("Indonesia", "Pesona Nusantara (Indonesia)", "Koleksi 4K Alam & Candi Ikonik Indonesia"));
+        options.add(new WallpaperOption("Anime", "Anime HD", "Ilustrasi Sinematik, Langit Senja & Pemandangan Anime"));
+        options.add(new WallpaperOption("Natural", "Alam & Pemandangan", "Pegunungan, Hutan & Aurora 4K"));
+        options.add(new WallpaperOption("Skyscraper", "Gedung Pencakar Langit & Kota", "Metropolis Modern & Arsitektur"));
+        options.add(new WallpaperOption("Space", "Luar Angkasa & Kosmos", "Galaksi, Nebula & Bintang (Deep Space)"));
+        options.add(new WallpaperOption("Ocean", "Lautan & Pesisir Pantai", "Air Jernih, Terumbu Karang & Pantai"));
+        options.add(new WallpaperOption("Minimalist", "Minimalis Gelap (OLED)", "Gelap Murni, Kurva Abstrak 3D & Siluet Malam"));
+        options.add(new WallpaperOption("MANAGE_CUSTOM", "Kelola Gambar Unggahan",
                 customCount > 0 ? (customCount + " foto diunggah • QR / Slideshow") : "Unggah foto pribadi lewat HP"));
-        options.add(new WallpaperOption("NEXT", "🔀 Ganti Gambar Berikutnya", "Putar gambar berikutnya di kategori ini"));
+        options.add(new WallpaperOption("NEXT", "Ganti Gambar Berikutnya", "Putar gambar berikutnya di kategori ini"));
 
         LinearLayout layout = new LinearLayout(this);
         layout.setOrientation(LinearLayout.VERTICAL);
-        layout.setPadding((int) (20 * density), (int) (16 * density), (int) (20 * density), (int) (12 * density));
+        // Same padding as the launcher's menu panel (popup_inputs).
+        layout.setPadding((int) (6 * density), (int) (6 * density), (int) (6 * density), (int) (6 * density));
 
-        // === MODIFIKASI: Background dialog transparan gaya glass ===
-        GradientDrawable dialogBg = new GradientDrawable();
-        dialogBg.setColor(0x4D000000); // 30% hitam transparan
-        dialogBg.setCornerRadius(20 * density);
-        dialogBg.setStroke((int) (1 * density), 0x33FFFFFF);
-        layout.setBackground(dialogBg);
+        // Real glass: the blurred wallpaper behind this panel (Backdrop, aligned to the screen) under
+        // a light veil, with GlassRim's liquid-glass edge shining at the top-left and bottom-right.
+        // The dialog window is clear (SemiTransparent style), so this is the only card drawn.
+        GlassDrawable panelGlass = new GlassDrawable(layout, 20 * density, density, null, 0.45f);
+        layout.setBackground(panelGlass);
+        Backdrop.watch(layout);
 
-        // Header Title (dikembalikan) + padding bawah 16dp sebagai jarak ke list
-        TextView titleView = new TextView(this);
-        titleView.setText("🖼️ Pilih Koleksi Wallpaper 4K");
-        titleView.setTextSize(19);
-        titleView.setTextColor(0xFFFFFFFF);
-        titleView.setTypeface(getResources().getFont(R.font.inter), Typeface.BOLD);
-        titleView.setFontVariationSettings("'wght' 700");
-        titleView.setShadowLayer(4 * density, 0, 1 * density, 0xDD000000);
-        titleView.setPadding(0, 0, 0, (int) (16 * density)); // === MODIFIKASI: jarak ke list ===
-        layout.addView(titleView);
-
-        // Header Subtitle — === MODIFIKASI: disembunyikan ===
-        // (kode asli dihapus, tidak ditampilkan)
+        // Tanpa judul: panel langsung berisi daftar, seperti panel menu launcher.
 
         ScrollView scroll = new ScrollView(this);
         scroll.setVerticalScrollBarEnabled(false);
@@ -3009,6 +2999,10 @@ public class MainActivity extends Activity implements AppAdapter.TileListener {
 
         AlertDialog[] dialogHolder = new AlertDialog[1];
         View[] viewToFocus = new View[1];
+        // The OK that opened this panel is still on its way out as the first row takes focus; on this
+        // TV its release can then land on that row and pick a category before the panel is seen.
+        // Swallow clicks for a moment, so opening the panel never also chooses something in it.
+        final long openedAt = android.os.SystemClock.uptimeMillis();
 
         for (int i = 0; i < options.size(); i++) {
             WallpaperOption opt = options.get(i);
@@ -3019,34 +3013,30 @@ public class MainActivity extends Activity implements AppAdapter.TileListener {
             row.setGravity(Gravity.CENTER_VERTICAL);
             row.setFocusable(true);
             row.setClickable(true);
-            row.setPadding((int) (16 * density), (int) (12 * density), (int) (16 * density), (int) (12 * density));
+            // Same row metrics as the launcher menu's items (item_input.xml).
+            row.setPadding((int) (12 * density), 0, (int) (12 * density), 0);
 
             // === MODIFIKASI: background transparan, highlight via focus listener ===
             row.setBackground(null);
             row.setOnFocusChangeListener((v, hasFocus) -> {
                 if (hasFocus) {
+                    // Same focus shape as the launcher menu's rows: 13dp corners, 0xA0 black.
                     GradientDrawable focusedBg = new GradientDrawable();
-                    focusedBg.setColor(0x99000000); // gelap seperti menu config
-                    focusedBg.setCornerRadius(10 * density);
+                    focusedBg.setColor(0xA0000000);
+                    focusedBg.setCornerRadius(13 * density);
                     v.setBackground(focusedBg);
                 } else {
                     v.setBackground(null);
                 }
             });
 
-            // === MODIFIKASI: Radio button (◉ aktif / ○ non-aktif) ===
-            TextView radioView = new TextView(this);
-            radioView.setText(isActive ? "◉" : "○");
-            radioView.setTextSize(18);
-            radioView.setTextColor(0xFFFFFFFF);
-            radioView.setPadding(0, 0, (int) (12 * density), 0);
-            row.addView(radioView);
-
-            // === MODIFIKASI: hanya nama, tanpa subtitle ===
+            // === MODIFIKASI: tanpa radio; kategori aktif ditandai teks biru ===
             TextView rowTitle = new TextView(this);
             rowTitle.setText(opt.title);
             rowTitle.setTextSize(16);
-            rowTitle.setTextColor(0xFFFFFFFF);
+            rowTitle.setTextColor(isActive ? 0xFF64D2FF : 0xFFFFFFFF);
+            rowTitle.setSingleLine(true);
+            rowTitle.setEllipsize(TextUtils.TruncateAt.END);
             rowTitle.setTypeface(getResources().getFont(R.font.inter), Typeface.BOLD);
             rowTitle.setFontVariationSettings("'wght' 700");
             rowTitle.setShadowLayer(3 * density, 0, 1 * density, 0xCC000000);
@@ -3057,6 +3047,7 @@ public class MainActivity extends Activity implements AppAdapter.TileListener {
 
             final String chosenKey = opt.key;
             row.setOnClickListener(v -> {
+                if (android.os.SystemClock.uptimeMillis() - openedAt < 400) return;
                 if (dialogHolder[0] != null) dialogHolder[0].dismiss();
                 SoundEffects.playSelect();
                 if ("NEXT".equals(chosenKey)) {
@@ -3071,8 +3062,7 @@ public class MainActivity extends Activity implements AppAdapter.TileListener {
                 }
             });
 
-            LinearLayout.LayoutParams rlp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-            rlp.bottomMargin = (int) (5 * density);
+            LinearLayout.LayoutParams rlp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, (int) (42 * density));
             list.addView(row, rlp);
 
             if (isActive && viewToFocus[0] == null) {
@@ -3084,7 +3074,7 @@ public class MainActivity extends Activity implements AppAdapter.TileListener {
         layout.addView(scroll, new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 0, 1f));
 
         // === MODIFIKASI: tombol Tutup dihilangkan, dialog ditutup via tombol Back ===
-        AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.Theme_TvHome_GlassDialog);
+        AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.Theme_TvHome_GlassDialog_SemiTransparent);
         builder.setView(layout);
         // builder.setNegativeButton("Tutup", ...) — DIHAPUS
         AlertDialog dialog = builder.create();
@@ -3093,10 +3083,48 @@ public class MainActivity extends Activity implements AppAdapter.TileListener {
         styleGlassDialog(dialog);
 
         if (dialog.getWindow() != null) {
-            int w = Math.min((int) (520 * density), getResources().getDisplayMetrics().widthPixels - (int) (120 * density));
-            int h = Math.min((int) (430 * density), (int) (getResources().getDisplayMetrics().heightPixels * 0.75f));
-            dialog.getWindow().setLayout(w, h);
-            // === MODIFIKASI: dialog di tengah (default), tidak di kanan ===
+            // Same size and place as the launcher's menu panel: the dropdown that opens under the
+            // Candy Box pill, with no dimmed backdrop. Opened from that menu, the panel simply
+            // stays where the menu was.
+            View anchor = btnCandyBox != null ? btnCandyBox : findViewById(R.id.btnSettings);
+            int width = menuPanelWidth;
+            int height = menuPanelHeight;
+            int left = 0;
+            int top = 0;
+            if (anchor != null) {
+                int[] at = new int[2];
+                anchor.getLocationOnScreen(at);
+                int gap = (int) (10 * density);
+                int sideMargin = Math.round(56 * density);
+                int screenW = getResources().getDisplayMetrics().widthPixels;
+                int screenH = getResources().getDisplayMetrics().heightPixels;
+                int rightLimit = screenW - sideMargin;
+                View settingsBtn = topSettings != null ? topSettings : findViewById(R.id.btnSettings);
+                if (settingsBtn != null && settingsBtn.getWidth() > 0) {
+                    int[] setAt = new int[2];
+                    settingsBtn.getLocationOnScreen(setAt);
+                    rightLimit = setAt[0] + settingsBtn.getWidth();
+                }
+                if (width <= 0) {
+                    layout.measure(View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED),
+                            View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
+                    width = Math.min((int) (400 * density),
+                            Math.max((int) (230 * density), layout.getMeasuredWidth()));
+                }
+                left = Math.max(sideMargin, Math.min(at[0], rightLimit - width));
+                top = at[1] + anchor.getHeight() + gap;
+                int maxHeight = screenH - top - Math.round(24 * density);
+                if (height <= 0) {
+                    height = Math.min((int) (430 * density), (int) (screenH * 0.75f));
+                }
+                height = Math.min(height, maxHeight);
+            }
+            dialog.getWindow().setLayout(width, height);
+            android.view.WindowManager.LayoutParams lp = dialog.getWindow().getAttributes();
+            lp.gravity = Gravity.TOP | Gravity.START;
+            lp.x = left;
+            lp.y = top;
+            dialog.getWindow().setAttributes(lp);
         }
 
         if (viewToFocus[0] != null) {
@@ -4863,6 +4891,8 @@ public class MainActivity extends Activity implements AppAdapter.TileListener {
     private View openMenu;
     private View menuAnchor;
     private final int[] menuAt = new int[2], menuGliderAt = new int[2];
+    /** Size of the last menu panel opened, so the wallpaper panel can take the same one. */
+    private int menuPanelWidth, menuPanelHeight;
 
     /**
      * Menu under the Inputs pill: HDMI ports (with connection state), AV and Live TV. It is drawn in
@@ -4986,6 +5016,12 @@ public class MainActivity extends Activity implements AppAdapter.TileListener {
         root.addView(panel, lp);
         openMenu = panel;
         menuAnchor = anchor;
+        // Remember the panel's shape: the wallpaper selector opens from one of these menus and is
+        // drawn in the same place and at the same size.
+        menuPanelWidth = width;
+        panel.post(() -> {
+            if (panel.getHeight() > 0) menuPanelHeight = panel.getHeight();
+        });
 
         // Focus stays strictly inside the menu rows until it closes.
         final List<View> focusableRows = new ArrayList<>();
@@ -5082,6 +5118,7 @@ public class MainActivity extends Activity implements AppAdapter.TileListener {
         float t = panel.getTop() + rows.getTop() + row.getTop() - glider.getTop();
         gliderOnPill = true;
         glider.setStyle(Glider.DARK);
+        glider.setDarkAlpha(Glider.FOCUS_ALPHA);
         glider.moveTo(l, t, l + row.getWidth(), t + row.getHeight(), 13 * density);
     }
 
