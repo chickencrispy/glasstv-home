@@ -836,6 +836,14 @@ public class MainActivity extends Activity implements AppAdapter.TileListener {
                 showNowPlayingDialog();
             }, 100);
         }
+        // Each start asks for a panel once: were Home rebuilt later, its saved start intent would
+        // otherwise open the same panel again.
+        if (getIntent() != null) {
+            getIntent().removeExtra("open_settings");
+            getIntent().removeExtra("open_candy_box");
+            getIntent().removeExtra("open_wallpaper");
+            getIntent().removeExtra("open_now_playing");
+        }
     }
 
     /**
@@ -2942,12 +2950,16 @@ public class MainActivity extends Activity implements AppAdapter.TileListener {
     }
 
     private Dialog qrUploadDialog;
+    /** The wallpaper selector while it is up; see {@link #showMenu} for why it matters there. */
+    private AlertDialog wallpaperDialog;
     private WallpaperUploadServer uploadServer;
     private ImageView qrImageView;
     private TextView qrStatusText;
     private TextView qrUrlText;
 
     private void showWallpaperDialog() {
+        // Already up: a second request would put a second panel on the first.
+        if (wallpaperDialog != null && wallpaperDialog.isShowing()) return;
         File customDir = new File(getFilesDir(), "custom_wallpapers");
         File[] customFiles = customDir.listFiles((dir, name) -> name.endsWith(".jpg") || name.endsWith(".png") || name.endsWith(".jpeg"));
         int customCount = (customFiles != null) ? customFiles.length : 0;
@@ -3079,7 +3091,15 @@ public class MainActivity extends Activity implements AppAdapter.TileListener {
         // builder.setNegativeButton("Tutup", ...) — DIHAPUS
         AlertDialog dialog = builder.create();
         dialogHolder[0] = dialog;
+        dialog.setOnDismissListener(d -> {
+            if (wallpaperDialog == d) wallpaperDialog = null;
+            // On this TV a key sent while the panel takes focus can still reach the launcher
+            // behind it, where the Candy Box pill is focused: that built a menu hidden behind
+            // the panel, which then looked as if Back had opened the menu. Drop any such menu.
+            closeMenu(false);
+        });
         dialog.show();
+        wallpaperDialog = dialog;
         styleGlassDialog(dialog);
 
         if (dialog.getWindow() != null) {
@@ -4990,6 +5010,9 @@ public class MainActivity extends Activity implements AppAdapter.TileListener {
      * the menu is above), or Back, closes it and the shape glides back to the anchor.
      */
     private void showMenu(FrameLayout panel, LinearLayout rows, View anchor, int width, boolean above) {
+        // The wallpaper selector is up: keys meant for it can still land on the launcher behind it,
+        // and a menu built there would only show once the panel closes, as if Back had opened it.
+        if (wallpaperDialog != null && wallpaperDialog.isShowing()) return;
         GlassDrawable glass = new GlassDrawable(panel, 20 * density, density, glider, 0.5f, true);
         panel.setBackground(glass);
         Backdrop.watch(panel);
