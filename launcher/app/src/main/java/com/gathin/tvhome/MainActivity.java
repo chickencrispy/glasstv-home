@@ -3967,11 +3967,6 @@ public class MainActivity extends Activity implements AppAdapter.TileListener {
 
     private void updateNightstandScreensaver() {
         if (screensaverView == null) return;
-        TextView hijri = screensaverView.findViewById(R.id.nightstandHijri);
-        if (hijri != null) hijri.setVisibility(View.GONE);
-
-        TextView prayer = screensaverView.findViewById(R.id.nightstandPrayer);
-        if (prayer != null) prayer.setVisibility(View.GONE);
 
         // Center locked strictly with no movement
         View content = screensaverView.findViewById(R.id.nightstandContent);
@@ -3991,31 +3986,19 @@ public class MainActivity extends Activity implements AppAdapter.TileListener {
         TextView date = screensaverView.findViewById(R.id.nightstandDate);
         TextView hint = screensaverView.findViewById(R.id.nightstandHint);
 
+        // The date view is a plain TextView: fill it in the Indonesian way, e.g. "Senin, 2 November 2026".
+        if (date != null) date.setText(ClockDream.indonesianDate(cal));
+
         if (isNightMode) {
             int red = 0xFFFF453A;
             if (clock != null) clock.setTextColor(red);
             if (ampm != null) ampm.setTextColor(0xCCFF453A);
             if (date != null) date.setTextColor(0xE6FF453A);
-            if (hijri != null) hijri.setTextColor(0xE6FF453A);
-            if (prayer != null) {
-                prayer.setTextColor(red);
-                android.graphics.drawable.GradientDrawable redPill = new android.graphics.drawable.GradientDrawable();
-                redPill.setShape(android.graphics.drawable.GradientDrawable.RECTANGLE);
-                redPill.setColor(0x26FF453A);
-                redPill.setStroke((int) (1 * density), 0x59FF453A);
-                redPill.setCornerRadius(21 * density);
-                prayer.setBackground(redPill);
-            }
             if (hint != null) hint.setTextColor(0x55FF453A);
         } else {
             if (clock != null) clock.setTextColor(0xFFFFFFFF);
             if (ampm != null) ampm.setTextColor(0xB3FFFFFF);
             if (date != null) date.setTextColor(0xE6FFFFFF);
-            if (hijri != null) hijri.setTextColor(0xD9E6E0D2);
-            if (prayer != null) {
-                prayer.setTextColor(0xFFFFFFFF);
-                prayer.setBackgroundResource(R.drawable.pill_bg);
-            }
             if (hint != null) hint.setTextColor(0x4DFFFFFF);
         }
     }
