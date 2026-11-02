@@ -2,6 +2,6 @@
   "versionCode": 22,
   "versionName": "3.3.1-id",
   "apkUrl": "https://github.com/chickencrispy/glasstv-home/releases/latest/download/glass-tv-home.apk",
-  "changelog": "Merge branch 'main' of https://github.com/chickencrispy/glasstv-home",
+  "changelog": "fix: restore launcher build and show Indonesian date on nightstand",
   "releaseDate": "2026-11-02"
 }
