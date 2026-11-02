@@ -4241,23 +4241,29 @@ public class MainActivity extends Activity implements AppAdapter.TileListener {
         overlay.setFocusable(false);
         overlay.setOnClickListener(v -> closeAppDrawer(true));
 
-        int maxW = Math.min(Math.round(860 * density), root.getWidth() - Math.round(72 * density));
-        int maxH = Math.min(Math.round(496 * density), root.getHeight() - Math.round(64 * density));
+        int rootW = root.getWidth() > 0 ? root.getWidth() : getResources().getDisplayMetrics().widthPixels;
+        int rootH = root.getHeight() > 0 ? root.getHeight() : getResources().getDisplayMetrics().heightPixels;
+        int insetH = Math.round(24 * density);
+        int insetV = Math.round(18 * density);
+        int maxW = rootW - (insetH * 2);
+        int maxH = rootH - (insetV * 2);
 
         LinearLayout panel = new LinearLayout(this);
         panel.setOrientation(LinearLayout.VERTICAL);
         panel.setClickable(true);
         panel.setClipChildren(true);
         panel.setClipToPadding(true);
-        int padH = Math.round(22 * density);
-        int padV = Math.round(16 * density);
+        int padH = Math.round(32 * density);
+        int padV = Math.round(22 * density);
         panel.setPadding(padH, padV, padH, padV);
 
         GlassDrawable glassBg = new GlassDrawable(panel, 26 * density, density, null, 0.45f);
         panel.setBackground(glassBg);
         Backdrop.watch(panel);
 
-        FrameLayout.LayoutParams panelLp = new FrameLayout.LayoutParams(maxW, maxH, Gravity.CENTER);
+        FrameLayout.LayoutParams panelLp = new FrameLayout.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT, Gravity.CENTER);
+        panelLp.setMargins(insetH, insetV, insetH, insetV);
         overlay.addView(panel, panelLp);
 
         // Header Row
@@ -4267,7 +4273,7 @@ public class MainActivity extends Activity implements AppAdapter.TileListener {
 
         TextView titleView = new TextView(this);
         titleView.setText("Semua Aplikasi");
-        titleView.setTextSize(18.5f);
+        titleView.setTextSize(21f);
         titleView.setTextColor(0xFFFFFFFF);
         titleView.setTypeface(getResources().getFont(R.font.inter), Typeface.BOLD);
         titleView.setFontVariationSettings("'wght' 700");
@@ -4276,7 +4282,7 @@ public class MainActivity extends Activity implements AppAdapter.TileListener {
 
         TextView subView = new TextView(this);
         subView.setText(appList.size() + " Aplikasi  •  Tahan OK untuk Info / Uninstall");
-        subView.setTextSize(12f);
+        subView.setTextSize(12.5f);
         subView.setTextColor(0xCCFFFFFF);
         subView.setTypeface(getResources().getFont(R.font.inter), Typeface.BOLD);
         subView.setFontVariationSettings("'wght' 600");
@@ -4303,16 +4309,17 @@ public class MainActivity extends Activity implements AppAdapter.TileListener {
         gridRows.setOrientation(LinearLayout.VERTICAL);
         gridRows.setClipChildren(false);
         gridRows.setClipToPadding(false);
-        int gridPad = Math.round(6 * density);
+        int gridPad = Math.round(10 * density);
         gridRows.setPadding(gridPad, gridPad, gridPad, gridPad);
 
-        final int COLS = 6;
         final List<View> cells = new ArrayList<>();
         final int total = appList.size();
+
+        int cellMargin = Math.round(10 * density);
+        int innerW = maxW - (padH * 2) - (gridPad * 2);
+        final int COLS = 6;
         int rowCount = (total + COLS - 1) / COLS;
 
-        int cellMargin = Math.round(5 * density);
-        int innerW = maxW - (padH * 2) - (gridPad * 2);
         int cardW = Math.max(Math.round(80 * density), (innerW / COLS) - (cellMargin * 2));
         int cardH = Math.round(cardW * 101f / 180f);
         final float cardRadius = 11f * density;
@@ -4388,7 +4395,7 @@ public class MainActivity extends Activity implements AppAdapter.TileListener {
 
                 TextView nameView = new TextView(this);
                 nameView.setText(item.label);
-                nameView.setTextSize(11.5f);
+                nameView.setTextSize(12f);
                 nameView.setTextColor(0xB3FFFFFF);
                 nameView.setTypeface(getResources().getFont(R.font.inter), Typeface.BOLD);
                 nameView.setFontVariationSettings("'wght' 650");

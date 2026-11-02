@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- The module card prompt: who is asking (app label, package, signing key) and two buttons.
-     Keep hidden is focused first; Back means Keep hidden too. -->
+<!--The module card prompt: who is asking (app label, package, signing key) and two buttons.
+    Keep hidden is focused first; Back means Keep hidden too. -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
