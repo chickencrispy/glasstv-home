@@ -1,7 +1,7 @@
 {
   "versionCode": 21,
   "versionName": "3.3.0-id",
-  "apkUrl": "https://github.com/luthpunk/glass-tv-home/releases/latest/download/glass-tv-home.apk",
-  "changelog": "feat: dynamic 16:9 solid banners for sideloaded apps, Indonesian city search, Anime 4K & OLED wallpapers (v3.3.0-id)",
-  "releaseDate": "2026-11-01"
+  "apkUrl": "https://github.com/chickencrispy/glasstv-home/releases/latest/download/glass-tv-home.apk",
+  "changelog": "Refactor font usage across layouts to use Inter font instead of Outfit font",
+  "releaseDate": "2026-11-02"
 }
