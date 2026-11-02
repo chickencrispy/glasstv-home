@@ -2,6 +2,6 @@
   "versionCode": 21,
   "versionName": "3.3.0-id",
   "apkUrl": "https://github.com/chickencrispy/glasstv-home/releases/latest/download/glass-tv-home.apk",
-  "changelog": "Refactor font usage across layouts to use Inter font instead of Outfit font",
+  "changelog": "Merge branch 'main' of https://github.com/chickencrispy/glasstv-home",
   "releaseDate": "2026-11-02"
 }
