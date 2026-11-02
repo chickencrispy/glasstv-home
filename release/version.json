@@ -2,6 +2,6 @@
   "versionCode": 22,
   "versionName": "3.3.1-id",
   "apkUrl": "https://github.com/chickencrispy/glasstv-home/releases/latest/download/glass-tv-home.apk",
-  "changelog": "fix: don't build the launcher menu behind the wallpaper panel",
+  "changelog": "feat: give the weather-location panel the menu panel's glass and size",
   "releaseDate": "2026-11-02"
 }
