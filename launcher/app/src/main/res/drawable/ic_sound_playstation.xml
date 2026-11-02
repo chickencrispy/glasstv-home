@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- The PlayStation logo, from PlayStation-Logo.wine.svg (viewBox -29.7 -38.20475 257.4
+     229.2285), drawn white like the panel's other row icons and sized to sit in a 24dp
+     viewport as the line icons do. The source's registered-trademark dot is left out. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="22dp" android:height="22dp"
+    android:viewportWidth="24" android:viewportHeight="24">
+    <group
+        android:translateX="2.75"
+        android:translateY="4.861"
+        android:scaleX="0.093434"
+        android:scaleY="0.093434">
+        <path
+            android:fillColor="#FFFFFFFF"
+            android:fillType="evenOdd"
+            android:pathData="M196.24 116.962c-3.869 4.88-13.344 8.36-13.344 8.36l-70.492 25.32V131.97l51.877-18.484c5.887-2.11 6.791-5.091 2.006-6.657-4.776-1.57-13.425-1.12-19.316.999l-34.567 12.174v-19.379l1.993-.674s9.988-3.535 24.034-5.091c14.045-1.547 31.242.211 44.743 5.329 15.215 4.808 16.928 11.895 13.065 16.775zm-77.125-31.796V37.413c0-5.608-1.035-10.77-6.297-12.232-4.03-1.291-6.53 2.45-6.53 8.054V152.82l-32.25-10.236V0c13.712 2.545 33.69 8.563 44.429 12.183 27.312 9.377 36.572 21.048 36.572 47.344 0 25.63-15.821 35.344-35.924 25.639zM14.862 130.018c-15.62-4.399-18.219-13.564-11.1-18.844 6.58-4.875 17.77-8.545 17.77-8.545l46.241-16.442v18.745L34.497 116.84c-5.878 2.109-6.782 5.095-2.005 6.66 4.78 1.565 13.433 1.12 19.32-.994l15.961-5.792v16.77c-1.012.18-2.14.36-3.184.535-15.966 2.609-32.97 1.52-49.727-4.002z" />
+    </group>
+</vector>

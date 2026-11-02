@@ -2470,6 +2470,14 @@ public class MainActivity extends Activity implements AppAdapter.TileListener {
                 SoundEffects.THEME_OFF
         };
 
+        // One white vector per choice, sized and spaced like the launcher menu's row icons.
+        final int[] soundIcons = new int[]{
+                R.drawable.ic_sound_playstation,
+                R.drawable.ic_sound_switch,
+                R.drawable.ic_sound_xbox,
+                R.drawable.ic_sound_off
+        };
+
         String currentTheme = SoundEffects.getActiveTheme(this);
         int selectedIndex = 0;
         for (int i = 0; i < soundKeys.length; i++) {
@@ -2531,7 +2539,20 @@ public class MainActivity extends Activity implements AppAdapter.TileListener {
             rowTitle.setTypeface(getResources().getFont(R.font.inter), Typeface.BOLD);
             rowTitle.setFontVariationSettings("'wght' 700");
             rowTitle.setShadowLayer(3 * density, 0, 1 * density, 0xCC000000);
-            row.addView(rowTitle, new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1f));
+
+            // Same icon size and spacing as item_input.xml, the menu's own rows.
+            ImageView rowIcon = new ImageView(this);
+            rowIcon.setImageResource(soundIcons[i]);
+            rowIcon.setScaleType(ImageView.ScaleType.CENTER);
+            rowIcon.setContentDescription(null);
+            LinearLayout.LayoutParams iconLp = new LinearLayout.LayoutParams(
+                    Math.round(20 * density), Math.round(20 * density));
+            LinearLayout.LayoutParams titleLp = new LinearLayout.LayoutParams(
+                    0, ViewGroup.LayoutParams.WRAP_CONTENT, 1f);
+            titleLp.setMarginStart(Math.round(10 * density));
+            titleLp.setMarginEnd(Math.round(12 * density));
+            row.addView(rowIcon, iconLp);
+            row.addView(rowTitle, titleLp);
 
             row.setOnClickListener(v -> {
                 if (android.os.SystemClock.uptimeMillis() - openedAt < 400) return;
