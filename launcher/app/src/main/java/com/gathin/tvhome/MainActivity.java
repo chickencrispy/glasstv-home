@@ -2352,14 +2352,18 @@ public class MainActivity extends Activity implements AppAdapter.TileListener {
         else if (hour >= 15 && hour < 18) period = "SORE";
         else period = "MALAM";
 
+        int dayOfWeek = cal.get(Calendar.DAY_OF_WEEK);
+        String[] idDays = {"Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"};
+        String dayName = (dayOfWeek >= 1 && dayOfWeek <= 7) ? idDays[dayOfWeek - 1] : "";
+
         int day = cal.get(Calendar.DAY_OF_MONTH);
         int month = cal.get(Calendar.MONTH);
         int year = cal.get(Calendar.YEAR);
-        String[] idMonths = {"JAN", "FEB", "MAR", "APR", "MEI", "JUN", "JUL", "AGU", "SEP", "OKT", "NOV", "DES"};
+        String[] idMonths = {"Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"};
         String mStr = (month >= 0 && month < 12) ? idMonths[month] : "";
         String dateStr = day + " " + mStr + " " + year;
 
-        if (ampmView != null) ampmView.setText(period);
+        if (ampmView != null) ampmView.setText(dayName);
         if (dateView != null) dateView.setText(dateStr);
     }
 
@@ -2658,7 +2662,7 @@ public class MainActivity extends Activity implements AppAdapter.TileListener {
         titleView.setText("🕌 Tetapan & Pilihan Azan");
         titleView.setTextSize(19);
         titleView.setTextColor(0xFFFFFFFF);
-        titleView.setTypeface(getResources().getFont(R.font.outfit), Typeface.BOLD);
+        titleView.setTypeface(getResources().getFont(R.font.inter), Typeface.BOLD);
         titleView.setFontVariationSettings("'wght' 700");
         titleView.setShadowLayer(4 * density, 0, 1 * density, 0xDD000000);
         titleCol.addView(titleView);
@@ -2667,7 +2671,7 @@ public class MainActivity extends Activity implements AppAdapter.TileListener {
         subView.setText("Notifikasi popup kad kaca terapung di atas semua aplikasi & tetapan audio azan");
         subView.setTextSize(12.5f);
         subView.setTextColor(0xD9FFFFFF);
-        subView.setTypeface(getResources().getFont(R.font.outfit), Typeface.BOLD);
+        subView.setTypeface(getResources().getFont(R.font.inter), Typeface.BOLD);
         subView.setFontVariationSettings("'wght' 600");
         subView.setShadowLayer(3 * density, 0, 1 * density, 0xCC000000);
         subView.setPadding(0, (int) (2 * density), 0, 0);
@@ -2786,7 +2790,7 @@ public class MainActivity extends Activity implements AppAdapter.TileListener {
         );
         soundTag.setText("TUKAR ❯");
         soundTag.setTextSize(12.5f);
-        soundTag.setTypeface(getResources().getFont(R.font.outfit), Typeface.BOLD);
+        soundTag.setTypeface(getResources().getFont(R.font.inter), Typeface.BOLD);
         soundTag.setFontVariationSettings("'wght' 700");
         soundTag.setTextColor(new ColorStateList(new int[][]{{android.R.attr.state_focused}, {}}, new int[]{0xFF000000, 0xFF38BDF8}));
         rightCol.addView(soundRow);
@@ -2810,7 +2814,7 @@ public class MainActivity extends Activity implements AppAdapter.TileListener {
         );
         testTag.setText("UJI ▶");
         testTag.setTextSize(13);
-        testTag.setTypeface(getResources().getFont(R.font.outfit), Typeface.BOLD);
+        testTag.setTypeface(getResources().getFont(R.font.inter), Typeface.BOLD);
         testTag.setFontVariationSettings("'wght' 700");
         testTag.setTextColor(new ColorStateList(new int[][]{{android.R.attr.state_focused}, {}}, new int[]{0xFF000000, 0xFF38BDF8}));
         rightCol.addView(testRow);
@@ -2829,7 +2833,7 @@ public class MainActivity extends Activity implements AppAdapter.TileListener {
         infoText.setText("💡 Waktu solat diselaraskan secara automatik mengikut zon JAKIM. Kad azan tetap muncul di atas Netflix, YouTube & Perfect TV.");
         infoText.setTextSize(11f);
         infoText.setTextColor(0xB3FFFFFF);
-        infoText.setTypeface(getResources().getFont(R.font.outfit), Typeface.NORMAL);
+        infoText.setTypeface(getResources().getFont(R.font.inter), Typeface.NORMAL);
         infoText.setFontVariationSettings("'wght' 500");
         infoText.setLineSpacing(0, 1.25f);
         infoCard.addView(infoText);
@@ -2854,7 +2858,7 @@ public class MainActivity extends Activity implements AppAdapter.TileListener {
         );
         closeTag.setText("TUTUP");
         closeTag.setTextSize(12.5f);
-        closeTag.setTypeface(getResources().getFont(R.font.outfit), Typeface.BOLD);
+        closeTag.setTypeface(getResources().getFont(R.font.inter), Typeface.BOLD);
         closeTag.setFontVariationSettings("'wght' 700");
         closeTag.setTextColor(new ColorStateList(new int[][]{{android.R.attr.state_focused}, {}}, new int[]{0xFF000000, 0x88FFFFFF}));
         rightCol.addView(closeRow);
@@ -2942,7 +2946,7 @@ public class MainActivity extends Activity implements AppAdapter.TileListener {
     private void updateMasterTag(TextView tag, boolean on) {
         tag.setText(on ? "ON" : "OFF");
         tag.setTextSize(13);
-        tag.setTypeface(getResources().getFont(R.font.outfit), Typeface.NORMAL);
+        tag.setTypeface(getResources().getFont(R.font.inter), Typeface.NORMAL);
         tag.setFontVariationSettings(on ? "'wght' 700" : "'wght' 600");
         int color = on ? 0xFF38BDF8 : 0x99FFFFFF;
         tag.setTextColor(new ColorStateList(new int[][]{{android.R.attr.state_focused}, {}}, new int[]{0xFF000000, color}));
@@ -2951,7 +2955,7 @@ public class MainActivity extends Activity implements AppAdapter.TileListener {
     private void updatePrayerTag(TextView tag, boolean on) {
         tag.setText(on ? "ON" : "OFF");
         tag.setTextSize(13);
-        tag.setTypeface(getResources().getFont(R.font.outfit), Typeface.NORMAL);
+        tag.setTypeface(getResources().getFont(R.font.inter), Typeface.NORMAL);
         tag.setFontVariationSettings(on ? "'wght' 700" : "'wght' 600");
         int color = on ? 0xFF38BDF8 : 0x99FFFFFF;
         tag.setTextColor(new ColorStateList(new int[][]{{android.R.attr.state_focused}, {}}, new int[]{0xFF000000, color}));
@@ -2962,7 +2966,7 @@ public class MainActivity extends Activity implements AppAdapter.TileListener {
         tv.setText(title);
         tv.setTextSize(11.5f);
         tv.setTextColor(0xFF38BDF8);
-        tv.setTypeface(getResources().getFont(R.font.outfit), Typeface.BOLD);
+        tv.setTypeface(getResources().getFont(R.font.inter), Typeface.BOLD);
         tv.setFontVariationSettings("'wght' 700");
         tv.setLetterSpacing(0.08f);
         tv.setPadding(0, (int) (6 * density), 0, (int) (3 * density));
@@ -2998,7 +3002,7 @@ public class MainActivity extends Activity implements AppAdapter.TileListener {
         rowTitle.setText(title);
         rowTitle.setTextSize(15);
         rowTitle.setTextColor(new ColorStateList(new int[][]{{android.R.attr.state_focused}, {}}, new int[]{0xFF000000, 0xFFFFFFFF}));
-        rowTitle.setTypeface(getResources().getFont(R.font.outfit), Typeface.BOLD);
+        rowTitle.setTypeface(getResources().getFont(R.font.inter), Typeface.BOLD);
         rowTitle.setFontVariationSettings("'wght' 700");
         rowTitle.setShadowLayer(3 * density, 0, 1 * density, 0xCC000000);
         rowTitle.setDuplicateParentStateEnabled(true);
@@ -3016,7 +3020,7 @@ public class MainActivity extends Activity implements AppAdapter.TileListener {
             rowSub.setText(subtitle);
             rowSub.setTextSize(12.5f);
             rowSub.setTextColor(new ColorStateList(new int[][]{{android.R.attr.state_focused}, {}}, new int[]{0xFF1E293B, 0xD9FFFFFF}));
-            rowSub.setTypeface(getResources().getFont(R.font.outfit), Typeface.BOLD);
+            rowSub.setTypeface(getResources().getFont(R.font.inter), Typeface.BOLD);
             rowSub.setFontVariationSettings("'wght' 600");
             rowSub.setShadowLayer(2 * density, 0, 1 * density, 0xAA000000);
             rowSub.setPadding(0, (int) (2 * density), 0, 0);
@@ -3466,26 +3470,26 @@ public class MainActivity extends Activity implements AppAdapter.TileListener {
         layout.setOrientation(LinearLayout.VERTICAL);
         layout.setPadding((int) (20 * density), (int) (16 * density), (int) (20 * density), (int) (12 * density));
 
-        // Header Title
+        // === MODIFIKASI: Background dialog transparan gaya glass ===
+        GradientDrawable dialogBg = new GradientDrawable();
+        dialogBg.setColor(0x4D000000); // 30% hitam transparan
+        dialogBg.setCornerRadius(20 * density);
+        dialogBg.setStroke((int) (1 * density), 0x33FFFFFF);
+        layout.setBackground(dialogBg);
+
+        // Header Title (dikembalikan) + padding bawah 16dp sebagai jarak ke list
         TextView titleView = new TextView(this);
         titleView.setText("🖼️ Pilih Koleksi Wallpaper 4K");
         titleView.setTextSize(19);
         titleView.setTextColor(0xFFFFFFFF);
-        titleView.setTypeface(getResources().getFont(R.font.outfit), Typeface.BOLD);
+        titleView.setTypeface(getResources().getFont(R.font.inter), Typeface.BOLD);
         titleView.setFontVariationSettings("'wght' 700");
         titleView.setShadowLayer(4 * density, 0, 1 * density, 0xDD000000);
+        titleView.setPadding(0, 0, 0, (int) (16 * density)); // === MODIFIKASI: jarak ke list ===
         layout.addView(titleView);
 
-        // Header Subtitle
-        TextView subView = new TextView(this);
-        subView.setText("Pexels & Unsplash CDN • Resolusi Ultra HD 3840×2160");
-        subView.setTextSize(13.5f);
-        subView.setTextColor(0xE6FFFFFF);
-        subView.setTypeface(getResources().getFont(R.font.outfit), Typeface.BOLD);
-        subView.setFontVariationSettings("'wght' 600");
-        subView.setShadowLayer(3 * density, 0, 1 * density, 0xCC000000);
-        subView.setPadding(0, (int) (3 * density), 0, (int) (12 * density));
-        layout.addView(subView);
+        // Header Subtitle — === MODIFIKASI: disembunyikan ===
+        // (kode asli dihapus, tidak ditampilkan)
 
         ScrollView scroll = new ScrollView(this);
         scroll.setVerticalScrollBarEnabled(false);
@@ -3500,59 +3504,45 @@ public class MainActivity extends Activity implements AppAdapter.TileListener {
             boolean isActive = opt.key.equalsIgnoreCase(currentKey) || (opt.key.equals("Indonesia") && (currentKey.startsWith("Indonesia") || currentKey.startsWith("Malaysia")));
 
             LinearLayout row = new LinearLayout(this);
-            row.setOrientation(LinearLayout.VERTICAL);
+            row.setOrientation(LinearLayout.HORIZONTAL); // === MODIFIKASI: horizontal untuk radio + teks ===
+            row.setGravity(Gravity.CENTER_VERTICAL);
             row.setFocusable(true);
             row.setClickable(true);
-            row.setPadding((int) (16 * density), (int) (9 * density), (int) (16 * density), (int) (9 * density));
+            row.setPadding((int) (16 * density), (int) (12 * density), (int) (16 * density), (int) (12 * density));
 
-            StateListDrawable bg = new StateListDrawable();
-            GradientDrawable on = new GradientDrawable();
-            on.setColor(0xFFFFFFFF);
-            on.setCornerRadius(10 * density);
-            GradientDrawable off = new GradientDrawable();
-            off.setColor(isActive ? 0x334A90E2 : 0x1AFFFFFF);
-            if (isActive) {
-                off.setStroke((int) (1.8f * density), 0xFF38BDF8);
-            }
-            off.setCornerRadius(10 * density);
-            bg.addState(new int[]{android.R.attr.state_focused}, on);
-            bg.addState(new int[]{}, off);
-            row.setBackground(bg);
+            // === MODIFIKASI: background transparan, highlight via focus listener ===
+            row.setBackground(null);
+            row.setOnFocusChangeListener((v, hasFocus) -> {
+                if (hasFocus) {
+                    GradientDrawable focusedBg = new GradientDrawable();
+                    focusedBg.setColor(0x99000000); // gelap seperti menu config
+                    focusedBg.setCornerRadius(10 * density);
+                    v.setBackground(focusedBg);
+                } else {
+                    v.setBackground(null);
+                }
+            });
 
-            // Row horizontal container for Title + Active tag
-            LinearLayout topRow = new LinearLayout(this);
-            topRow.setOrientation(LinearLayout.HORIZONTAL);
-            topRow.setGravity(Gravity.CENTER_VERTICAL);
+            // === MODIFIKASI: Radio button (◉ aktif / ○ non-aktif) ===
+            TextView radioView = new TextView(this);
+            radioView.setText(isActive ? "◉" : "○");
+            radioView.setTextSize(18);
+            radioView.setTextColor(0xFFFFFFFF);
+            radioView.setPadding(0, 0, (int) (12 * density), 0);
+            row.addView(radioView);
 
+            // === MODIFIKASI: hanya nama, tanpa subtitle ===
             TextView rowTitle = new TextView(this);
             rowTitle.setText(opt.title);
             rowTitle.setTextSize(16);
-            rowTitle.setTextColor(new ColorStateList(new int[][]{{android.R.attr.state_focused}, {}}, new int[]{0xFF000000, 0xFFFFFFFF}));
-            rowTitle.setTypeface(getResources().getFont(R.font.outfit), Typeface.BOLD);
+            rowTitle.setTextColor(0xFFFFFFFF);
+            rowTitle.setTypeface(getResources().getFont(R.font.inter), Typeface.BOLD);
             rowTitle.setFontVariationSettings("'wght' 700");
             rowTitle.setShadowLayer(3 * density, 0, 1 * density, 0xCC000000);
-            topRow.addView(rowTitle, new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1f));
+            row.addView(rowTitle, new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1f));
 
-            if (isActive) {
-                TextView activeTag = new TextView(this);
-                activeTag.setText("✓ Aktif");
-                activeTag.setTextSize(13);
-                activeTag.setTextColor(new ColorStateList(new int[][]{{android.R.attr.state_focused}, {}}, new int[]{0xFF000000, 0xFF38BDF8}));
-                activeTag.setTypeface(getResources().getFont(R.font.outfit), Typeface.BOLD);
-                activeTag.setFontVariationSettings("'wght' 700");
-                topRow.addView(activeTag);
-            }
-            row.addView(topRow);
-
-            TextView rowSub = new TextView(this);
-            rowSub.setText(opt.subtitle);
-            rowSub.setTextSize(13);
-            rowSub.setTextColor(new ColorStateList(new int[][]{{android.R.attr.state_focused}, {}}, new int[]{0xFF222222, 0xD9FFFFFF}));
-            rowSub.setTypeface(getResources().getFont(R.font.outfit), Typeface.BOLD);
-            rowSub.setFontVariationSettings("'wght' 600");
-            rowSub.setShadowLayer(2 * density, 0, 1 * density, 0xAA000000);
-            rowSub.setPadding(0, (int) (2 * density), 0, 0);
-            row.addView(rowSub);
+            // === MODIFIKASI: badge "✓ Aktif" dihapus (diganti radio button) ===
+            // === MODIFIKASI: subtitle item dihapus ===
 
             final String chosenKey = opt.key;
             row.setOnClickListener(v -> {
@@ -3582,9 +3572,10 @@ public class MainActivity extends Activity implements AppAdapter.TileListener {
         scroll.addView(list);
         layout.addView(scroll, new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 0, 1f));
 
+        // === MODIFIKASI: tombol Tutup dihilangkan, dialog ditutup via tombol Back ===
         AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.Theme_TvHome_GlassDialog);
         builder.setView(layout);
-        builder.setNegativeButton("Tutup", (d, w) -> d.dismiss());
+        // builder.setNegativeButton("Tutup", ...) — DIHAPUS
         AlertDialog dialog = builder.create();
         dialogHolder[0] = dialog;
         dialog.show();
@@ -3594,6 +3585,7 @@ public class MainActivity extends Activity implements AppAdapter.TileListener {
             int w = Math.min((int) (520 * density), getResources().getDisplayMetrics().widthPixels - (int) (120 * density));
             int h = Math.min((int) (430 * density), (int) (getResources().getDisplayMetrics().heightPixels * 0.75f));
             dialog.getWindow().setLayout(w, h);
+            // === MODIFIKASI: dialog di tengah (default), tidak di kanan ===
         }
 
         if (viewToFocus[0] != null) {
@@ -3661,7 +3653,7 @@ public class MainActivity extends Activity implements AppAdapter.TileListener {
     private void styleGlassDialog(AlertDialog dialog) {
         if (dialog == null) return;
         try {
-            Typeface outfit = getResources().getFont(R.font.outfit);
+            Typeface outfit = getResources().getFont(R.font.inter);
             TextView titleView = dialog.findViewById(android.R.id.title);
             if (titleView != null) {
                 titleView.setTypeface(outfit, Typeface.BOLD);
@@ -3789,7 +3781,7 @@ public class MainActivity extends Activity implements AppAdapter.TileListener {
         title.setText("✨ Asisten AI Gemini");
         title.setTextSize(22);
         title.setTextColor(0xFFFFFFFF);
-        title.setTypeface(getResources().getFont(R.font.outfit), Typeface.BOLD);
+        title.setTypeface(getResources().getFont(R.font.inter), Typeface.BOLD);
         title.setFontVariationSettings("'wght' 700");
         title.setShadowLayer(4 * density, 0, 1 * density, 0xDD000000);
         title.setPadding(0, 0, 0, (int) (4 * density));
@@ -3799,7 +3791,7 @@ public class MainActivity extends Activity implements AppAdapter.TileListener {
         sub.setText("Asisten Pintar Bawaan Glass TV Home");
         sub.setTextSize(14f);
         sub.setTextColor(0xE6FFFFFF);
-        sub.setTypeface(getResources().getFont(R.font.outfit), Typeface.BOLD);
+        sub.setTypeface(getResources().getFont(R.font.inter), Typeface.BOLD);
         sub.setFontVariationSettings("'wght' 600");
         sub.setShadowLayer(3 * density, 0, 1 * density, 0xCC000000);
         sub.setPadding(0, 0, 0, (int) (14 * density));
@@ -3826,7 +3818,7 @@ public class MainActivity extends Activity implements AppAdapter.TileListener {
                 + "• Memori & TV: Sistem Berjalan Cepat & Optimal");
         statusText.setTextSize(14.5f);
         statusText.setTextColor(0xFFFFFFFF);
-        statusText.setTypeface(getResources().getFont(R.font.outfit), Typeface.BOLD);
+        statusText.setTypeface(getResources().getFont(R.font.inter), Typeface.BOLD);
         statusText.setFontVariationSettings("'wght' 600");
         statusText.setShadowLayer(3 * density, 0, 1 * density, 0xCC000000);
         statusText.setLineSpacing(0, 1.3f);
@@ -3837,7 +3829,7 @@ public class MainActivity extends Activity implements AppAdapter.TileListener {
         actionsTitle.setText("Tindakan Pintar:");
         actionsTitle.setTextSize(14.5f);
         actionsTitle.setTextColor(0xE6FFFFFF);
-        actionsTitle.setTypeface(getResources().getFont(R.font.outfit), Typeface.BOLD);
+        actionsTitle.setTypeface(getResources().getFont(R.font.inter), Typeface.BOLD);
         actionsTitle.setFontVariationSettings("'wght' 700");
         actionsTitle.setShadowLayer(3 * density, 0, 1 * density, 0xCC000000);
         actionsTitle.setPadding(0, (int) (14 * density), 0, (int) (8 * density));
@@ -3896,7 +3888,7 @@ public class MainActivity extends Activity implements AppAdapter.TileListener {
         btn.setText(title);
         btn.setTextSize(15.5f);
         btn.setTextColor(0xFFFFFFFF);
-        btn.setTypeface(getResources().getFont(R.font.outfit), Typeface.BOLD);
+        btn.setTypeface(getResources().getFont(R.font.inter), Typeface.BOLD);
         btn.setFontVariationSettings("'wght' 650");
         btn.setShadowLayer(3 * density, 0, 1 * density, 0xAA000000);
         btn.setPadding((int) (16 * density), (int) (12 * density), (int) (16 * density), (int) (12 * density));
@@ -4007,7 +3999,7 @@ public class MainActivity extends Activity implements AppAdapter.TileListener {
         TextView title = new TextView(this);
         title.setText("📲 Unggah Wallpaper Dari HP");
         title.setTextColor(0xFFFFFFFF);
-        title.setTypeface(getResources().getFont(R.font.outfit), Typeface.BOLD);
+        title.setTypeface(getResources().getFont(R.font.inter), Typeface.BOLD);
         title.setFontVariationSettings("'wght' 700");
         title.setTextSize(TypedValue.COMPLEX_UNIT_SP, 21);
         title.setShadowLayer(4 * density, 0, 1 * density, 0xDD000000);
@@ -4018,7 +4010,7 @@ public class MainActivity extends Activity implements AppAdapter.TileListener {
         TextView sub = new TextView(this);
         sub.setText("Hubungkan HP ke Wi-Fi yang sama, lalu pindai kode QR di bawah:");
         sub.setTextColor(0xFFE2E8F0);
-        sub.setTypeface(getResources().getFont(R.font.outfit), Typeface.BOLD);
+        sub.setTypeface(getResources().getFont(R.font.inter), Typeface.BOLD);
         sub.setFontVariationSettings("'wght' 600");
         sub.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14.5f);
         sub.setShadowLayer(3 * density, 0, 1 * density, 0xCC000000);
@@ -4051,7 +4043,7 @@ public class MainActivity extends Activity implements AppAdapter.TileListener {
         qrUrlText = new TextView(this);
         qrUrlText.setText("🌐 " + uploadUrl);
         qrUrlText.setTextColor(0xFF38BDF8);
-        qrUrlText.setTypeface(getResources().getFont(R.font.outfit), Typeface.BOLD);
+        qrUrlText.setTypeface(getResources().getFont(R.font.inter), Typeface.BOLD);
         qrUrlText.setFontVariationSettings("'wght' 700");
         qrUrlText.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
         qrUrlText.setShadowLayer(3 * density, 0, 1 * density, 0xCC000000);
@@ -4063,7 +4055,7 @@ public class MainActivity extends Activity implements AppAdapter.TileListener {
         qrStatusText = new TextView(this);
         qrStatusText.setText("📡 Menunggu pindaian kamera atau foto dari HP...");
         qrStatusText.setTextColor(0xFFF1F5F9);
-        qrStatusText.setTypeface(getResources().getFont(R.font.outfit), Typeface.BOLD);
+        qrStatusText.setTypeface(getResources().getFont(R.font.inter), Typeface.BOLD);
         qrStatusText.setFontVariationSettings("'wght' 600");
         qrStatusText.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14);
         qrStatusText.setShadowLayer(3 * density, 0, 1 * density, 0xAA000000);
@@ -4076,7 +4068,7 @@ public class MainActivity extends Activity implements AppAdapter.TileListener {
         btnClose.setText("Tutup / Batal");
         btnClose.setTextColor(0xFFFFFFFF);
         btnClose.setBackgroundResource(R.drawable.pill_bg);
-        btnClose.setTypeface(getResources().getFont(R.font.outfit), Typeface.BOLD);
+        btnClose.setTypeface(getResources().getFont(R.font.inter), Typeface.BOLD);
         btnClose.setFontVariationSettings("'wght' 700");
         btnClose.setTextSize(TypedValue.COMPLEX_UNIT_SP, 15);
         btnClose.setFocusable(true);
@@ -4091,7 +4083,7 @@ public class MainActivity extends Activity implements AppAdapter.TileListener {
         TextView credit = new TextView(this);
         credit.setText("✨ Glass TV Indonesia");
         credit.setTextColor(0xFFCBD5E1);
-        credit.setTypeface(getResources().getFont(R.font.outfit), Typeface.BOLD);
+        credit.setTypeface(getResources().getFont(R.font.inter), Typeface.BOLD);
         credit.setFontVariationSettings("'wght' 600");
         credit.setTextSize(TypedValue.COMPLEX_UNIT_SP, 13);
         credit.setGravity(Gravity.CENTER);
@@ -4486,7 +4478,7 @@ public class MainActivity extends Activity implements AppAdapter.TileListener {
         ((ImageView) row.findViewById(R.id.icon)).setImageResource(R.drawable.ic_input);
         TextView title = row.findViewById(R.id.title);
         title.setText(name + (isNext ? " (Seterusnya)" : ""));
-        title.setTypeface(getResources().getFont(R.font.outfit), Typeface.BOLD);
+        title.setTypeface(getResources().getFont(R.font.inter), Typeface.BOLD);
         title.setFontVariationSettings(isNext ? "'wght' 700" : "'wght' 650");
         title.setShadowLayer(3 * density, 0, 1 * density, 0xCC000000);
 
@@ -4494,7 +4486,7 @@ public class MainActivity extends Activity implements AppAdapter.TileListener {
         View dot = row.findViewById(R.id.dot);
         status.setText(time);
         status.setVisibility(View.VISIBLE);
-        status.setTypeface(getResources().getFont(R.font.outfit), Typeface.BOLD);
+        status.setTypeface(getResources().getFont(R.font.inter), Typeface.BOLD);
         status.setFontVariationSettings(isNext ? "'wght' 700" : "'wght' 600");
         status.setShadowLayer(3 * density, 0, 1 * density, 0xCC000000);
 
@@ -4847,7 +4839,7 @@ public class MainActivity extends Activity implements AppAdapter.TileListener {
         titleView.setText("Semua Aplikasi");
         titleView.setTextSize(18.5f);
         titleView.setTextColor(0xFFFFFFFF);
-        titleView.setTypeface(getResources().getFont(R.font.outfit), Typeface.BOLD);
+        titleView.setTypeface(getResources().getFont(R.font.inter), Typeface.BOLD);
         titleView.setFontVariationSettings("'wght' 700");
         titleView.setShadowLayer(4 * density, 0, 1 * density, 0xCC000000);
         header.addView(titleView, new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1f));
@@ -4856,7 +4848,7 @@ public class MainActivity extends Activity implements AppAdapter.TileListener {
         subView.setText(appList.size() + " Aplikasi  •  Tahan OK untuk Info / Uninstall");
         subView.setTextSize(12f);
         subView.setTextColor(0xCCFFFFFF);
-        subView.setTypeface(getResources().getFont(R.font.outfit), Typeface.BOLD);
+        subView.setTypeface(getResources().getFont(R.font.inter), Typeface.BOLD);
         subView.setFontVariationSettings("'wght' 600");
         subView.setShadowLayer(2 * density, 0, 1 * density, 0xAA000000);
         header.addView(subView);
@@ -4968,7 +4960,7 @@ public class MainActivity extends Activity implements AppAdapter.TileListener {
                 nameView.setText(item.label);
                 nameView.setTextSize(11.5f);
                 nameView.setTextColor(0xB3FFFFFF);
-                nameView.setTypeface(getResources().getFont(R.font.outfit), Typeface.BOLD);
+                nameView.setTypeface(getResources().getFont(R.font.inter), Typeface.BOLD);
                 nameView.setFontVariationSettings("'wght' 650");
                 nameView.setSingleLine(true);
                 nameView.setEllipsize(TextUtils.TruncateAt.END);
@@ -5185,7 +5177,7 @@ public class MainActivity extends Activity implements AppAdapter.TileListener {
         titleView.setText("Tambah ke Beranda");
         titleView.setTextSize(17.5f);
         titleView.setTextColor(0xFFFFFFFF);
-        titleView.setTypeface(getResources().getFont(R.font.outfit), Typeface.BOLD);
+        titleView.setTypeface(getResources().getFont(R.font.inter), Typeface.BOLD);
         titleView.setFontVariationSettings("'wght' 700");
         titleView.setShadowLayer(4 * density, 0, 1 * density, 0xCC000000);
         panel.addView(titleView);
@@ -5196,7 +5188,7 @@ public class MainActivity extends Activity implements AppAdapter.TileListener {
                 : (appList.size() + " Aplikasi tersedia  •  Klik OK untuk tambah"));
         subView.setTextSize(11.5f);
         subView.setTextColor(0xBFFFFFFF);
-        subView.setTypeface(getResources().getFont(R.font.outfit), Typeface.BOLD);
+        subView.setTypeface(getResources().getFont(R.font.inter), Typeface.BOLD);
         subView.setFontVariationSettings("'wght' 550");
         subView.setShadowLayer(2 * density, 0, 1 * density, 0xAA000000);
         LinearLayout.LayoutParams subLp = new LinearLayout.LayoutParams(
@@ -5233,7 +5225,7 @@ public class MainActivity extends Activity implements AppAdapter.TileListener {
             emptyView.setTextSize(13f);
             emptyView.setTextColor(0xB3FFFFFF);
             emptyView.setGravity(Gravity.CENTER);
-            emptyView.setTypeface(getResources().getFont(R.font.outfit), Typeface.BOLD);
+            emptyView.setTypeface(getResources().getFont(R.font.inter), Typeface.BOLD);
             emptyView.setPadding(padH, Math.round(64 * density), padH, Math.round(64 * density));
             emptyView.setFocusable(true);
             emptyView.setOnClickListener(v -> closeAddAppSheet(true));
@@ -5314,7 +5306,7 @@ public class MainActivity extends Activity implements AppAdapter.TileListener {
                 nameTv.setText(item.label);
                 nameTv.setTextSize(13.5f);
                 nameTv.setTextColor(0xD9FFFFFF);
-                nameTv.setTypeface(getResources().getFont(R.font.outfit), Typeface.BOLD);
+                nameTv.setTypeface(getResources().getFont(R.font.inter), Typeface.BOLD);
                 nameTv.setFontVariationSettings("'wght' 650");
                 nameTv.setSingleLine(true);
                 nameTv.setEllipsize(TextUtils.TruncateAt.END);
@@ -5328,7 +5320,7 @@ public class MainActivity extends Activity implements AppAdapter.TileListener {
                 plusBadge.setTextSize(16f);
                 plusBadge.setTextColor(0xCCFFFFFF);
                 plusBadge.setGravity(Gravity.CENTER);
-                plusBadge.setTypeface(getResources().getFont(R.font.outfit), Typeface.BOLD);
+                plusBadge.setTypeface(getResources().getFont(R.font.inter), Typeface.BOLD);
                 final GradientDrawable badgeBg = new GradientDrawable();
                 badgeBg.setShape(GradientDrawable.OVAL);
                 badgeBg.setColor(0x22FFFFFF);

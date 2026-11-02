@@ -48,7 +48,7 @@ public final class CitySearchDialog {
         if (activity == null || activity.isFinishing()) return;
 
         final float density = activity.getResources().getDisplayMetrics().density;
-        final Typeface outfit = activity.getResources().getFont(R.font.outfit);
+        final Typeface outfit = activity.getResources().getFont(R.font.inter);
         final Handler uiHandler = new Handler(Looper.getMainLooper());
         final Runnable[] pendingOnlineSearch = new Runnable[1];
 
