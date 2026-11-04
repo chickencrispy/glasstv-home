@@ -2,6 +2,6 @@
   "versionCode": 22,
   "versionName": "3.3.1-id",
   "apkUrl": "https://github.com/chickencrispy/glasstv-home/releases/latest/download/glass-tv-home.apk",
-  "changelog": "feat: give each sound choice its white vector icon",
-  "releaseDate": "2026-11-02"
+  "changelog": "feat: alternate the Hijri and Gregorian date on Home and the screensavers",
+  "releaseDate": "2026-11-04"
 }

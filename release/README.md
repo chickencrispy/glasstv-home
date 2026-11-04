@@ -7,9 +7,9 @@ Fail pemasangan rasmi (*Official Release APK*) untuk **Glass TV Home**.
 * **Versi / Version**: `v3.3.1-id` (Launcher Glass TV Home Edisi Indonesia: cuaca dan AQI, tempat, tetapan tema, OTA In-App Auto Update)
 * **Pautan Muat Turun Terus (Direct Download Link)**:  
   [https://github.com/chickencrispy/glasstv-home/raw/main/release/glass-tv-home.apk](https://github.com/chickencrispy/glasstv-home/raw/main/release/glass-tv-home.apk)
-* **Saiz Fail**: ~568 KB (Sangat ringan, pantas dimuat turun & jimat memori TV)
+* **Saiz Fail**: ~570 KB (Sangat ringan, pantas dimuat turun & jimat memori TV)
 * **Keserasian**: Android TV & Google TV (Android 8.0 Oreo ke atas, API 26+)
-* **SHA-256 Checksum**: `df411e2427cf1ba65565aea13e17be2341ed31942b2388d4930dbf95447aa2ed`
+* **SHA-256 Checksum**: `4c9ffe84da10bb2070e5e7ce9706a64568f771fb545930d43b5f41850d6a1b91`
 
 ---
 
