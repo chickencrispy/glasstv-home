@@ -82,6 +82,19 @@ final class PrayerTimes {
         return true;
     }
 
+    /**
+     * Jam maghrib hari ini dalam milidetik, atau -1 kalau takwim lokasi ini belum ada.
+     *
+     * Dipakai layar utama sebagai batas ganti hari Hijriah: hari Hijriah mulai saat maghrib, bukan
+     * tengah malam. Sengaja tanpa hitungan cadangan — kalau takwimnya belum ada, lebih baik tanggal
+     * Hijriah tidak ditampilkan daripada menebak batas harinya.
+     */
+    static long maghribToday(Context context) {
+        long[] times = getTimesForToday(context, Calendar.getInstance().get(Calendar.DAY_OF_MONTH));
+        if (times == null || times.length < 6) return -1L;
+        return times[4];
+    }
+
     private PrayerTimes() {
     }
 

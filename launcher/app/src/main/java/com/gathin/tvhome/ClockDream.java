@@ -12,7 +12,8 @@ import java.util.Random;
 
 /**
  * Screensaver (DreamService): StandBy OLED Nightstand Screensaver with large 110sp digits,
- * an Indonesian Gregorian date, and subtle drift to prevent OLED burn-in over long sessions.
+ * an Indonesian date that alternates between Gregorian and Hijri, and subtle drift to prevent
+ * OLED burn-in over long sessions.
  *
  * <p>Between 10:00 PM and 6:00 AM, automatically shifts to iPhone StandBy Wind Down
  * Mode (soft monochrome red on pure black). Dismisses on any remote button press.
@@ -33,6 +34,10 @@ public class ClockDream extends DreamService {
     private TextView clock;
     private TextView ampm;
     private TextView date;
+    private TextView dateHijri;
+    /** The Gregorian and Hijri dates swapping in that line, with the same rhythm as on Home. */
+    private DateAlternator dateAlternator;
+    private Config config;
     private TextView hint;
     private long dreamStartTime = 0;
 
@@ -81,7 +86,15 @@ public class ClockDream extends DreamService {
         clock = findViewById(R.id.nightstandClock);
         ampm = findViewById(R.id.nightstandAmPm);
         date = findViewById(R.id.nightstandDate);
+        dateHijri = findViewById(R.id.nightstandDateHijri);
         hint = findViewById(R.id.nightstandHint);
+
+        // The same config.xml and config.json Home reads, so the screensaver follows the same
+        // hijri_date and reduced_motion settings instead of showing a date Home left out.
+        config = Config.load(this);
+        dateAlternator = new DateAlternator(handler, date, dateHijri,
+                getResources().getDisplayMetrics().density);
+        dateAlternator.setReducedMotion(config.reducedMotion);
 
         updateNightstand();
     }
@@ -105,6 +118,7 @@ public class ClockDream extends DreamService {
     public void onDreamingStopped() {
         dreamStartTime = 0;
         handler.removeCallbacks(tick);
+        if (dateAlternator != null) dateAlternator.stop();
         super.onDreamingStopped();
     }
 
@@ -112,6 +126,7 @@ public class ClockDream extends DreamService {
     public void onDetachedFromWindow() {
         dreamStartTime = 0;
         handler.removeCallbacks(tick);
+        if (dateAlternator != null) dateAlternator.stop();
         super.onDetachedFromWindow();
     }
 
@@ -121,6 +136,9 @@ public class ClockDream extends DreamService {
         Calendar cal = Calendar.getInstance();
         if (date != null) {
             date.setText(indonesianDate(cal));
+        }
+        if (dateAlternator != null) {
+            dateAlternator.refresh(config != null && config.hijriDate ? DateAlternator.hijriToday(this) : null);
         }
 
         // StandBy Wind Down Mode: 10:00 PM (22:00) to 6:00 AM (06:00) -> Red Monochrome
@@ -132,11 +150,13 @@ public class ClockDream extends DreamService {
             if (clock != null) clock.setTextColor(red);
             if (ampm != null) ampm.setTextColor(0xCCFF453A);
             if (date != null) date.setTextColor(0xE6FF453A);
+            if (dateHijri != null) dateHijri.setTextColor(0xE6FF453A);
             if (hint != null) hint.setTextColor(0x55FF453A);
         } else {
             if (clock != null) clock.setTextColor(0xFFFFFFFF);
             if (ampm != null) ampm.setTextColor(0xB3FFFFFF);
             if (date != null) date.setTextColor(0xE6FFFFFF);
+            if (dateHijri != null) dateHijri.setTextColor(0xE6FFFFFF);
             if (hint != null) hint.setTextColor(0x4DFFFFFF);
         }
     }

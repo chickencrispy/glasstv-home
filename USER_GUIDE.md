@@ -205,7 +205,7 @@ Pengguna yang memasang APK secara manual atau pindah lokasi **TIDAK MEMERLUKAN K
 * **Perpindahan Instan**: Pilih **🔀 Next Wallpaper** kapan saja untuk langsung beralih ke foto berikutnya dalam kategori aktif Anda.
 
 ### C. Mode Ambient StandBy & Hemat Daya Pintar
-* **Menganggur 10 Menit**: Masuk ke screensaver StandBy hitam yang aman untuk OLED, menampilkan angka besar 110sp, tanggal Hijriah Islam, dan waktu salat berikutnya.
+* **Menganggur 10 Menit**: Masuk ke screensaver StandBy hitam yang aman untuk OLED, menampilkan angka besar 110sp, dan tanggal Masehi yang bergantian dengan tanggal Hijriah — 10 detik Masehi, 5 detik Hijriah.
 * **2 Jam Kemudian**: Jika dibiarkan tanpa sentuhan, layar TV masuk ke standby tidur (`GLOBAL_ACTION_LOCK_SCREEN`) untuk menghemat daya.
 * **Bangunkan**: Tekan tombol apa pun pada remote TV untuk membangunkan TV segera.
 

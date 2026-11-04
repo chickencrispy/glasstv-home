@@ -45,6 +45,8 @@ final class Config {
     final boolean moduleCards;
     /** Calmer motion for weak GPUs (config.xml, reduced_motion): stiff spring, short fades, no replay. */
     final boolean reducedMotion;
+    /** Hijri date alternating with the Gregorian one on the home screen (config.xml, hijri_date). */
+    final boolean hijriDate;
     final String vpnApp;
     final boolean showHomeSettingsShortcut;
     /** The Wi-Fi / Ethernet pill in the top bar (config.xml, show_network_pill). */
@@ -72,7 +74,7 @@ final class Config {
     private Config(List<String> dockApps, List<String> hiddenApps, String liveTvPackage, String liveTvAction,
                    String sourcePanelService, String sourcePanelAction, String inputAction,
                    int columns, int rowsBelowDock,
-                   boolean moduleCards, boolean reducedMotion, String vpnApp,
+                   boolean moduleCards, boolean reducedMotion, boolean hijriDate, String vpnApp,
                    boolean showHomeSettingsShortcut, boolean showNetworkPill, boolean showLiveTv,
                    int backgroundColor,
                    File wallpaper, List<File> wallpapers, long wallpaperIntervalMs,
@@ -89,6 +91,7 @@ final class Config {
         this.rowsBelowDock = rowsBelowDock;
         this.moduleCards = moduleCards;
         this.reducedMotion = reducedMotion;
+        this.hijriDate = hijriDate;
         this.vpnApp = vpnApp;
         this.showHomeSettingsShortcut = showHomeSettingsShortcut;
         this.showNetworkPill = showNetworkPill;
@@ -122,6 +125,7 @@ final class Config {
         int rowsBelow = res.getInteger(R.integer.rows_below_dock);
         boolean moduleCards = res.getBoolean(R.bool.module_cards);
         boolean reducedMotion = res.getBoolean(R.bool.reduced_motion);
+        boolean hijriDate = res.getBoolean(R.bool.hijri_date);
         String vpn = res.getString(R.string.vpn_app).trim();
         boolean homeSettings = res.getBoolean(R.bool.show_home_settings_shortcut);
         boolean networkPill = res.getBoolean(R.bool.show_network_pill);
@@ -145,6 +149,7 @@ final class Config {
             rowsBelow = integer(json, "rows_below_dock", rowsBelow, 0, 3);
             moduleCards = bool(json, "module_cards", moduleCards);
             reducedMotion = bool(json, "reduced_motion", reducedMotion);
+            hijriDate = bool(json, "hijri_date", hijriDate);
             vpn = string(json, "vpn_app", vpn);
             homeSettings = bool(json, "show_home_settings_shortcut", homeSettings);
             networkPill = bool(json, "show_network_pill", networkPill);
@@ -189,7 +194,7 @@ final class Config {
                 : CacheCleaner.DEFAULT_DAYS;
 
         return new Config(dock, hidden, liveTv, liveTvAction, panelService, panelAction, inputAction,
-                Math.max(1, columns), Math.max(0, rowsBelow), moduleCards, reducedMotion,
+                Math.max(1, columns), Math.max(0, rowsBelow), moduleCards, reducedMotion, hijriDate,
                 vpn, homeSettings, networkPill, liveTvRow, background, wallpaper, wallpapers, wallpaperIntervalMs,
                 places, wallpaperOnline, wallpaperFeed, cacheCleanDays, applied);
     }

@@ -137,7 +137,9 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
                     android:orientation="vertical"
-                    android:gravity="center_vertical">
+                    android:gravity="center_vertical"
+                    android:clipChildren="false"
+                    android:clipToPadding="false">
 
                     <!--  Atas: nama hari dalam bahasa Indonesia (mis. Senin / Jumat), diisi oleh updateDateAndPeriod().  -->
                     <TextView 
@@ -156,23 +158,52 @@
                         android:shadowRadius="3" 
                         android:textAllCaps="false"/>
 
-                    <!-- Bawah: tanggal lengkap (mis. 2 November 2026), diisi oleh updateDateAndPeriod(). -->
-                    <TextView 
-                        android:id="@+id/date" 
-                        android:layout_width="wrap_content" 
-                        android:layout_height="wrap_content" 
-                        android:layout_marginTop="2dp" 
-                        android:includeFontPadding="false" 
-                        android:textColor="#E6FFFFFF" 
-                        android:textSize="17sp" 
-                        android:fontFamily="@font/inter" 
-                        android:fontVariationSettings="'wght' 600" 
-                        android:letterSpacing="0.06" 
-                        android:shadowColor="#80000000" 
-                        android:shadowDx="0" 
-                        android:shadowDy="1" 
-                        android:shadowRadius="3" 
-                        android:textAllCaps="false"/>
+                    <!-- Bawah: tanggal lengkap (mis. 2 November 2026), dan di belakangnya tanggal Hijriah
+                         (mis. 12 Jumadil-Awal 1448 H). Keduanya diisi updateDateAndPeriod() dan bergantian;
+                         keduanya selalu terlihat supaya lebar blok tidak berubah saat animasi, yang tidak
+                         giliran hanya transparan. -->
+                    <FrameLayout
+                        android:id="@+id/dateSlot"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="2dp"
+                        android:clipChildren="false"
+                        android:clipToPadding="false">
+
+                        <TextView
+                            android:id="@+id/date"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:includeFontPadding="false"
+                            android:textColor="#E6FFFFFF"
+                            android:textSize="17sp"
+                            android:fontFamily="@font/inter"
+                            android:fontVariationSettings="'wght' 600"
+                            android:letterSpacing="0.06"
+                            android:shadowColor="#80000000"
+                            android:shadowDx="0"
+                            android:shadowDy="1"
+                            android:shadowRadius="3"
+                            android:textAllCaps="false"/>
+
+                        <!-- Tanggal Hijriah, ditulis "12 Jumadil-Awal 1448 H" (HijriCalendar). -->
+                        <TextView
+                            android:id="@+id/dateHijri"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:alpha="0"
+                            android:includeFontPadding="false"
+                            android:textColor="#E6FFFFFF"
+                            android:textSize="17sp"
+                            android:fontFamily="@font/inter"
+                            android:fontVariationSettings="'wght' 600"
+                            android:letterSpacing="0.06"
+                            android:shadowColor="#80000000"
+                            android:shadowDx="0"
+                            android:shadowDy="1"
+                            android:shadowRadius="3"
+                            android:textAllCaps="false"/>
+                    </FrameLayout>
                 </LinearLayout>
             </LinearLayout>
 

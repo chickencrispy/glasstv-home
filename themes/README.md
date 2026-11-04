@@ -32,6 +32,7 @@ is ignored, and a file that doesn't parse is ignored as a whole, so a theme can 
 | `rows_below_dock` | 0 to 3 | Grid rows left visible under the dock |
 | `module_cards` | bool | Look for module cards and ask about them (`true`); `false` turns the feature off |
 | `reduced_motion` | bool | Calmer motion for weak GPUs: stiff highlight spring, no tile overshoot, short fades, no entrance replay |
+| `hijri_date` | bool | The Hijri date alternating with the Gregorian one, on the home screen and on the screensaver alike: 10 seconds Gregorian, 5 seconds Hijri, sliding as they swap. It follows Muhammadiyah's KHGT calendar and changes at maghrib, from this location's prayer timetable; with no timetable yet, or outside the table's years (1447–1454 H), the Gregorian date shows alone. On by default |
 | `vpn_app` | string | App the network pill opens when a VPN is configured; also shows a red "VPN off" badge while no VPN is up |
 | `show_home_settings_shortcut` | bool | The "Default home" tile, where the TV has a home picker |
 | `show_network_pill` | bool | The Wi-Fi / Ethernet pill in the top bar; `false` hides it |

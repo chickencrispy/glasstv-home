@@ -203,7 +203,7 @@ Pengguna yang memasang file APK secara manual atau pindah rumah **TIDAK MEMERLUK
 * **Ganti Gambar Seketika**: Pilih **🔀 Next Wallpaper** untuk beralih ke gambar berikutnya kapan saja.
 
 ### C. Screensaver StandBy & Auto-Off 2 Jam (Hemat Listrik)
-* **10 Menit Dibiarkan Tanpa Tombol**: TV akan otomatis masuk mode *StandBy Screensaver* berlatar hitam pekat (aman untuk mencegah *screen burn-in* pada TV OLED/LED), menampilkan jam besar 110sp, tanggal Hijriah (contoh: `🌙 12 Jumadilawal 1448H`), dan salat berikutnya.
+* **10 Menit Dibiarkan Tanpa Tombol**: TV akan otomatis masuk mode *StandBy Screensaver* berlatar hitam pekat (aman untuk mencegah *screen burn-in* pada TV OLED/LED), menampilkan jam besar 110sp, dan tanggal Masehi yang bergantian dengan tanggal Hijriah (contoh: `12 Jumadil-Awal 1448 H`) — 10 detik Masehi, 5 detik Hijriah.
 * **2 Jam Setelah Itu**: Jika TV terus tidak disentuh, sistem akan mematikan tampilan TV (*sleep standby*) secara otomatis.
 * **Untuk Menghidupkan Kembali**: Tekan tombol apa pun pada remote untuk membangunkan TV.
 

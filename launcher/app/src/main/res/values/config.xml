@@ -79,4 +79,11 @@
          tiles that zoom without overshoot, shorter fades and no tile entrance when Home comes back. Set it
          here or with "reduced_motion": true in a theme's config.json; false keeps the normal motion. -->
     <bool name="reduced_motion">false</bool>
+
+    <!-- Tanggal Hijriah bergantian dengan tanggal Masehi, di layar utama dan di screensaver: 10 detik
+         Masehi, 5 detik Hijriah, dengan animasi tiap pergantian. Tanggalnya mengikuti kalender KHGT
+         Muhammadiyah dan berganti hari saat maghrib, memakai jadwal solat lokasi ini; kalau jadwalnya
+         belum ada, tanggal Masehi yang tampil. Di luar rentang tabel (sebelum 1447 H atau sesudah
+         1454 H) juga Masehi saja. false: baris tanggal tetap Masehi seperti semula. -->
+    <bool name="hijri_date">true</bool>
 </resources>

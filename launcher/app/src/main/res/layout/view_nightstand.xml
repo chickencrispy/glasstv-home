@@ -58,22 +58,48 @@
                 android:includeFontPadding="false" />
         </LinearLayout>
 
-        <!-- Gregorian Date, in Indonesian: "Senin, 2 November 2026" -->
-        <TextView
-            android:id="@+id/nightstandDate"
+        <!-- The Gregorian date alternating with the Hijri one: "Senin, 2 November 2026", then
+             "25 Jumadil-Awal 1448 H". Both stay visible, the one out of turn transparent, so the block
+             keeps the width of the longer date and nothing shifts as they swap. -->
+        <FrameLayout
+            android:id="@+id/nightstandDateSlot"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:textColor="#E6FFFFFF"
-            android:textSize="19sp"
-            android:fontFamily="@font/inter"
-            android:fontVariationSettings="'wght' 500"
-            android:letterSpacing="0.04"
-            android:shadowColor="#80000000"
-            android:shadowDx="0"
-            android:shadowDy="2"
-            android:shadowRadius="5"
-            android:includeFontPadding="false" />
+            android:clipChildren="false"
+            android:clipToPadding="false">
+
+            <TextView
+                android:id="@+id/nightstandDate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#E6FFFFFF"
+                android:textSize="19sp"
+                android:fontFamily="@font/inter"
+                android:fontVariationSettings="'wght' 500"
+                android:letterSpacing="0.04"
+                android:shadowColor="#80000000"
+                android:shadowDx="0"
+                android:shadowDy="2"
+                android:shadowRadius="5"
+                android:includeFontPadding="false" />
+
+            <TextView
+                android:id="@+id/nightstandDateHijri"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:alpha="0"
+                android:textColor="#E6FFFFFF"
+                android:textSize="19sp"
+                android:fontFamily="@font/inter"
+                android:fontVariationSettings="'wght' 500"
+                android:letterSpacing="0.04"
+                android:shadowColor="#80000000"
+                android:shadowDx="0"
+                android:shadowDy="2"
+                android:shadowRadius="5"
+                android:includeFontPadding="false" />
+        </FrameLayout>
 
         <!-- Dim return hint -->
         <TextView

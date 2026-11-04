@@ -181,6 +181,10 @@ public class MainActivity extends Activity implements AppAdapter.TileListener {
     private View btnAssistant;
     private View btnCandyBox;
     private TextView ampmView, dateView;
+    /** Tanggal Hijriah, bertumpuk di belakang {@link #dateView} (lihat date_slot di activity_main.xml). */
+    private TextView dateHijriView;
+    /** Pertukaran tanggal Masehi dan Hijriah di baris tanggal. */
+    private DateAlternator dateAlternator;
     private TextView weatherAirQualityView;
     private View nowPlayingCard;
     private ImageView cardAlbumArt;
@@ -252,6 +256,8 @@ public class MainActivity extends Activity implements AppAdapter.TileListener {
     private long lastUserInteraction = android.os.SystemClock.elapsedRealtime();
     private boolean screensaverActive = false;
     private View screensaverView;
+    /** Tanggal Masehi/Hijriah di screensaver, bergantian seperti di Home. */
+    private DateAlternator screensaverDate;
     private boolean wallpaperFullscreen = false;
     private View mainContent;
     private static final long DOUBLE_BACK_DELAY_MS = 350L;
@@ -426,6 +432,9 @@ public class MainActivity extends Activity implements AppAdapter.TileListener {
         });
         ampmView = findViewById(R.id.ampm);
         dateView = findViewById(R.id.date);
+        dateHijriView = findViewById(R.id.dateHijri);
+        dateAlternator = new DateAlternator(handler, dateView, dateHijriView, density);
+        dateAlternator.setReducedMotion(reducedMotion);
         updateDateAndPeriod();
         weatherAirQualityView = findViewById(R.id.weatherAirQuality);
         if (weatherAirQualityView != null) {
@@ -1077,6 +1086,9 @@ public class MainActivity extends Activity implements AppAdapter.TileListener {
         hiddenSinceResume = true;
         handler.removeCallbacks(cacheClean);
         handler.removeCallbacks(nowPlayingPoll);
+        // Nothing runs while another app is in front, the date swaps included.
+        dateAlternator.stop();
+        if (screensaverDate != null) screensaverDate.stop();
         super.onStop();
     }
 
@@ -2227,6 +2239,16 @@ public class MainActivity extends Activity implements AppAdapter.TileListener {
 
         if (ampmView != null) ampmView.setText(dayName);
         if (dateView != null) dateView.setText(dateStr);
+        updateHijriDate();
+    }
+
+    /**
+     * Menyiapkan tanggal Hijriah dan pertukarannya. Dipanggil tiap menit dari minuteTick dan saat Home
+     * kembali ke depan, jadi pergantian hari ikut terbawa tanpa timer sendiri. Di luar tabel, takwim
+     * belum ada, atau fiturnya dimatikan: tanggal Masehi diam seperti semula.
+     */
+    private void updateHijriDate() {
+        dateAlternator.refresh(config != null && config.hijriDate ? DateAlternator.hijriToday(this) : null);
     }
 
     /** Shows the Wi-Fi network name on the button when we can read it, otherwise the connection type. */
@@ -4126,6 +4148,11 @@ public class MainActivity extends Activity implements AppAdapter.TileListener {
             screensaverView.setOnClickListener(v -> dismissScreensaver());
             root.addView(screensaverView, new FrameLayout.LayoutParams(
                     ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+            // Tanggal di screensaver bergantian Masehi/Hijriah dengan ritme yang sama seperti Home.
+            screensaverDate = new DateAlternator(handler,
+                    screensaverView.findViewById(R.id.nightstandDate),
+                    screensaverView.findViewById(R.id.nightstandDateHijri), density);
+            screensaverDate.setReducedMotion(reducedMotion);
         }
 
         updateNightstandScreensaver();
@@ -4155,21 +4182,28 @@ public class MainActivity extends Activity implements AppAdapter.TileListener {
         TextView clock = screensaverView.findViewById(R.id.nightstandClock);
         TextView ampm = screensaverView.findViewById(R.id.nightstandAmPm);
         TextView date = screensaverView.findViewById(R.id.nightstandDate);
+        TextView dateHijri = screensaverView.findViewById(R.id.nightstandDateHijri);
         TextView hint = screensaverView.findViewById(R.id.nightstandHint);
 
-        // The date view is a plain TextView: fill it in the Indonesian way, e.g. "Senin, 2 November 2026".
+        // The Gregorian line in the Indonesian way, e.g. "Senin, 2 November 2026"; the Hijri one takes
+        // its turn from the alternator, on the same timetable and maghrib boundary as on Home.
         if (date != null) date.setText(ClockDream.indonesianDate(cal));
+        if (screensaverDate != null) {
+            screensaverDate.refresh(config != null && config.hijriDate ? DateAlternator.hijriToday(this) : null);
+        }
 
         if (isNightMode) {
             int red = 0xFFFF453A;
             if (clock != null) clock.setTextColor(red);
             if (ampm != null) ampm.setTextColor(0xCCFF453A);
             if (date != null) date.setTextColor(0xE6FF453A);
+            if (dateHijri != null) dateHijri.setTextColor(0xE6FF453A);
             if (hint != null) hint.setTextColor(0x55FF453A);
         } else {
             if (clock != null) clock.setTextColor(0xFFFFFFFF);
             if (ampm != null) ampm.setTextColor(0xB3FFFFFF);
             if (date != null) date.setTextColor(0xE6FFFFFF);
+            if (dateHijri != null) dateHijri.setTextColor(0xE6FFFFFF);
             if (hint != null) hint.setTextColor(0x4DFFFFFF);
         }
     }
@@ -4177,6 +4211,7 @@ public class MainActivity extends Activity implements AppAdapter.TileListener {
     private void dismissScreensaver() {
         if (!screensaverActive || screensaverView == null) return;
         screensaverActive = false;
+        if (screensaverDate != null) screensaverDate.stop();
         lastUserInteraction = android.os.SystemClock.elapsedRealtime();
         screensaverView.animate().alpha(0f).setDuration(350).withEndAction(() -> {
             if (!screensaverActive && screensaverView != null) {
