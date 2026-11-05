@@ -8,7 +8,6 @@ import android.os.Looper;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.style.ForegroundColorSpan;
-import android.text.style.RelativeSizeSpan;
 import android.text.style.StyleSpan;
 import android.util.Log;
 
@@ -20,17 +19,15 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collections;
 import java.util.Date;
-import java.util.List;
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 
 /**
- * Clean Waktu Solat for Putrajaya (JAKIM Zone WLY01).
- * Fetches official JAKIM e-solat timetable, caches locally, and includes
- * an accurate solar-calculation fallback so it never fails offline.
+ * Waktu solat from JAKIM's timetable, for the zone this location falls in: cached locally per zone and
+ * month, with a solar-calculation fallback so it never fails offline.
  */
 final class PrayerTimes {
     private static final String TAG = "TvHome.Prayer";
@@ -38,49 +35,11 @@ final class PrayerTimes {
     private static final String KEY_JSON = "takwim_wly01";
     private static final String KEY_MONTH = "takwim_month";
 
-    // Coordinates for Putrajaya
-    private static final double LATITUDE = 2.9264;
-    private static final double LONGITUDE = 101.6964;
+    /** UTC+8, the whole of Malaysia. */
     private static final double TIMEZONE = 8.0;
 
-    static final String[] NAMES = {"Subuh", "Syuruk", "Zohor", "Asar", "Maghrib", "Isyak"};
-    private static final String[] PRAYER_NAMES = NAMES;
+    private static final String[] PRAYER_NAMES = {"Subuh", "Syuruk", "Zohor", "Asar", "Maghrib", "Isyak"};
     private static final String[] PRAYER_KEYS = {"fajr", "syuruk", "dhuhr", "asr", "maghrib", "isha"};
-
-    static final class Day {
-        final int[] minutes;
-        final String hijri;
-
-        Day(int[] minutes, String hijri) {
-            this.minutes = minutes;
-            this.hijri = hijri;
-        }
-    }
-
-    static Day day(Context ctx, String zone, Calendar date) {
-        if (zone == null || zone.isEmpty()) zone = getJakimZone(ctx);
-        long[] times = getTimesForToday(ctx, date.get(Calendar.DAY_OF_MONTH));
-        if (times == null || times.length < 6) {
-            times = calculateFallback(ctx, date);
-        }
-        if (times == null || times.length < 6) return null;
-        int[] minutes = new int[6];
-        for (int i = 0; i < 6; i++) {
-            Calendar c = Calendar.getInstance();
-            c.setTimeInMillis(times[i]);
-            minutes[i] = c.get(Calendar.HOUR_OF_DAY) * 60 + c.get(Calendar.MINUTE);
-        }
-        return new Day(minutes, getHijriDate());
-    }
-
-    static boolean due(Context ctx, String zone) {
-        return day(ctx, zone, Calendar.getInstance()) == null;
-    }
-
-    static boolean refresh(Context ctx, String zone) {
-        sync(ctx, null);
-        return true;
-    }
 
     /**
      * Jam maghrib hari ini dalam milidetik, atau -1 kalau takwim lokasi ini belum ada.
@@ -98,28 +57,14 @@ final class PrayerTimes {
     private PrayerTimes() {
     }
 
-    /** Forces an immediate background sync for the active location/zone. */
+    /** Syncs the timetable for the active location/zone in the background, then runs {@code onUpdated}. */
     static void sync(Context context, Runnable onUpdated) {
-        syncInternal(context, onUpdated, true);
-    }
-
-    /** Refresh timetable in background if needed (once a month / day). */
-    static void syncIfDue(Context context, Runnable onUpdated) {
-        syncInternal(context, onUpdated, false);
-    }
-
-    private static void syncInternal(Context context, Runnable onUpdated, boolean force) {
         new Thread(() -> {
             try {
                 SharedPreferences prefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
                 Calendar now = Calendar.getInstance();
                 int currentMonth = now.get(Calendar.YEAR) * 100 + (now.get(Calendar.MONTH) + 1);
                 String zone = getJakimZone(context);
-                String cachedZone = prefs.getString("cached_zone", "");
-
-                if (!force && zone.equals(cachedZone) && prefs.getInt(KEY_MONTH, 0) == currentMonth && prefs.contains(KEY_JSON)) {
-                    return; // already have this month's takwim
-                }
 
                 URL url = new URL("https://api.waktusolat.app/v2/solat/" + zone);
                 HttpURLConnection conn = (HttpURLConnection) url.openConnection();
@@ -151,91 +96,68 @@ final class PrayerTimes {
         }, "prayer-sync").start();
     }
 
-    public static class PrayerZone {
-        public final String code;
-        public final String state;
-        public final String name;
-        public final double lat;
-        public final double lon;
-
-        public PrayerZone(String code, String state, String name, double lat, double lon) {
-            this.code = code;
-            this.state = state;
-            this.name = name;
-            this.lat = lat;
-            this.lon = lon;
-        }
-
-        public String getDisplayName() {
-            return name + " (" + state + " • " + code + ")";
-        }
-    }
-
-    private static final List<PrayerZone> PRESET_ZONES = new ArrayList<>();
+    /** JAKIM zone code to the name that zone is known by, for the zone name in the prayer line. */
+    private static final Map<String, String> ZONE_NAMES = new HashMap<>();
 
     static {
         // W.P. & Putrajaya
-        PRESET_ZONES.add(new PrayerZone("WLY01", "W.P.", "Putrajaya & Kuala Lumpur", 2.9158, 101.6909));
-        PRESET_ZONES.add(new PrayerZone("WLY02", "W.P.", "Labuan", 5.3347, 115.2289));
+        ZONE_NAMES.put("WLY01", "Putrajaya & Kuala Lumpur");
+        ZONE_NAMES.put("WLY02", "Labuan");
 
         // Selangor
-        PRESET_ZONES.add(new PrayerZone("SGR01", "Selangor", "Shah Alam, Petaling, Gombak, Sepang", 3.0683, 101.5058));
-        PRESET_ZONES.add(new PrayerZone("SGR02", "Selangor", "Kuala Selangor, Sabak Bernam", 3.3500, 101.2500));
-        PRESET_ZONES.add(new PrayerZone("SGR03", "Selangor", "Klang, Kuala Langat, Banting", 3.0108, 101.4081));
+        ZONE_NAMES.put("SGR01", "Shah Alam, Petaling, Gombak, Sepang");
+        ZONE_NAMES.put("SGR02", "Kuala Selangor, Sabak Bernam");
+        ZONE_NAMES.put("SGR03", "Klang, Kuala Langat, Banting");
 
         // Melaka
-        PRESET_ZONES.add(new PrayerZone("MLK01", "Melaka", "Bandaraya Melaka, Alor Gajah, Jasin", 2.1909, 102.2571));
+        ZONE_NAMES.put("MLK01", "Bandaraya Melaka, Alor Gajah, Jasin");
 
         // Negeri Sembilan
-        PRESET_ZONES.add(new PrayerZone("NGS02", "Negeri Sembilan", "Seremban, Port Dickson, Nilai", 2.6953, 101.9056));
-        PRESET_ZONES.add(new PrayerZone("NGS01", "Negeri Sembilan", "Tampin, Jempol", 2.4700, 102.2300));
+        ZONE_NAMES.put("NGS02", "Seremban, Port Dickson, Nilai");
+        ZONE_NAMES.put("NGS01", "Tampin, Jempol");
 
         // Johor
-        PRESET_ZONES.add(new PrayerZone("JHR02", "Johor", "Johor Bahru, Pasir Gudang, Kulai", 1.4947, 103.7419));
-        PRESET_ZONES.add(new PrayerZone("JHR03", "Johor", "Batu Pahat, Muar, Tangkak, Segamat", 1.9191, 102.8658));
-        PRESET_ZONES.add(new PrayerZone("JHR04", "Johor", "Kluang, Mersing", 2.0306, 103.3214));
+        ZONE_NAMES.put("JHR02", "Johor Bahru, Pasir Gudang, Kulai");
+        ZONE_NAMES.put("JHR03", "Batu Pahat, Muar, Tangkak, Segamat");
+        ZONE_NAMES.put("JHR04", "Kluang, Mersing");
 
         // Pulau Pinang
-        PRESET_ZONES.add(new PrayerZone("PNG01", "Pulau Pinang", "Seluruh Negeri Pulau Pinang", 5.3942, 100.3983));
+        ZONE_NAMES.put("PNG01", "Seluruh Negeri Pulau Pinang");
 
         // Perak
-        PRESET_ZONES.add(new PrayerZone("PRK02", "Perak", "Ipoh, Batu Gajah, Kampar", 4.6397, 101.1083));
-        PRESET_ZONES.add(new PrayerZone("PRK03", "Perak", "Taiping, Bagan Serai, Parit Buntar", 4.8569, 100.7417));
-        PRESET_ZONES.add(new PrayerZone("PRK04", "Perak", "Lumut, Manjung, Pangkor, Sitiawan", 4.1953, 100.6728));
-        PRESET_ZONES.add(new PrayerZone("PRK01", "Perak", "Tapah, Slim River, Tanjung Malim", 3.6800, 101.5200));
+        ZONE_NAMES.put("PRK02", "Ipoh, Batu Gajah, Kampar");
+        ZONE_NAMES.put("PRK03", "Taiping, Bagan Serai, Parit Buntar");
+        ZONE_NAMES.put("PRK04", "Lumut, Manjung, Pangkor, Sitiawan");
+        ZONE_NAMES.put("PRK01", "Tapah, Slim River, Tanjung Malim");
 
         // Kedah & Perlis
-        PRESET_ZONES.add(new PrayerZone("KDH01", "Kedah", "Kota Setar, Pokok Sena, Kubang Pasu", 6.1371, 100.3469));
-        PRESET_ZONES.add(new PrayerZone("KDH02", "Kedah", "Kuala Muda, Yan, Pendang, Sungai Petani", 5.6297, 100.4677));
-        PRESET_ZONES.add(new PrayerZone("KDH07", "Kedah", "Pulau Langkawi", 6.3316, 99.8585));
-        PRESET_ZONES.add(new PrayerZone("PLS01", "Perlis", "Kangar, Padang Besar, Arau", 6.4299, 100.2109));
+        ZONE_NAMES.put("KDH01", "Kota Setar, Pokok Sena, Kubang Pasu");
+        ZONE_NAMES.put("KDH02", "Kuala Muda, Yan, Pendang, Sungai Petani");
+        ZONE_NAMES.put("KDH07", "Pulau Langkawi");
+        ZONE_NAMES.put("PLS01", "Kangar, Padang Besar, Arau");
 
         // Pahang
-        PRESET_ZONES.add(new PrayerZone("PHG02", "Pahang", "Kuantan, Pekan, Muadzam Shah", 3.8192, 103.2966));
-        PRESET_ZONES.add(new PrayerZone("PHG03", "Pahang", "Jerantut, Temerloh, Maran, Bera", 3.4478, 102.4178));
-        PRESET_ZONES.add(new PrayerZone("PHG04", "Pahang", "Bentong, Raub, Lipis", 3.5200, 101.9000));
-        PRESET_ZONES.add(new PrayerZone("PHG06", "Pahang", "Cameron Highlands", 4.4700, 101.3800));
+        ZONE_NAMES.put("PHG02", "Kuantan, Pekan, Muadzam Shah");
+        ZONE_NAMES.put("PHG03", "Jerantut, Temerloh, Maran, Bera");
+        ZONE_NAMES.put("PHG04", "Bentong, Raub, Lipis");
+        ZONE_NAMES.put("PHG06", "Cameron Highlands");
 
         // Terengganu & Kelantan
-        PRESET_ZONES.add(new PrayerZone("TRG01", "Terengganu", "Kuala Terengganu, Marang, Kuala Nerus", 5.3117, 103.1325));
-        PRESET_ZONES.add(new PrayerZone("TRG04", "Terengganu", "Kemaman, Dungun", 4.2622, 103.4258));
-        PRESET_ZONES.add(new PrayerZone("KTN01", "Kelantan", "Kota Bharu, Bachok, Pasir Puteh, Tumpat", 6.1256, 102.2386));
-        PRESET_ZONES.add(new PrayerZone("KTN02", "Kelantan", "Machang, Pasir Mas, Tanah Merah", 5.7600, 102.2100));
+        ZONE_NAMES.put("TRG01", "Kuala Terengganu, Marang, Kuala Nerus");
+        ZONE_NAMES.put("TRG04", "Kemaman, Dungun");
+        ZONE_NAMES.put("KTN01", "Kota Bharu, Bachok, Pasir Puteh, Tumpat");
+        ZONE_NAMES.put("KTN02", "Machang, Pasir Mas, Tanah Merah");
 
         // Sabah
-        PRESET_ZONES.add(new PrayerZone("SBH07", "Sabah", "Kota Kinabalu, Penampang, Tuaran, Papar", 6.0971, 116.1665));
-        PRESET_ZONES.add(new PrayerZone("SBH03", "Sabah", "Tawau, Balung, Merotai, Kalabakan", 4.2564, 117.8931));
-        PRESET_ZONES.add(new PrayerZone("SBH05", "Sabah", "Kudat, Kota Marudu, Pitas, Sandakan", 5.8456, 118.0678));
+        ZONE_NAMES.put("SBH07", "Kota Kinabalu, Penampang, Tuaran, Papar");
+        ZONE_NAMES.put("SBH03", "Tawau, Balung, Merotai, Kalabakan");
+        ZONE_NAMES.put("SBH05", "Kudat, Kota Marudu, Pitas, Sandakan");
 
         // Sarawak
-        PRESET_ZONES.add(new PrayerZone("SWK08", "Sarawak", "Kuching, Bau, Lundu, Samarahan, Serian", 1.5622, 110.3889));
-        PRESET_ZONES.add(new PrayerZone("SWK04", "Sarawak", "Bintulu, Tatau, Sebauh", 3.1772, 113.0412));
-        PRESET_ZONES.add(new PrayerZone("SWK02", "Sarawak", "Miri, Niah, Bekenu, Sibuti", 4.4947, 114.0434));
-        PRESET_ZONES.add(new PrayerZone("SWK05", "Sarawak", "Sibu, Mukah, Kanowit, Song", 2.2981, 111.8344));
-    }
-
-    public static List<PrayerZone> getPresetZones() {
-        return Collections.unmodifiableList(PRESET_ZONES);
+        ZONE_NAMES.put("SWK08", "Kuching, Bau, Lundu, Samarahan, Serian");
+        ZONE_NAMES.put("SWK04", "Bintulu, Tatau, Sebauh");
+        ZONE_NAMES.put("SWK02", "Miri, Niah, Bekenu, Sibuti");
+        ZONE_NAMES.put("SWK05", "Sibu, Mukah, Kanowit, Song");
     }
 
     public static String getActiveZone(Context context) {
@@ -251,11 +173,9 @@ final class PrayerTimes {
         if (prefs.contains("manual_prayer_zone_name")) {
             return prefs.getString("manual_prayer_zone_name", "Putrajaya & Kuala Lumpur");
         }
-        String zone = getActiveZone(context);
-        for (PrayerZone pz : PRESET_ZONES) {
-            if (pz.code.equalsIgnoreCase(zone)) return pz.name;
-        }
-        return AppLocationManager.getLocationName(context);
+        String zone = getActiveZone(context).toUpperCase(Locale.ROOT);
+        String name = ZONE_NAMES.get(zone);
+        return name != null ? name : AppLocationManager.getLocationName(context);
     }
 
     public static String getShortZoneName(Context context) {
@@ -276,8 +196,6 @@ final class PrayerTimes {
         prefs.edit()
                 .remove("manual_prayer_zone")
                 .remove("manual_prayer_zone_name")
-                .remove("manual_lat")
-                .remove("manual_lon")
                 .apply();
     }
 
@@ -287,18 +205,6 @@ final class PrayerTimes {
         prefs.edit()
                 .putString("manual_prayer_zone", zoneCode)
                 .putString("manual_prayer_zone_name", zoneCode)
-                .apply();
-        sync(context, null);
-    }
-
-    public static void setPrayerZone(Context context, PrayerZone zone) {
-        if (zone == null) return;
-        SharedPreferences prefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
-        prefs.edit()
-                .putString("manual_prayer_zone", zone.code)
-                .putString("manual_prayer_zone_name", zone.name)
-                .putString("manual_lat", String.valueOf(zone.lat))
-                .putString("manual_lon", String.valueOf(zone.lon))
                 .apply();
         sync(context, null);
     }
@@ -342,52 +248,6 @@ final class PrayerTimes {
         if (loc.contains("sibu")) return "SWK05";
 
         return "WLY01"; // Default Putrajaya
-    }
-
-    static class PrayerItem {
-        final String name;
-        final String timeStr;
-        final boolean isNext;
-        final boolean isPast;
-
-        PrayerItem(String name, String timeStr, boolean isNext, boolean isPast) {
-            this.name = name;
-            this.timeStr = timeStr;
-            this.isNext = isNext;
-            this.isPast = isPast;
-        }
-    }
-
-    /** Returns all 6 prayers for today with formatted times and status. */
-    static PrayerItem[] getPrayerItems(Context context) {
-        Calendar now = Calendar.getInstance();
-        int day = now.get(Calendar.DAY_OF_MONTH);
-        long[] times = getTimesForToday(context, day);
-        if (times == null || times.length < 6) {
-            times = calculateFallback(context, now);
-        }
-        long nowMs = now.getTimeInMillis();
-        int nextIdx = -1;
-        for (int i = 0; i < times.length; i++) {
-            if (i == 1) continue;
-            if (times[i] > nowMs) {
-                nextIdx = i;
-                break;
-            }
-        }
-        if (nextIdx == -1) nextIdx = 0;
-
-        SimpleDateFormat timeFmt = new SimpleDateFormat("HH:mm", Locale.getDefault());
-        PrayerItem[] items = new PrayerItem[6];
-        for (int i = 0; i < 6; i++) {
-            items[i] = new PrayerItem(
-                    PRAYER_NAMES[i],
-                    timeFmt.format(new Date(times[i])),
-                    i == nextIdx,
-                    times[i] < nowMs
-            );
-        }
-        return items;
     }
 
     /** Returns formatted clean UI CharSequence with highlighted next prayer, bold and legible. */
@@ -492,13 +352,8 @@ final class PrayerTimes {
 
     /** Astronomical calculation fallback based on user's active Malaysian location. */
     private static long[] calculateFallback(Context context, Calendar cal) {
-        SharedPreferences prefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
-        double latitude = prefs.contains("manual_lat")
-                ? Double.parseDouble(prefs.getString("manual_lat", String.valueOf(AppLocationManager.getLatitude(context))))
-                : AppLocationManager.getLatitude(context);
-        double longitude = prefs.contains("manual_lon")
-                ? Double.parseDouble(prefs.getString("manual_lon", String.valueOf(AppLocationManager.getLongitude(context))))
-                : AppLocationManager.getLongitude(context);
+        double latitude = AppLocationManager.getLatitude(context);
+        double longitude = AppLocationManager.getLongitude(context);
 
         int year = cal.get(Calendar.YEAR);
         int month = cal.get(Calendar.MONTH) + 1;
@@ -556,103 +411,5 @@ final class PrayerTimes {
         double cotA = shadowFactor + Math.tan(Math.toRadians(phi));
         double angle = Math.toDegrees(Math.atan(1.0 / cotA));
         return sunAngleHour(angle, lat, delta);
-    }
-
-    static class ScheduleItem {
-        final String name;
-        final String timeFormatted;
-        final boolean isNext;
-        final boolean isPast;
-
-        ScheduleItem(String name, String timeFormatted, boolean isNext, boolean isPast) {
-            this.name = name;
-            this.timeFormatted = timeFormatted;
-            this.isNext = isNext;
-            this.isPast = isPast;
-        }
-    }
-
-    /** Returns full day prayer list for popup display. */
-    static java.util.List<ScheduleItem> getFullSchedule(Context context) {
-        java.util.List<ScheduleItem> list = new java.util.ArrayList<>();
-        Calendar now = Calendar.getInstance();
-        long[] times = getTimesForToday(context, now.get(Calendar.DAY_OF_MONTH));
-        if (times == null || times.length < 6) times = calculateFallback(context, now);
-
-        long nowMs = now.getTimeInMillis();
-        int nextIdx = -1;
-        for (int i = 0; i < times.length; i++) {
-            if (i == 1) continue; // Skip Syuruk (sunrise)
-            if (times[i] > nowMs) {
-                nextIdx = i;
-                break;
-            }
-        }
-        if (nextIdx == -1) nextIdx = 0;
-
-        SimpleDateFormat sdf = new SimpleDateFormat("h:mm a", Locale.getDefault());
-        for (int i = 0; i < times.length; i++) {
-            boolean isNext = (i == nextIdx);
-            boolean isPast = (times[i] < nowMs);
-            list.add(new ScheduleItem(PRAYER_NAMES[i], sdf.format(new Date(times[i])), isNext, isPast));
-        }
-        return list;
-    }
-
-    /** Returns short summary of next prayer (e.g. for screensaver). */
-    static String getNextPrayerSummary(Context context) {
-        Calendar now = Calendar.getInstance();
-        long[] times = getTimesForToday(context, now.get(Calendar.DAY_OF_MONTH));
-        if (times == null || times.length < 6) times = calculateFallback(context, now);
-
-        long nowMs = now.getTimeInMillis();
-        int nextIdx = -1;
-        for (int i = 0; i < times.length; i++) {
-            if (i == 1) continue; // Skip Syuruk (sunrise)
-            if (times[i] > nowMs) {
-                nextIdx = i;
-                break;
-            }
-        }
-
-        long nextTimeMs;
-        String prayerName;
-        if (nextIdx != -1) {
-            prayerName = PRAYER_NAMES[nextIdx];
-            nextTimeMs = times[nextIdx];
-        } else {
-            // All prayers today have passed (after Isyak) -> Next is tomorrow's Subuh
-            prayerName = PRAYER_NAMES[0];
-            Calendar tomorrow = (Calendar) now.clone();
-            tomorrow.add(Calendar.DAY_OF_MONTH, 1);
-            long[] tomTimes = getTimesForToday(context, tomorrow.get(Calendar.DAY_OF_MONTH));
-            if (tomTimes == null || tomTimes.length < 6) {
-                tomTimes = calculateFallback(context, tomorrow);
-            }
-            nextTimeMs = (tomTimes != null && tomTimes.length > 0) ? tomTimes[0] : (times[0] + 86400000L);
-        }
-
-        SimpleDateFormat sdf = new SimpleDateFormat("h:mm a", Locale.getDefault());
-        String zone = getShortZoneName(context);
-        return prayerName + " • " + sdf.format(new Date(nextTimeMs)) + " (" + zone + ")";
-    }
-
-    /** Returns Islamic Hijrah date (e.g. "11 Jamadilawal 1448H"). */
-    static String getHijriDate() {
-        try {
-            java.time.chrono.HijrahDate h = java.time.chrono.HijrahDate.now();
-            int day = h.get(java.time.temporal.ChronoField.DAY_OF_MONTH);
-            int month = h.get(java.time.temporal.ChronoField.MONTH_OF_YEAR);
-            int year = h.get(java.time.temporal.ChronoField.YEAR);
-            String[] months = {
-                "Muharram", "Safar", "Rabiulawal", "Rabiulakhir",
-                "Jamadilawal", "Jamadilakhir", "Rejab", "Syaaban",
-                "Ramadan", "Syawal", "Zulkaedah", "Zulhijjah"
-            };
-            String monthName = (month >= 1 && month <= 12) ? months[month - 1] : "Hijrah";
-            return day + " " + monthName + " " + year + "H";
-        } catch (Exception e) {
-            return "";
-        }
     }
 }

@@ -55,10 +55,12 @@ public class WallpaperUploadServer {
         this.port = port;
         this.listener = listener;
         SecureRandom random = new SecureRandom();
-        byte[] bytes = new byte[16];
-        random.nextBytes(bytes);
-        StringBuilder sb = new StringBuilder(32);
-        for (byte value : bytes) sb.append(String.format(Locale.ROOT, "%02x", value));
+        // 6 karakter alphanumeric: 62^6 ≈ 56 miliar kombinasi
+        final String ALPHANUM = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+        StringBuilder sb = new StringBuilder(6);
+        for (int i = 0; i < 6; i++) {
+            sb.append(ALPHANUM.charAt(random.nextInt(ALPHANUM.length())));
+        }
         this.token = sb.toString();
     }
 

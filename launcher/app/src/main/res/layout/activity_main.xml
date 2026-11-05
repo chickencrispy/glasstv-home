@@ -378,7 +378,8 @@
                 </LinearLayout>
             </LinearLayout>
 
-            <!-- Tombol menu kanan atas: Input, Wi-Fi, Asisten, Kotak Fitur, dan Pengaturan; tingginya disamakan dengan blok jam/tanggal. -->
+            <!-- Bilah Tombol Atas: Input, Wi-Fi, Asisten, Kotak Fitur, dan Pengaturan, berjajar di kanan atas;
+                 tingginya disamakan dengan blok jam/tanggal. -->
             <LinearLayout
                 android:id="@+id/topButtons"
                 android:layout_width="wrap_content"
