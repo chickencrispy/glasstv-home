@@ -40,6 +40,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.os.Environment;
 import android.provider.Settings;
 import android.text.SpannableString;
 import android.text.Spanned;
@@ -382,7 +383,18 @@ public class MainActivity extends Activity implements AppAdapter.TileListener {
 
         String rawCat = getSharedPreferences("wallpaper_prefs", MODE_PRIVATE).getString("active_category", "Indonesia");
         final String activeCat = "Malaysia".equalsIgnoreCase(rawCat) ? "Indonesia" : rawCat;
-        if ("Custom".equalsIgnoreCase(activeCat)) {
+        File customDirCheck = new File(Environment.getExternalStorageDirectory(), "Pictures/Wallpaper/" + activeCat);
+        if (customDirCheck.exists() && customDirCheck.isDirectory()) {
+            placesMode = false;
+            File[] files = customDirCheck.listFiles((dir, name) -> {
+                String n = name.toLowerCase(java.util.Locale.ROOT);
+                return n.endsWith(".jpg") || n.endsWith(".png") || n.endsWith(".jpeg");
+            });
+            if (files != null && files.length > 0) {
+                Arrays.sort(files, (a, b) -> Long.compare(b.lastModified(), a.lastModified()));
+                wallpapers = new ArrayList<>(Arrays.asList(files));
+            }
+        } else if ("Custom".equalsIgnoreCase(activeCat)) {
             placesMode = false;
             File customDir = new File(getFilesDir(), "custom_wallpapers");
             File[] files = customDir.listFiles((dir, name) -> name.endsWith(".jpg") || name.endsWith(".png") || name.endsWith(".jpeg"));
@@ -3104,6 +3116,22 @@ public class MainActivity extends Activity implements AppAdapter.TileListener {
         }
 
         List<WallpaperOption> options = new ArrayList<>();
+
+        File wallpaperDir = new File(Environment.getExternalStorageDirectory(), "Pictures/Wallpaper");
+        if (wallpaperDir.exists() && wallpaperDir.isDirectory()) {
+            File[] subDirs = wallpaperDir.listFiles(File::isDirectory);
+            if (subDirs != null) {
+                for (File subDir : subDirs) {
+                    File[] images = subDir.listFiles((dir, name) -> {
+                        String n = name.toLowerCase(java.util.Locale.ROOT);
+                        return n.endsWith(".jpg") || n.endsWith(".png");
+                    });
+                    if (images != null && images.length > 0) {
+                        options.add(new WallpaperOption(subDir.getName(), subDir.getName(), "Koleksi kustom di " + subDir.getName()));
+                    }
+                }
+            }
+        }
         options.add(new WallpaperOption("Indonesia", "Pesona Nusantara (Indonesia)", "Koleksi 4K Alam & Candi Ikonik Indonesia"));
         options.add(new WallpaperOption("Anime", "Anime HD", "Ilustrasi Sinematik, Langit Senja & Pemandangan Anime"));
         options.add(new WallpaperOption("Natural", "Alam & Pemandangan", "Pegunungan, Hutan & Aurora 4K"));

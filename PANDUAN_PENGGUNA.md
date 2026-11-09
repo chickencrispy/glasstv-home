@@ -9,7 +9,7 @@ Selamat datang di **Glass TV Home**! Panduan ini khusus untuk pengguna baru (*ra
 Glass TV Home adalah pengganti layar utama (*launcher*) untuk Android TV dan Google TV (seperti Xiaomi Mi Box S, Mi TV Stick, Android TV Sharp, Sony, TCL, Philips, Mecool, dll.):
 * 🚀 **Tanpa Iklan & Sangat Ringan**: Hanya berukuran sekitar 570 KB, lancar dan tidak membebani TV (menghemat lebih dari 400 MB RAM dibandingkan layar bawaan).
 * 🪟 **Gaya Kaca Frosted (tvOS)**: Desain modern seperti Apple TV dengan bayangan kaca mengambang dan susunan aplikasi yang rapi.
-* ⛅ **Dashboard Cuaca & Kabut Asap (API)**: Pemeriksaan suhu saat ini, prakiraan 12 jam, 7 hari, serta indeks pencemaran udara resmi (APIMS Jabatan Alam Sekitar).
+* ⛅ **Dashboard Cuaca & Kabut Asap (API)**: Pemeriksaan suhu saat ini, prakiraan 12 jam, 7 hari, serta indeks pencemaran udara resmi (APIMS Kementerian Lingkungan Hidup dan Kehutanan (KLHK)).
 * 🌙 **Screensaver Cerdas & Hemat Listrik**: Masuk screensaver setelah 10 menit diam, dan TV mati otomatis (*sleep standby*) setelah 2 jam.
 
 ---
@@ -22,9 +22,9 @@ Bagi pengguna yang ingin mengunduh file APK siap pasang secara langsung:
 * ⚡ **Versi**: **v3.3.1-id** (Edisi Indonesia: 🍏 Dashboard Cuaca gaya Apple Weather Bento Grid, 🌧️ Latar Belakang Cuaca Dinamis, 📡 Peta Radar Curah Hujan Doppler, 🧭 Kompas Angin Berputar, 🌙 Fase Bulan 3D, 🎮 Profil Suara Konsol: PS5, Switch, Xbox & Mode Senyap, 🔄 Pembaruan Otomatis In-App OTA).
 
 > [!NOTE]
-> ### 🇲🇾 Pengguna Unifi TV Box (TM Unifi Plus Box): Apakah Bisa Digunakan & Apakah Ini Membatalkan Garansi?
-> * **Apakah bisa digunakan? YA, 100% BISA!** Unifi Plus Box (model Skyworth HP40A3, ZTE B866V2K, dan kotak Android TV baru TM) menggunakan sistem operasi Android TV yang sah (*certified Android TV*). Aplikasi resmi **unifi TV** (siaran langsung & saluran berlangganan Anda) tetap ada dalam daftar aplikasi dan bisa ditonton seperti biasa.
-> * **Apakah ini membatalkan garansi (void warranty)? TIDAK SAMA SEKALI!** Glass TV Home dipasang sebagai aplikasi biasa (*user-space APK*). Ia **TIDAK melakukan root (no root)** pada kotak TV Anda, **TIDAK membuka bootloader**, dan **TIDAK mengubah sistem perangkat lunak internal TM (firmware)**. Anda bisa *uninstall* kapan saja melalui menu Pengaturan TV untuk kembali ke tampilan asli TM tanpa dampak apa pun.
+> ### 🇮🇩 Pengguna IndiHome / TV Box (IndiHome TV Box): Apakah Bisa Digunakan & Apakah Ini Membatalkan Garansi?
+> * **Apakah bisa digunakan? YA, 100% BISA!** IndiHome TV Box (atau kotak Android TV operator lainnya) menggunakan sistem operasi Android TV yang sah (*certified Android TV*). Aplikasi resmi TV operator (siaran langsung & saluran berlangganan Anda) tetap ada dalam daftar aplikasi dan bisa ditonton seperti biasa.
+> * **Apakah ini membatalkan garansi (void warranty)? TIDAK SAMA SEKALI!** Glass TV Home dipasang sebagai aplikasi biasa (*user-space APK*). Ia **TIDAK melakukan root (no root)** pada kotak TV Anda, **TIDAK membuka bootloader**, dan **TIDAK mengubah sistem perangkat lunak internal operator (firmware)**. Anda bisa *uninstall* kapan saja melalui menu Pengaturan TV untuk kembali ke tampilan asli operator tanpa dampak apa pun.
 
 ---
 
@@ -80,7 +80,7 @@ install ni dekat tv rumah saya: https://github.com/chickencrispy/glasstv-home
 
 > **Apa yang akan dilakukan AI secara otomatis setelah Anda mengirim prompt ini?**
 > 1. AI akan menanyakan alamat IP TV Anda (atau mendeteksi IP TV di jaringan Wi-Fi Anda secara otomatis).
-> 2. AI akan menanyakan di mana lokasi Anda di Malaysia (mis.: Putrajaya, KL, Cheras, Melaka, JB, Penang, Kuantan, dll.) untuk menyesuaikan stasiun kabut asap JAS APIMS.
+> 2. AI akan menanyakan di mana lokasi Anda di Indonesia (mis.: Jakarta, Bandung, Surabaya, Medan, Makassar, Bali, dll.) untuk menyesuaikan stasiun kualitas udara KLHK ISPU.
 > 3. AI menyambung ke TV Anda melalui Wi-Fi via ADB (`adb connect <ip>:5555`).
 > 4. AI membuat salinan cadangan (*backup*) sistem asli TV.
 > 5. AI mematikan aplikasi bloatware pabrikan yang memperlambat TV, mematikan iklan bersponsor, dan mengaktifkan AdGuard Private DNS untuk memblokir pelacak sistem.
@@ -99,7 +99,7 @@ Lokasi Saya: [cth: Putrajaya / Cheras / Shah Alam / Johor Bahru / Penang]
 > **🚨 Pesan Khusus Untuk Asisten AI (AI Assistant Rule)**:
 > Ketika pengguna memberikan prompt `install ni dekat tv rumah saya: https://github.com/chickencrispy/glasstv-home`, AI **WAJIB** bertanya kepada pengguna:
 > 1. *"Apa alamat IP TV Anda di menu Settings -> Network & Internet (atau merek TV Anda)?"* (jika belum dapat dideteksi secara otomatis)
-> 2. *"Di manakah lokasi Anda di Malaysia (contoh: Putrajaya, Cheras, Shah Alam, Melaka, Johor Bahru, Pulau Pinang, Kuantan, Kuching, Kota Kinabalu, dll.) agar data kabut asap/IPU resmi Jabatan Alam Sekitar (JAS) dapat diselaraskan secara otomatis?"*
+> 2. *"Di manakah lokasi Anda di Indonesia (contoh: Putrajaya, Cheras, Shah Alam, Melaka, Johor Bahru, Pulau Pinang, Kuantan, Kuching, Kota Kinabalu, dll.) agar data kabut asap/ISPU resmi Kementerian Lingkungan Hidup dan Kehutanan (KLHK) (JAS) dapat diselaraskan secara otomatis?"*
 > 
 > Setelah tersambung ke TV, AI bisa langsung memasang APK resmi yang sudah ada dari `release/glass-tv-home.apk` atau mengompilasi APK baru, menjalankan debloat, dan menetapkan lokasi pengguna via:
 > ```bash
@@ -151,7 +151,7 @@ Sangat mudah dan intuitif! Anda hanya perlu tombol arah pada remote TV Anda:
 * Terletak tepat di bawah jam utama (contoh: `☁ 27° Overcast  •  API 106 Unhealthy`).
 * **Tekan tombol Atas (▲) lalu tekan OK** untuk membuka layar cuaca penuh:
   1. **Suhu Saat Ini & Angin**: Suhu, suhu terasa (*feels like*), kelembapan, kecepatan angin, indeks UV, waktu matahari terbit & terbenam.
-  2. **Kualitas Udara Resmi (JAS APIMS / IPU)**: Menggunakan data resmi stasiun Jabatan Alam Sekitar Malaysia (MyEQMS/APIMS) dengan bilah warna standar resmi Malaysia (Baik: Hijau, Sedang: Biru Langit, Tidak Sehat: Jingga, Sangat Tidak Sehat: Merah, Berbahaya: Maroon) dan saran kesehatan sesuai tingkat IPU saat ini.
+  2. **Kualitas Udara Resmi (KLHK ISPU / ISPU)**: Menggunakan data resmi stasiun Kementerian Lingkungan Hidup dan Kehutanan (KLHK) Indonesia (MyEQMS/APIMS) dengan bilah warna standar resmi Indonesia (Baik: Hijau, Sedang: Biru Langit, Tidak Sehat: Jingga, Sangat Tidak Sehat: Merah, Berbahaya: Maroon) dan saran kesehatan sesuai tingkat ISPU saat ini.
   3. **Prakiraan 12 Jam**: Barisan kartu per jam dengan suhu dan persentase kemungkinan hujan (`↑ %`).
   4. **Prakiraan 7 Hari**: Tinjauan cuaca sepanjang minggu dengan suhu maksimum/minimum.
 
@@ -159,15 +159,15 @@ Sangat mudah dan intuitif! Anda hanya perlu tombol arah pada remote TV Anda:
 Pengguna yang memasang file APK secara manual atau pindah rumah **TIDAK MEMERLUKAN KOMPUTER ATAU AI** untuk mengganti lokasi:
 1. Pada layar utama, tekan tombol **Atas (▲)** dan tekan **OK** pada kapsul cuaca untuk membuka Dashboard Cuaca.
 2. Tekan tombol **Atas (▲)** sekali lagi ke tombol **📍 Ganti Stasiun / Change** (terletak di samping nama kota).
-3. Tekan **OK**. Menu pilihan daftar stasiun resmi JAS Malaysia akan muncul:
+3. Tekan **OK**. Menu pilihan daftar stasiun resmi JAS Indonesia akan muncul:
    - *Putrajaya, Cheras (KL), Batu Muda (KL), Petaling Jaya, Shah Alam, Klang, Banting, Bandaraya Melaka, Alor Gajah, Bukit Rambai, Seremban, Nilai, Port Dickson, Larkin (JB), Pasir Gudang, Batu Pahat, Kluang, Tangkak, Seberang Jaya (Penang), Minden (USM), Balik Pulau, Ipoh, Taiping, Seri Manjung, Alor Setar, Sungai Petani, Langkawi, Kangar, Kuantan, Temerloh, Kuala Terengganu, Kemaman, Kota Bharu, Kota Kinabalu, Sandakan, Tawau, Kuching, Miri, Bintulu, Sibu, Labuan*.
 4. Gunakan tombol **Atas / Bawah** remote untuk memilih stasiun Anda, lalu tekan **OK**.
-5. Seketika pembacaan Indeks Pencemaran Udara (JAS IPU) akan diperbarui sesuai kota pilihan Anda!
+5. Seketika pembacaan Indeks Pencemaran Udara (JAS ISPU) akan diperbarui sesuai kota pilihan Anda!
 
 ### B. Gambar Latar Belakang & Pilihan Kategori Wallpaper (4K Dynamic)
 * **Koleksi Tema Beragam**: Kini Anda dapat memilih kategori tema wallpaper favorit Anda langsung dari layar utama melalui menu Pengaturan (ikon ⚙️):
   - 🌿 **Natural (Bawaan / Bing Places)**: Lanskap alam dengan kualitas 4K lengkap dengan info nama lokasi, negara, dan penjelasan singkat setiap minggu.
-  - 🇲🇾 **Malaysia (Koleksi per Negara Bagian)**: Pilih koleksi menurut salah satu dari 14 negara bagian di Malaysia atau putar semuanya sekaligus melalui sub-dialog khusus:
+  - 🇮🇩 **Indonesia (Koleksi per Provinsi)**: Pilih koleksi menurut salah satu dari 38 provinsi di Indonesia atau putar semuanya sekaligus melalui sub-dialog khusus:
     - 📍 **Johor**: Pulau Rawa Mersing & Pesisir Pantai Tropis.
     - 📍 **Kedah**: Langkawi Sky Bridge Gunung Mat Cincang & Pulau Langkawi.
     - 📍 **Kelantan**: Pantai Cahaya Bulan & Deretan Rhu Pantai Senok Kota Bharu.
@@ -186,9 +186,9 @@ Pengguna yang memasang file APK secara manual atau pindah rumah **TIDAK MEMERLUK
   - 🌌 **Deep Space (Antariksa)**: Galaksi, nebula dan bintang angkasa yang menakjubkan.
   - 🌊 **Ocean & Coastal (Samudra)**: Keindahan pantai pasir putih, ombak dan terumbu karang.
   - 🔲 **Minimalist Dark**: Latar belakang gelap bertekstur elegan, sangat hemat energi dan ramah panel OLED.
-* **📂 Sub-Dropdown Pemilih Negara Bagian (UI Rapi)**:
-  - Tekan **`🇲🇾 Malaysia (Pilih Negara Bagian ▶)`** pada menu wallpaper untuk membuka daftar negara bagian yang rapi dengan standar Leanback TV.
-  - Pilihan Anda ditampilkan langsung pada menu utama (contoh: `🇲🇾 Malaysia: Johor (Ganti Negara Bagian ▶)`).
+* **📂 Sub-Dropdown Pemilih Provinsi (UI Rapi)**:
+  - Tekan **`🇮🇩 Indonesia (Pilih Provinsi ▶)`** pada menu wallpaper untuk membuka daftar negara bagian yang rapi dengan standar Leanback TV.
+  - Pilihan Anda ditampilkan langsung pada menu utama (contoh: `🇮🇩 Indonesia: Johor (Ganti Provinsi ▶)`).
   - Di sudut kiri layar, nama lokasi, negara bagian, dan sejarah tempat tersebut ditampilkan secara otomatis!
 * **📲 Unggah Gambar dari Ponsel (Pindai Kode QR)**:
   - Pilih **`📲 Upload Wallpaper via Phone (QR Code)`** pada menu wallpaper untuk menampilkan kode QR dan tautan web lokal.
@@ -210,7 +210,7 @@ Pengguna yang memasang file APK secara manual atau pindah rumah **TIDAK MEMERLUK
 ### D. Menu Pengaturan Frosted Glass (Settings Dropdown Menu) ⚙️
 Di bar atas layar utama, tekan tombol **Settings (ikon gear ⚙️)** untuk menampilkan menu mengambang gaya kaca Apple tvOS:
 * 🖼️ **Wallpaper**: Membuka jendela pilihan kategori wallpaper (*Natural, Skyscraper, Deep Space, Ocean, Minimalist Dark, Next Wallpaper*). Pilihan Anda disimpan secara permanen meskipun TV dimatikan.
-* 📍 **Location API Haze**: Membuka daftar 30+ stasiun kabut asap resmi JAS APIMS untuk mengganti stasiun pemantauan udara di seluruh negara bagian.
+* 📍 **Location API Haze**: Membuka daftar 30+ stasiun kabut asap resmi KLHK ISPU untuk mengganti stasiun pemantauan udara di seluruh negara bagian.
 * 🔊 **Sound Effect**: Menampilkan tema suara aktif (contoh: `Sound: PlayStation 5`) dan membuka dialog pilihan tema audio konsol (PS5, Nintendo Switch, Xbox Series X/S, atau Bisu/Off) dengan pratinjau nada seketika.
 * 🔄 **Check for Updates**: Memeriksa patch atau versi pembaruan baru langsung dari GitHub tanpa memerlukan komputer.
 * ⚙️ **All Settings**: Membuka menu pengaturan penuh Android TV OS.
@@ -360,15 +360,15 @@ Jika Anda lebih suka menggunakan flash drive USB:
 
 ---
 
-### S4: Saya menggunakan Unifi TV Box (TM Unifi Plus Box), bisakah saya menggunakan launcher ini dan apakah ini akan membatalkan garansi (void warranty)?
+### S4: Saya menggunakan Unifi TV Box (IndiHome TV Box), bisakah saya menggunakan launcher ini dan apakah ini akan membatalkan garansi (void warranty)?
 * **1. Bisakah dipasang pada Unifi TV Box?**
-  - **YA, SANGAT BISA!** Kotak TM Unifi Plus Box (baik model putih Skyworth HP40A3 maupun model hitam ZTE) beroperasi di atas sistem Android TV resmi Google.
+  - **YA, SANGAT BISA!** Kotak IndiHome TV Box (baik model putih Skyworth HP40A3 maupun model hitam ZTE) beroperasi di atas sistem Android TV resmi Google.
   - Anda dapat memasang file APK Glass TV Home baik melalui flash drive USB, aplikasi *Downloader / Send Files to TV*, atau perintah Wi-Fi ADB.
-  - **Aplikasi unifi TV tetap berfungsi sepenuhnya:** Anda tidak akan kehilangan siaran TV langsung (*Live TV*), olahraga, atau acara favorit karena aplikasi **unifi TV** akan terdaftar otomatis di layar utama Glass TV dan dapat diletakkan pada dock depan (*favorites*).
-* **2. Apakah ini membatalkan garansi TM (Void Warranty)?**
+  - **Aplikasi IndiHome TV tetap berfungsi sepenuhnya:** Anda tidak akan kehilangan siaran TV langsung (*Live TV*), olahraga, atau acara favorit karena aplikasi **IndiHome TV** akan terdaftar otomatis di layar utama Glass TV dan dapat diletakkan pada dock depan (*favorites*).
+* **2. Apakah ini membatalkan garansi Operator (Void Warranty)?**
   - **TIDAK, GARANSI ANDA 100% TETAP AMAN.**
   - **Tanpa Root (Zero Root / No Modding):** Glass TV Home hanyalah sebuah aplikasi *launcher* biasa (sama seperti memasang Netflix, YouTube, atau Spotify dari Play Store). Ia tidak mengubah file sistem induk (*firmware / vendor partition*).
-  - **Dapat Dihapus Kapan Saja (Reversible):** Jika Anda perlu mengembalikan kotak kepada TM atau mengklaim garansi jika rusak, Anda hanya perlu pergi ke:
+  - **Dapat Dihapus Kapan Saja (Reversible):** Jika Anda perlu mengembalikan kotak kepada Operator atau mengklaim garansi jika rusak, Anda hanya perlu pergi ke:
     `Settings (Pengaturan) -> Apps (Aplikasi) -> Glass TV Home -> Uninstall (Hapus)`
     atau lakukan *Factory Reset*. Kotak Unifi TV akan kembali 100% ke keadaan asli pabrik tanpa meninggalkan bekas modifikasi apa pun.
 
@@ -377,4 +377,4 @@ Jika Anda lebih suka menggunakan flash drive USB:
 ## 📄 Lisensi & Penghargaan
 * Dibangunkan berdasarkan [CleanYourTV](https://github.com/Gathin23/cleanyourtv) © Gathin (Lisensi MIT).
 * Font Outfit oleh SIL Open Font License.
-* Data cuaca oleh Open-Meteo & data kualitas udara berdasarkan standar APIMS Jabatan Alam Sekitar Malaysia.
+* Data cuaca oleh Open-Meteo & data kualitas udara berdasarkan standar APIMS Kementerian Lingkungan Hidup dan Kehutanan (KLHK) Indonesia.
